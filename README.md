@@ -3,7 +3,7 @@
 # คำอธิบาย เป็นเกมกลยุทธ์วางแผนผสมผสานกับแนวทางของเกมเศรษฐี (Turn-based strategy) โดยต้องมีผู้เล่นมากกว่าหนึ่งคน   ซึ่งอาจจะเป็นบอทหรือออนไลน์ก็ได้
 # Art  : Pixel art
 
-
+Detail https://docs.google.com/document/d/1MBpKLW3JPyolgtaAmSR1SnHyQ3BvyfHYOJN05SsXc4A/edit
 
 
 # ระบบของเกม
