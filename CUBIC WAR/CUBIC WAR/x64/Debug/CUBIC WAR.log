@@ -1,2 +1,4 @@
 ﻿  main.cpp
+D:\_STUDY\CMU\_Y1T2\261102 Computer Programming\CUBIC WAR\CUBIC WAR\CUBIC WAR\main.cpp(6,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+D:\_STUDY\CMU\_Y1T2\261102 Computer Programming\CUBIC WAR\CUBIC WAR\CUBIC WAR\main.cpp(10,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   CUBIC WAR.vcxproj -> D:\_STUDY\CMU\_Y1T2\261102 Computer Programming\CUBIC WAR\CUBIC WAR\x64\Debug\CUBIC WAR.exe
