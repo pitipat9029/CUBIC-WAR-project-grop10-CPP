@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\CUBIC WAR",
+    "\\CUBIC WAR\\CUBIC WAR"
   ],
-  "SelectedNode": "\\CUBIC WAR.sln",
+  "SelectedNode": "\\CUBIC WAR\\CUBIC WAR\\main.cpp",
   "PreviewInSolutionExplorer": false
 }

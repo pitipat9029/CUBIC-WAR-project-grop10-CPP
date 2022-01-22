@@ -1,5 +1,10 @@
 CUBIC WAR/.vs/
 
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
 ipch/
 *.aps
 *.ncb
