@@ -3,7 +3,12 @@
 Game::Game()
 {
 	this->initWindow();
+	this->initVariable();
+	this->initFont();
+	this->initText();
+
 	this->initMap();
+
 }
 
 Game::~Game()
@@ -24,18 +29,21 @@ void Game::initWindow()
 
 	this->window = new sf::RenderWindow(this->videoMode, "Game", sf::Style::Titlebar | sf::Style::Close);
 	this->window->setFramerateLimit(60);
+
+
 }
 
 void Game::initMap()
 {
 	this->Map = new Maptest;
+
 }
 
 void Game::pollEvents()
 {
 	while (this->window->pollEvent(this->event)) {
 
-		switch (this->event.type)
+		switch (this->event.type)  
 		{
 		case sf::Event::Closed:
 			this->window->close();
@@ -49,26 +57,72 @@ void Game::pollEvents()
 	}
 }
 
+
+void Game::initVariable()
+{
+	this->points = 0;
+
+}
+
+void Game::initFont()
+{
+	this->font.loadFromFile("Fonts/Minecraft.ttf");
+}
+
+void Game::initText()
+{
+	this->guiText.setFont(this->font);
+	this->guiText.setFillColor(sf::Color::White);
+	this->guiText.setCharacterSize(32);
+}
 void Game::UpdateMousePosition()
 {
 	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
 	this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
+
 }
 
 void Game::Update()
 {
 	this->pollEvents();
+
+
+	this->player.update(this->window);
+	this->updateGui();
+	
+
 	this->UpdateMousePosition();
+
 }
 
+void Game::updateGui()
+{
+	std::stringstream ss;
+
+	ss << "Points: " << this->points;
+	this->guiText.setString(ss.str());
+}
+ 
 void Game::Render()
 {
 	this->window->clear();
 
 	//Code draw things here
+
+	this->player.render(this->window);
+
+	//Render gui
+	this->RenderGui(this->window);
+
 	this->Map->Render(*this->window);
 	this->Building.Create(this->Map->gridInfos, this->mousePosView, *this->window);
 	
 
+
 	this->window->display();
+}
+
+void Game::RenderGui(sf::RenderTarget* target)
+{
+	target->draw(this->guiText);
 }
