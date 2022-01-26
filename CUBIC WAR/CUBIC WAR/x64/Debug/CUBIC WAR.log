@@ -1,4 +1,2 @@
-﻿  Building.cpp
-D:\_STUDY\CMU\_Y1T2\261102 Computer Programming\Project\CUBIC WAR\CUBIC WAR\CUBIC WAR\Building.cpp(48,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\_STUDY\CMU\_Y1T2\261102 Computer Programming\Project\CUBIC WAR\CUBIC WAR\CUBIC WAR\Building.cpp(48,23): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+﻿  Game.cpp
   CUBIC WAR.vcxproj -> D:\_STUDY\CMU\_Y1T2\261102 Computer Programming\Project\CUBIC WAR\CUBIC WAR\x64\Debug\CUBIC WAR.exe

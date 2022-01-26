@@ -45,8 +45,8 @@ void Building::Create(std::vector<Maptest::gridInfo> grids, sf::Vector2f MP, sf:
 	yPos = grids[0].y;
 
 	sf::RectangleShape rect;
-	rect.setPosition(xPos-25.5, yPos-25.5);
-	rect.setSize(sf::Vector2f(50.f,50.f));
+	rect.setPosition(xPos-25, yPos-25);
+	rect.setSize(sf::Vector2f(49.f,49.f));
 	rect.setFillColor(sf::Color::Green);
 	window.draw(rect);
 }

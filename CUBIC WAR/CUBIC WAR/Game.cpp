@@ -57,7 +57,6 @@ void Game::pollEvents()
 	}
 }
 
-
 void Game::initVariable()
 {
 	this->points = 0;
@@ -72,9 +71,10 @@ void Game::initFont()
 void Game::initText()
 {
 	this->guiText.setFont(this->font);
-	this->guiText.setFillColor(sf::Color::White);
+	this->guiText.setFillColor(sf::Color::Blue);
 	this->guiText.setCharacterSize(32);
 }
+
 void Game::UpdateMousePosition()
 {
 	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
@@ -85,12 +85,8 @@ void Game::UpdateMousePosition()
 void Game::Update()
 {
 	this->pollEvents();
-
-
 	this->player.update(this->window);
 	this->updateGui();
-	
-
 	this->UpdateMousePosition();
 
 }
@@ -111,13 +107,12 @@ void Game::Render()
 
 	this->player.render(this->window);
 
-	//Render gui
-	this->RenderGui(this->window);
-
 	this->Map->Render(*this->window);
 	this->Building.Create(this->Map->gridInfos, this->mousePosView, *this->window);
-	
 
+	//Render gui
+	this->RenderGui(this->window);
+	
 
 	this->window->display();
 }
