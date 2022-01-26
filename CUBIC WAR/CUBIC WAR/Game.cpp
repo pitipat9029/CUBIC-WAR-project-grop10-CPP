@@ -3,11 +3,13 @@
 Game::Game()
 {
 	this->initWindow();
+	this->initMap();
 }
 
 Game::~Game()
 {
 	delete window;
+	delete Map;
 }
 
 const bool Game::IsRuning() const
@@ -21,6 +23,12 @@ void Game::initWindow()
 	this->videoMode.width = 800;
 
 	this->window = new sf::RenderWindow(this->videoMode, "Game", sf::Style::Titlebar | sf::Style::Close);
+	this->window->setFramerateLimit(60);
+}
+
+void Game::initMap()
+{
+	this->Map = new Maptest;
 }
 
 void Game::pollEvents()
@@ -41,9 +49,16 @@ void Game::pollEvents()
 	}
 }
 
+void Game::UpdateMousePosition()
+{
+	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
+	this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
+}
+
 void Game::Update()
 {
 	this->pollEvents();
+	this->UpdateMousePosition();
 }
 
 void Game::Render()
@@ -51,6 +66,9 @@ void Game::Render()
 	this->window->clear();
 
 	//Code draw things here
+	this->Map->Render(*this->window);
+	this->Building.Create(this->Map->gridInfos, this->mousePosView, *this->window);
+	
 
 	this->window->display();
 }

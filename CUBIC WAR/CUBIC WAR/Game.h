@@ -6,6 +6,9 @@
 #include <ctime>
 #include <vector>
 
+#include "Building.h"
+#include "Maptest.h"
+
 class Game
 {
 private:
@@ -13,10 +16,18 @@ private:
 	sf::Event event;
 
 	void initWindow();
+	void initMap();
+
 	void pollEvents();
+	void UpdateMousePosition();
+
+	Building Building;
+	Maptest *Map;
 
 public:
 	sf::RenderWindow* window;
+	sf::Vector2i mousePosWindow;
+	sf::Vector2f mousePosView;
 
 	// Consturctor & Desturctor
 	Game();

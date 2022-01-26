@@ -12,13 +12,12 @@ void Maptest::InitMap()
 			this->grids.push_back(this->grid);
 
 			gridInfo gridInfo;
+			gridInfo.id = r * (800 / gridSize) + c;
 			gridInfo.buildingID = 0;
 			gridInfo.type = "NULL";
 			gridInfo.x = grid.getPosition().x + (gridSize / 2);
 			gridInfo.y = grid.getPosition().y + (gridSize / 2);
 			this->gridInfos.push_back(gridInfo);
-			std::cout << gridInfo.x << " ";
-			std::cout << gridInfo.y << std::endl;
 		}
 	}
 }

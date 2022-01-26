@@ -116,12 +116,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\_STUDY\CMU\_Y1T2\261102 Computer Programming\CUBIC WAR\CUBIC WAR\sfml\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../sfml/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\_STUDY\CMU\_Y1T2\261102 Computer Programming\CUBIC WAR\CUBIC WAR\sfml\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../sfml/lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;flac.lib;freetype.lib;ogg.lib;openal32.lib;sfml-audio.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib;sfml-network.lib;vorbis.lib;vorbisenc.lib;vorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -133,23 +133,27 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\_STUDY\CMU\_Y1T2\261102 Computer Programming\CUBIC WAR\CUBIC WAR\sfml\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../sfml/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\_STUDY\CMU\_Y1T2\261102 Computer Programming\CUBIC WAR\CUBIC WAR\sfml\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../sfml/lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;flac.lib;freetype.lib;ogg.lib;openal32.lib;sfml-audio.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib;sfml-network.lib;vorbis.lib;vorbisenc.lib;vorbisfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Building.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Maptest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Building.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Maptest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

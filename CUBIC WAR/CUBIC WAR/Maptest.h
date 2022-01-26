@@ -8,22 +8,23 @@
 class Maptest
 {
 private:
+	sf::RectangleShape grid;
+
+	float gridSize;
+	void InitMap();
+
+public:
+
 	struct gridInfo {
+		int id = 0;
 		std::string type;
 		int buildingID = 0;
 		int x = 0;
 		int y = 0;
 	};
 
-	sf::RectangleShape grid;
-
-	float gridSize;
 	std::vector<gridInfo> gridInfos;
 	std::vector<sf::RectangleShape> grids;
-
-	void InitMap();
-
-public:
 
 	Maptest();
 	~Maptest();
