@@ -7,7 +7,6 @@
 #include <sstream>
 
 #include "Player.h"
-
 #include "Building.h"
 #include "Maptest.h"
 
@@ -24,7 +23,6 @@ private:
 	sf::Font font;
 	sf::Text guiText;
 
-
 	void initWindow();
 	void initMap();
 
@@ -36,14 +34,14 @@ private:
 
 	void UpdateMousePosition();
 
-	Building Building;
-	Maptest *Map;
-
 
 public:
 	sf::RenderWindow* window;
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
+
+	Building* building;
+	Maptest* map;
 
 	// Consturctor & Desturctor
 	Game();

@@ -8,13 +8,13 @@ Game::Game()
 	this->initText();
 
 	this->initMap();
-
 }
 
 Game::~Game()
 {
 	delete window;
-	delete Map;
+	delete map;
+	delete building;
 }
 
 const bool Game::IsRuning() const
@@ -29,14 +29,12 @@ void Game::initWindow()
 
 	this->window = new sf::RenderWindow(this->videoMode, "Game", sf::Style::Titlebar | sf::Style::Close);
 	this->window->setFramerateLimit(60);
-
-
 }
 
 void Game::initMap()
 {
-	this->Map = new Maptest;
-
+	this->map = new Maptest;
+	this->building = new Building(this->map, this->window, this->map->gridInfos, &this->mousePosView);
 }
 
 void Game::pollEvents()
@@ -88,7 +86,6 @@ void Game::Update()
 	this->player.update(this->window);
 	this->updateGui();
 	this->UpdateMousePosition();
-
 }
 
 void Game::updateGui()
@@ -101,20 +98,18 @@ void Game::updateGui()
  
 void Game::Render()
 {
+
 	this->window->clear();
 
 	//Code draw things here
-
 	this->player.render(this->window);
-
-	this->Map->Render(*this->window);
-	this->Building.Create(this->Map->gridInfos, this->mousePosView, *this->window);
+	this->map->Render(*this->window);
+	this->building->Update(this->player.myBuildings);
 
 	//Render gui
-	this->RenderGui(this->window);
-	
-
+	//this->RenderGui(this->window);
 	this->window->display();
+
 }
 
 void Game::RenderGui(sf::RenderTarget* target)

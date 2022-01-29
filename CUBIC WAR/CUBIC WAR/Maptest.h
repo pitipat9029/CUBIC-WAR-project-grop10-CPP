@@ -8,7 +8,7 @@
 class Maptest
 {
 private:
-	sf::RectangleShape grid;
+	sf::Sprite grid;
 
 	float gridSize;
 	void InitMap();
@@ -19,12 +19,12 @@ public:
 		int id = 0;
 		std::string type;
 		int buildingID = 0;
-		int x = 0;
-		int y = 0;
+		float x = 0;
+		float y = 0;
 	};
 
 	std::vector<gridInfo> gridInfos;
-	std::vector<sf::RectangleShape> grids;
+	std::vector<sf::Sprite> grids;
 
 	Maptest();
 	~Maptest();

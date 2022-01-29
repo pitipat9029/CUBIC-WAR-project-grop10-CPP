@@ -3,11 +3,11 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Game.h";
+#include "Game.h"
 
 int main()
 {
-    srand(time(0));
+    srand((unsigned int)time(NULL));
     Game game;
 
     while (game.IsRuning()) {
