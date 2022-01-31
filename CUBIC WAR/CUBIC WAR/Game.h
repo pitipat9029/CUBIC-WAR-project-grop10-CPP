@@ -6,9 +6,7 @@
 #include <vector>
 #include <sstream>
 
-#include "Player.h"
-#include "Building.h"
-#include "Maptest.h"
+#include "Action.h"
 
 class Game
 {
@@ -16,21 +14,11 @@ private:
 	sf::VideoMode videoMode;
 	sf::Event event;
 
-	Player player;
-
-	int points;
-
-	sf::Font font;
-	sf::Text guiText;
-
 	void initWindow();
-	void initMap();
+	void initVariable();
+	void initPlayer(int);
 
 	void pollEvents();
-
-	void initVariable();
-	void initFont();
-	void initText();
 
 	void UpdateMousePosition();
 
@@ -40,8 +28,10 @@ public:
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
 
-	Building* building;
-	Maptest* map;
+	Action* gameAction;
+	Map* map;
+
+	std::vector<Player> gamePlayers;
 
 	// Consturctor & Desturctor
 	Game();
@@ -51,9 +41,6 @@ public:
 
 	// Function
 	void Update();
-	void updateGui();
 	void Render();
-
-	void RenderGui(sf::RenderTarget* target);
 };
 

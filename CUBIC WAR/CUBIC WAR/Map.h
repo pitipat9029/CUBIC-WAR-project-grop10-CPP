@@ -5,7 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 
-class Maptest
+class Map
 {
 private:
 	sf::Sprite grid;
@@ -26,8 +26,8 @@ public:
 	std::vector<gridInfo> gridInfos;
 	std::vector<sf::Sprite> grids;
 
-	Maptest();
-	~Maptest();
+	Map();
+	~Map();
 
 	void Render(sf::RenderTarget &);
 };
