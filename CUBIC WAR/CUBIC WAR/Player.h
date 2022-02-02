@@ -19,11 +19,10 @@ private:
 	void initShape();
 
 public:
-
 	Player(float x = 0.f,float y = 0.f);
 	virtual ~Player();
 
-	std::vector<Building::sPlayerBuilding> myBuildings;
+	std::vector<Building> myBuildings;
 
 	void updateInput();
 	void update(sf::RenderTarget* target);

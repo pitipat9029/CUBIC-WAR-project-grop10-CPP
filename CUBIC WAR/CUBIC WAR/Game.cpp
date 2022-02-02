@@ -23,19 +23,28 @@ const bool Game::IsRuning() const
 	return this->window->isOpen();
 }
 
+// Seting Game start
+
 void Game::initWindow()
 {
 	this->videoMode.height = 600;
 	this->videoMode.width = 800;
-
 	this->window = new sf::RenderWindow(this->videoMode, "Game", sf::Style::Titlebar | sf::Style::Close);
 	this->window->setFramerateLimit(60);
 }
 
-void Game::initMap()
+void Game::initVariable()
 {
-	this->map = new Maptest;
-	this->building = new Building(this->map, this->window, this->map->gridInfos, &this->mousePosView);
+	this->map = new Map;
+	this->gameAction = new Action(this->map, this->window, this->map->gridInfos, this->gamePlayers, &this->mousePosView);
+}
+
+void Game::initPlayer(int numbers)
+{
+	Player player;
+	for (int i = 0; i < numbers; i++) {
+		gamePlayers.push_back(player);
+	}
 }
 
 void Game::pollEvents()
@@ -85,22 +94,9 @@ void Game::pollEvents()
 	}
 }
 
-void Game::initButton()
-{
-	this->button.setFillColor(sf::Color::Red);
-	this->button.setSize(sf::Vector2f(50.f, 50.f));
-	this->button.setPosition(0.f, 0.f);
-}
-
-
 void Game::initVariable()
 {
 	this->points = 0;
-	Player player1;
-	players.push_back(player1);
-
-	Player player2;
-	players.push_back(player2);
 
 }
 
@@ -121,14 +117,11 @@ void Game::UpdateMousePosition()
 {
 	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
 	this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
-
 }
 
 void Game::Update()
 {
 	this->pollEvents();
-	this->player.update(this->window);
-	this->updateGui();
 	this->UpdateMousePosition();
 }
 
@@ -139,36 +132,39 @@ void Game::updateGui()
 	ss << "Points: " << this->points;
 	this->guiText.setString(ss.str());
 }
-
-void Game::updateButton()
-{
-	
-}
-
  
 void Game::Render()
 {
-
 	this->window->clear();
 
-	//Code draw things here
+	//--------------------------
 
+	//Code draw things here
 	this->player.render(this->window);
 	this->map->Render(*this->window);
-	this->building->Update(this->player.myBuildings);
+	this->gameAction->Update();
+
+	//--------------------------
 
 	//Render gui
-	window->draw(button);
 	//this->RenderGui(this->window);
 	this->window->display();
+}
 
+Game::Game()
+{
+	this->initWindow();
+	this->initPlayer(2);
+	this->initVariable();
 }
 void Game::renderButton(sf::RenderTarget* target)
 {
 	target->draw(this->button);
 }
 
-void Game::RenderGui(sf::RenderTarget* target)
+Game::~Game()
 {
-	target->draw(this->guiText);
+	delete window;
+	delete map;
+	delete gameAction;
 }
