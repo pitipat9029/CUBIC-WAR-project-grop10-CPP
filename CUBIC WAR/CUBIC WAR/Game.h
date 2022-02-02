@@ -16,9 +16,14 @@ private:
 	sf::VideoMode videoMode;
 	sf::Event event;
 
+	sf::RectangleShape button;
+
 	Player player;
 
 	int points;
+
+	int roll1, roll2;
+	
 
 	sf::Font font;
 	sf::Text guiText;
@@ -27,6 +32,8 @@ private:
 	void initMap();
 
 	void pollEvents();
+
+	void initButton();
 
 	void initVariable();
 	void initFont();
@@ -39,6 +46,8 @@ public:
 	sf::RenderWindow* window;
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
+	
+	std::vector<Player> players;
 
 	Building* building;
 	Maptest* map;
@@ -52,8 +61,10 @@ public:
 	// Function
 	void Update();
 	void updateGui();
+	void updateButton();
 	void Render();
 
+	void renderButton(sf::RenderTarget* target);
 	void RenderGui(sf::RenderTarget* target);
 };
 

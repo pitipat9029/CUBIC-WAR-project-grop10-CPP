@@ -6,6 +6,7 @@ Game::Game()
 	this->initVariable();
 	this->initFont();
 	this->initText();
+	this->initButton();
 
 	this->initMap();
 }
@@ -51,13 +52,55 @@ void Game::pollEvents()
 			if (this->event.key.code == sf::Keyboard::Escape) this->window->close();
 			break;
 		}
+		if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
+		{
+			button.setFillColor(sf::Color::Blue);
+		}
+		else
+		{
+			button.setFillColor(sf::Color::Red);
+		}
+
+		//button press
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
+			{
+				std::cout << "Start Your turn\n";
+				roll1 = (rand() % 6) + 1;
+				roll2 = (rand() % 6) + 1;
+
+				points = roll1 + roll2;
+				std::cout << "dice1 = " << roll1 << "\n";
+				std::cout << "dice2 = " << roll2 << "\n";
+				std::cout << "Your total points is " << points << "\n";
+
+				if (roll1 == roll2)
+				{
+					std::cout << "U can roll again! \n";
+				}
+			}
+		}
 
 	}
 }
 
+void Game::initButton()
+{
+	this->button.setFillColor(sf::Color::Red);
+	this->button.setSize(sf::Vector2f(50.f, 50.f));
+	this->button.setPosition(0.f, 0.f);
+}
+
+
 void Game::initVariable()
 {
 	this->points = 0;
+	Player player1;
+	players.push_back(player1);
+
+	Player player2;
+	players.push_back(player2);
 
 }
 
@@ -72,6 +115,7 @@ void Game::initText()
 	this->guiText.setFillColor(sf::Color::Blue);
 	this->guiText.setCharacterSize(32);
 }
+
 
 void Game::UpdateMousePosition()
 {
@@ -95,6 +139,12 @@ void Game::updateGui()
 	ss << "Points: " << this->points;
 	this->guiText.setString(ss.str());
 }
+
+void Game::updateButton()
+{
+	
+}
+
  
 void Game::Render()
 {
@@ -102,14 +152,20 @@ void Game::Render()
 	this->window->clear();
 
 	//Code draw things here
+
 	this->player.render(this->window);
 	this->map->Render(*this->window);
 	this->building->Update(this->player.myBuildings);
 
 	//Render gui
+	window->draw(button);
 	//this->RenderGui(this->window);
 	this->window->display();
 
+}
+void Game::renderButton(sf::RenderTarget* target)
+{
+	target->draw(this->button);
 }
 
 void Game::RenderGui(sf::RenderTarget* target)
