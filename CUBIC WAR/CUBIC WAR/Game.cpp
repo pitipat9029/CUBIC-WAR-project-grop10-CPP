@@ -3,19 +3,19 @@
 Game::Game()
 {
 	this->initWindow();
+	this->initPlayer(2);
 	this->initVariable();
 	this->initFont();
 	this->initText();
 	this->initButton();
-
-	this->initMap();
+	this->points = 0;
 }
 
 Game::~Game()
 {
 	delete window;
 	delete map;
-	delete building;
+	delete gameAction;
 }
 
 const bool Game::IsRuning() const
@@ -37,6 +37,14 @@ void Game::initVariable()
 {
 	this->map = new Map;
 	this->gameAction = new Action(this->map, this->window, this->map->gridInfos, this->gamePlayers, &this->mousePosView);
+
+}
+
+void Game::initButton()
+{
+	this->button.setFillColor(sf::Color::Red);
+	this->button.setSize(sf::Vector2f(50.f, 50.f));
+	this->button.setPosition(0.f, 0.f);
 }
 
 void Game::initPlayer(int numbers)
@@ -94,12 +102,6 @@ void Game::pollEvents()
 	}
 }
 
-void Game::initVariable()
-{
-	this->points = 0;
-
-}
-
 void Game::initFont()
 {
 	this->font.loadFromFile("Fonts/Minecraft.ttf");
@@ -147,24 +149,12 @@ void Game::Render()
 	//--------------------------
 
 	//Render gui
+	window->draw(button);
 	//this->RenderGui(this->window);
 	this->window->display();
 }
 
-Game::Game()
-{
-	this->initWindow();
-	this->initPlayer(2);
-	this->initVariable();
-}
 void Game::renderButton(sf::RenderTarget* target)
 {
 	target->draw(this->button);
-}
-
-Game::~Game()
-{
-	delete window;
-	delete map;
-	delete gameAction;
 }

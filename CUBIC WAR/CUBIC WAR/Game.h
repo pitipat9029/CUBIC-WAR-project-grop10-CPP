@@ -17,6 +17,8 @@ private:
 	sf::RectangleShape button;
 
 	Player player;
+	std::vector<Player> gamePlayers;
+	Action* gameAction;
 
 	int points;
 
@@ -29,10 +31,9 @@ private:
 	void initWindow();
 	void initVariable();
 	void initPlayer(int);
+	void initButton();
 
 	void pollEvents();
-
-	void initVariable();
 	void initFont();
 	void initText();
 
@@ -45,7 +46,7 @@ public:
 	sf::Vector2f mousePosView;
 
 	Building* building;
-	Maptest* map;
+	Map* map;
 
 	// Consturctor & Desturctor
 	Game();
@@ -59,5 +60,6 @@ public:
 	void Render();
 
 	void RenderGui(sf::RenderTarget* target);
+	void renderButton(sf::RenderTarget*);
 };
 
