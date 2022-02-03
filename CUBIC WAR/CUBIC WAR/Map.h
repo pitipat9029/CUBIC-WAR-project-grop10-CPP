@@ -8,8 +8,6 @@
 class Map
 {
 private:
-	sf::Sprite grid;
-
 	float gridSize;
 	void InitMap();
 
@@ -19,12 +17,12 @@ public:
 		int id = 0;
 		std::string type;
 		int buildingID = 0;
-		float x = 0;
-		float y = 0;
+		float x = 0, y = 0;
+		int row = 0, column = 0;
+		sf::Sprite grid;
 	};
 
 	std::vector<gridInfo> gridInfos;
-	std::vector<sf::Sprite> grids;
 
 	Map();
 	~Map();

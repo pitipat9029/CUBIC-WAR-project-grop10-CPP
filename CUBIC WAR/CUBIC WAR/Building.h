@@ -5,15 +5,15 @@
 class Building
 {
 private:
-	std::string type; //[0 = base, 1 = military, 2 = canon, 3 = archery, 4 wall]
+	int type; //[0 = base, 1 = military, 2 = canon, 3 = archery, 4 wall]
 	int id = 0;
-	int maxLifePoint = 0, maxDamage = 0;
-	int lifePoint = 0, damage = 0;
+	int maxLifePoint = 0, lifePoint = 0;
+	int damage = 0;
 	
 public:
 	sf::RectangleShape object;
 
-	Building();
+	Building(int);
 	~Building();
 };
 

@@ -15,6 +15,7 @@ private:
 	Map* map;
 	sf::RenderWindow* window;
 	sf::Vector2f* mousePosView;
+	std::vector<sf::Sprite> grids;
 
 	struct sBuildingInfo {
 		std::string type;
