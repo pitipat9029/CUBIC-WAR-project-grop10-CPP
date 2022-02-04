@@ -2,28 +2,26 @@
 
 void Map::InitMap()
 {
-	for (int r = -1; r < 900 / 60; r += 1) {
-		for (int c = -1; c < 11; c += 1) {
-			gridInfo gridInfo;
-			gridInfo.id = r * (800 / gridSize) + c;
-			gridInfo.row = r;
-			gridInfo.column = c;
-			gridInfo.buildingID = 0;
-			gridInfo.type = "NULL";
+	for (int c = -1; c < 11; c += 1) {
+		for (int r = -1; r < 900 / 60; r += 1) {
+			Building grid;
+			grid.id = r * (800 / gridSize) + c;
+			grid.row = r;
+			grid.column = c;
 
 			if (c % 2 == 0) {
-				gridInfo.grid.setPosition(r * gridSize, c * (gridSize - 10));
+				grid.grid.setPosition(r * gridSize, c * (gridSize - 10));
 			}
 			else {
-				gridInfo.grid.setPosition(r * gridSize + gridSize / 2, c * (gridSize - 10));
+				grid.grid.setPosition(r * gridSize + gridSize / 2, c * (gridSize - 10));
 			}
 
-			gridInfo.y = gridInfo.grid.getPosition().y + 30;
-			gridInfo.x = gridInfo.grid.getPosition().x + 30;
+			grid.yPos = grid.grid.getPosition().y + 30;
+			grid.xPos = grid.grid.getPosition().x + 30;
 
-			gridInfo.grid.scale(0.5f, 0.5f);
+			grid.grid.scale(0.5f, 0.5f);
 
-			this->gridInfos.push_back(gridInfo);
+			this->grids.push_back(grid);
 		}
 	}
 }
@@ -38,17 +36,10 @@ Map::~Map()
 {
 }
 
-void Map::Render(sf::RenderTarget& target)
+void Map::Render(sf::RenderTarget* target)
 {
-	sf::Texture texture;
-
-	if (!texture.loadFromFile("Textures/grass_05.png")) {
-		std::cout << "Error!";
-	}
-
-	for (unsigned int i = 0; i < this->gridInfos.size(); i++) {
-		gridInfos[i].grid.setTexture(texture);
-		target.draw(gridInfos[i].grid);
+	for (unsigned int i = 0; i < this->grids.size(); i++) {
+		grids[i].Render(target);
 	}
 }
 

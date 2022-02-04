@@ -28,7 +28,7 @@ const bool Game::IsRuning() const
 void Game::initWindow()
 {
 	this->videoMode.height = 600;
-	this->videoMode.width = 800;
+	this->videoMode.width = 900;
 	this->window = new sf::RenderWindow(this->videoMode, "Game", sf::Style::Titlebar | sf::Style::Close);
 	this->window->setFramerateLimit(60);
 }
@@ -36,8 +36,7 @@ void Game::initWindow()
 void Game::initVariable()
 {
 	this->map = new Map;
-	this->gameAction = new Action(this->map, this->window, this->map->gridInfos, this->gamePlayers, &this->mousePosView);
-
+	this->gameAction = new Action(this->map, this->window, this->map->grids, this->gamePlayers, &this->mousePosView);
 }
 
 void Game::initButton()
@@ -114,7 +113,6 @@ void Game::initText()
 	this->guiText.setCharacterSize(32);
 }
 
-
 void Game::UpdateMousePosition()
 {
 	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
@@ -142,14 +140,14 @@ void Game::Render()
 	//--------------------------
 
 	//Code draw things here
-	this->player.render(this->window);
-	this->map->Render(*this->window);
+	//this->player.render(this->window);
+	this->map->Render(this->window);
 	this->gameAction->Update();
 
 	//--------------------------
 
 	//Render gui
-	window->draw(button);
+	//window->draw(button);
 	//this->RenderGui(this->window);
 	this->window->display();
 }

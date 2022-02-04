@@ -5,6 +5,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Building.h"
+
 class Map
 {
 private:
@@ -12,20 +14,10 @@ private:
 	void InitMap();
 
 public:
-
-	struct gridInfo {
-		int id = 0;
-		std::string type;
-		int buildingID = 0;
-		float x = 0, y = 0;
-		int row = 0, column = 0;
-		sf::Sprite grid;
-	};
-
-	std::vector<gridInfo> gridInfos;
+	std::vector<Building> grids;
 
 	Map();
 	~Map();
 
-	void Render(sf::RenderTarget &);
+	void Render(sf::RenderTarget *);
 };

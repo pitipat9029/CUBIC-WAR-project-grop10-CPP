@@ -12,30 +12,23 @@
 class Action
 {
 private:
-	Map* map;
-	sf::RenderWindow* window;
-	sf::Vector2f* mousePosView;
+	Map* pMap;
+	sf::RenderWindow* pWindow;
+	sf::Vector2f* pMousePosView;
 	std::vector<sf::Sprite> grids;
 
-	struct sBuildingInfo {
-		std::string type;
-		int maxLifePoint = 0, maxDamage = 0;
-		sf::RectangleShape object;
-	};
-
 	bool isCreatdMode;
+	bool isMousePress = false;
 
 public:
-	std::vector<Map::gridInfo>& gridInfos;
+	std::vector<Building>& gridInfos;
 	std::vector<Player>& gamePlayers;
 
 	//std::vector<sPlayerBuilding> playerBuildings;
 
-	Action(Map*, sf::RenderWindow*, std::vector<Map::gridInfo>&, std::vector<Player>&, sf::Vector2f*);
+	Action(Map*, sf::RenderWindow*, std::vector<Building>&, std::vector<Player>&, sf::Vector2f*);
 	~Action();
 
 	void Update();
-	void Render();
-	void AddBuilding(int, float, float);
-	void Create();
+	void MousePointer();
 };
