@@ -1,30 +1,20 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <iostream>
-#include <vector>
-#include <ctime>
-#include <cmath>
+#include <string>
 
-class unit
+class Unit
 {
 private:
-	string name;
+	std::string type = "";
 	int hp;
 	int maxhp;
 	int atk;
-	int atk range;
-	int atk f soldier;
-	int atk f building;
-	int move range;
 	int direction;
-	int vision;
 	int points;
 
 public:
-	void engineering();
-	void soldier();
-	void archer();
-	void artillery();
-	void scouts();
+	Unit(std::string);
+	~Unit();
 };
+
 
