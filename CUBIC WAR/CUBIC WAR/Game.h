@@ -45,7 +45,6 @@ public:
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
 
-	Building* building;
 	Map* map;
 
 	// Consturctor & Desturctor

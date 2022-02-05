@@ -5,19 +5,20 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Building.h"
+#include "Grid.h"
 
 class Map
 {
 private:
-	float gridSize;
+	sf::Vector2f gridSize;
+	int maxColumn, maxRow;
 	void InitMap();
 
 public:
-	std::vector<Building> grids;
-
 	Map();
 	~Map();
+
+	std::vector<Grid> vGrids;
 
 	void Render(sf::RenderTarget *);
 };

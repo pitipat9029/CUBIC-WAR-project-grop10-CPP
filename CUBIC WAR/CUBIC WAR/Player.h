@@ -6,8 +6,6 @@
 #include <ctime>
 #include <vector>
 
-#include "Building.h"
-
 class Player
 {
 private:
@@ -21,8 +19,6 @@ private:
 public:
 	Player(float x = 0.f,float y = 0.f);
 	virtual ~Player();
-
-	std::vector<Building> myBuildings;
 
 	void updateInput();
 	void update(sf::RenderTarget* target);

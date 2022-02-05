@@ -7,7 +7,7 @@
 
 #include "Map.h"
 #include "Player.h"
-#include "Building.h"
+#include "Grid.h"
 
 class Action
 {
@@ -15,20 +15,22 @@ private:
 	Map* pMap;
 	sf::RenderWindow* pWindow;
 	sf::Vector2f* pMousePosView;
+	Grid* pGridPointed = 0;
 	std::vector<sf::Sprite> grids;
+	sf::Vector2i currentMousePos;
 
 	bool isCreatdMode;
 	bool isMousePress = false;
 
+	Grid* CheckGridPointed();
+	void HighlightGrid();
+
 public:
-	std::vector<Building>& gridInfos;
+	std::vector<Grid>& gridInfos;
 	std::vector<Player>& gamePlayers;
 
-	//std::vector<sPlayerBuilding> playerBuildings;
-
-	Action(Map*, sf::RenderWindow*, std::vector<Building>&, std::vector<Player>&, sf::Vector2f*);
+	Action(Map*, sf::RenderWindow*, std::vector<Grid>&, std::vector<Player>&, sf::Vector2f*);
 	~Action();
 
 	void Update();
-	void MousePointer();
 };

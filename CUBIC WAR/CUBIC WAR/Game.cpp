@@ -36,7 +36,7 @@ void Game::initWindow()
 void Game::initVariable()
 {
 	this->map = new Map;
-	this->gameAction = new Action(this->map, this->window, this->map->grids, this->gamePlayers, &this->mousePosView);
+	this->gameAction = new Action(this->map, this->window, this->map->vGrids, this->gamePlayers, &this->mousePosView);
 }
 
 void Game::initButton()

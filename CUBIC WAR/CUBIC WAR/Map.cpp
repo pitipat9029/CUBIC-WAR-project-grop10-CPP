@@ -2,33 +2,27 @@
 
 void Map::InitMap()
 {
-	for (int c = -1; c < 11; c += 1) {
-		for (int r = -1; r < 900 / 60; r += 1) {
-			Building grid;
-			grid.id = r * (800 / gridSize) + c;
-			grid.row = r;
-			grid.column = c;
-
-			if (c % 2 == 0) {
-				grid.grid.setPosition(r * gridSize, c * (gridSize - 10));
+	for (int r = -1; r < this->maxRow; r += 1) {
+		for (int c = -1; c < this->maxColumn; c += 1) {
+			Grid grid(r, c, this->gridSize);
+			if (!((c < 0 || (c > this->maxColumn - 2 && (r % 2) != 0)) || (r < 0 || r >= this->maxRow))) {
+				grid.SetEnabled(true);
+			} else {
+				grid.SetEnabled(false);
 			}
-			else {
-				grid.grid.setPosition(r * gridSize + gridSize / 2, c * (gridSize - 10));
-			}
-
-			grid.yPos = grid.grid.getPosition().y + 30;
-			grid.xPos = grid.grid.getPosition().x + 30;
-
-			grid.grid.scale(0.5f, 0.5f);
-
-			this->grids.push_back(grid);
+			this->vGrids.push_back(grid);
 		}
 	}
 }
 
 Map::Map()
 {
-	gridSize = 60.f;
+	gridSize.x = 60.f;
+	gridSize.y = 70.f;
+
+	maxRow = 11;
+	maxColumn = (900 / gridSize.x);
+
 	InitMap();
 }
 
@@ -38,8 +32,8 @@ Map::~Map()
 
 void Map::Render(sf::RenderTarget* target)
 {
-	for (unsigned int i = 0; i < this->grids.size(); i++) {
-		grids[i].Render(target);
+	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
+		vGrids[i].Render(target);
 	}
 }
 
