@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Grid.h"
+#include "Unit.h"
 
 class Map
 {
@@ -19,6 +20,7 @@ public:
 	~Map();
 
 	std::vector<Grid> vGrids;
+	std::vector<Unit> vUnits;
 
 	void Render(sf::RenderTarget *);
 };

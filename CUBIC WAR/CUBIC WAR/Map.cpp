@@ -35,6 +35,9 @@ void Map::Render(sf::RenderTarget* target)
 	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
 		vGrids[i].Render(target);
 	}
+	for (unsigned int i = 0; i < this->vUnits.size(); i++) {
+		vUnits[i].Render(target);
+	}
 }
 
 

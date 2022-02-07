@@ -20,9 +20,14 @@ void Action::Update()
 
 	if (pGridPointed != 0) {
 		this->HighlightGrid();
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 			if (!this->isMousePress) {
-				this->pGridPointed->CreateBuilding("B");
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					this->pGridPointed->AddUnit("Soldier", pMap->vUnits);
+				}
+				else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+					this->pGridPointed->CreateBuilding("B");
+				}
 				this->isMousePress = true;
 			}
 		}

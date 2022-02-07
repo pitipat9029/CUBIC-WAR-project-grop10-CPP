@@ -34,10 +34,13 @@ public:
 
 	void Render(sf::RenderTarget*);
 	void CreateBuilding(std::string type);
-	bool isHovered(sf::Vector2i);
-	float distanceFromMouse(sf::Vector2i);
+	void AddUnit(std::string type, std::vector<Unit>&);
+
 	void SetEnabled(bool);
+
+	bool isHovered(sf::Vector2i);
 	bool isEnabled();
+	float distanceFromMouse(sf::Vector2i);
 	sf::Vector2f GetPosition();
 	
 };

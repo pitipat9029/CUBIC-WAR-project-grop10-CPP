@@ -2,8 +2,8 @@
 
 void Grid::Setup()
 {
-	if (!texture.loadFromFile("Textures/Terrain/grass_05.png")) {
-		std::cout << "Error!";
+	if (!texture.loadFromFile("Textures/Terrain/grass.png")) {
+		std::cout << "Error to load Textures/Terrain/grass.png";// +this->imgPath + ".png" << std::endl;
 	}
 
 	this->shape.scale(this->size.x / this->texture.getSize().x, this->size.y / this->texture.getSize().y);
@@ -66,6 +66,13 @@ void Grid::CreateBuilding(std::string type)
 	if (!this->texture.loadFromFile("Textures/Building/" + this->imgPath + ".png")) {
 		std::cout << "Error to load Textures/Building/" + this->imgPath + ".png" << std::endl;
 	}
+}
+
+void Grid::AddUnit(std::string type, std::vector<Unit>& vUnits)
+{
+	Unit unit(type, this->centerPos);
+	vUnits.push_back(unit);
+	this->pUnit = &vUnits.back();
 }
 
 bool Grid::isHovered(sf::Vector2i MousePos)
