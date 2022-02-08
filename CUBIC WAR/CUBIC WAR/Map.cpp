@@ -2,7 +2,9 @@
 
 void Map::InitMap()
 {
+	std::vector<Grid> gridRow;
 	for (int r = -1; r < this->maxRow; r += 1) {
+		gridRow.clear();
 		for (int c = -1; c < this->maxColumn; c += 1) {
 			Grid grid(r, c, this->gridSize);
 			if (!((c < 0 || (c > this->maxColumn - 2 && (r % 2) != 0)) || (r < 0 || r >= this->maxRow))) {
@@ -10,8 +12,9 @@ void Map::InitMap()
 			} else {
 				grid.SetEnabled(false);
 			}
-			this->vGrids.push_back(grid);
+			gridRow.push_back(grid);
 		}
+		this->vGrids.push_back(gridRow);
 	}
 }
 
@@ -32,8 +35,13 @@ Map::~Map()
 
 void Map::Render(sf::RenderTarget* target)
 {
+	/*for (unsigned int i = 0; i < this->vGridsAll.size(); i++) {
+		vGridsAll[i].Render(target);
+	}*/
 	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
-		vGrids[i].Render(target);
+		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
+			vGrids[i][j].Render(target);
+		}
 	}
 	for (unsigned int i = 0; i < this->vUnits.size(); i++) {
 		vUnits[i].Render(target);

@@ -17,7 +17,7 @@ private:
 	int maxhp;
 
 	int atk;
-	int direction;
+	int moveRadius;
 
 public:
 	Unit(std::string, sf::Vector2f);

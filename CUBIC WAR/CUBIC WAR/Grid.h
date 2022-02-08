@@ -19,16 +19,17 @@ private:
 	std::string imgPath = "";
 	sf::Texture texture;
 	sf::Sprite shape;
-
-	bool isBuilding = false;
+	
 	std::string typeBuilding = "";
 	int maxLifePoint = 0, lifePoint = 0;
 	int damage = 0;
 
-	bool isUnit = false;
 	Unit* pUnit = 0;
 	
 public:
+	bool isBuilding = false;
+	bool isUnit = false;
+
 	Grid(int, int, sf::Vector2f);
 	~Grid();
 
@@ -42,6 +43,7 @@ public:
 	bool isEnabled();
 	float distanceFromMouse(sf::Vector2i);
 	sf::Vector2f GetPosition();
+	sf::Vector2i GetRC();
 	
 };
 

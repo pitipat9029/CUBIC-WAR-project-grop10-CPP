@@ -22,14 +22,18 @@ private:
 	bool isCreatdMode;
 	bool isMousePress = false;
 
+	Grid* pGridMoveStart = 0;
+
 	Grid* CheckGridPointed();
 	void HighlightGrid();
 
+	void HighlightMove(int);
+
 public:
-	std::vector<Grid>& gridInfos;
+	std::vector<std::vector<Grid>>& gridInfos;
 	std::vector<Player>& gamePlayers;
 
-	Action(Map*, sf::RenderWindow*, std::vector<Grid>&, std::vector<Player>&, sf::Vector2f*);
+	Action(Map*, sf::RenderWindow*, std::vector<std::vector<Grid>>&, std::vector<Player>&, sf::Vector2f*);
 	~Action();
 
 	void Update();

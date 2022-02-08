@@ -19,7 +19,8 @@ public:
 	Map();
 	~Map();
 
-	std::vector<Grid> vGrids;
+	std::vector<Grid> vGridsAll;
+	std::vector<std::vector<Grid>> vGrids;
 	std::vector<Unit> vUnits;
 
 	void Render(sf::RenderTarget *);

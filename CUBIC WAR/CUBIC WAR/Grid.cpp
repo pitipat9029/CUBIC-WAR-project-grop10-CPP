@@ -70,6 +70,7 @@ void Grid::CreateBuilding(std::string type)
 
 void Grid::AddUnit(std::string type, std::vector<Unit>& vUnits)
 {
+	this->isUnit = true;
 	Unit unit(type, this->centerPos);
 	vUnits.push_back(unit);
 	this->pUnit = &vUnits.back();
@@ -97,6 +98,13 @@ void Grid::SetEnabled(bool x)
 sf::Vector2f Grid::GetPosition()
 {
 	return this->shape.getPosition();
+}
+
+sf::Vector2i Grid::GetRC()
+{
+	int q = this->column - (this->row - (this->row & 1)) / 2;
+	int r = this->row;
+	return sf::Vector2i(r, q);
 }
 
 bool Grid::isEnabled()
