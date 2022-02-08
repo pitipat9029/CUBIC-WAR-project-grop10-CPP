@@ -14,6 +14,9 @@ private:
 	sf::VideoMode videoMode;
 	sf::Event event;
 
+	sf::Clock clock1sec;
+	sf::Time t1; 
+
 	sf::RectangleShape button;
 
 	Player player;

@@ -76,15 +76,16 @@ void Game::pollEvents()
 		{
 			button.setFillColor(sf::Color::Red);
 		}
-
+		
 		//button press
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
+			/*if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
 			{
 				std::cout << "Start Your turn\n";
 				roll1 = (rand() % 6) + 1;
 				roll2 = (rand() % 6) + 1;
+				
 
 				points = roll1 + roll2;
 				std::cout << "dice1 = " << roll1 << "\n";
@@ -95,7 +96,8 @@ void Game::pollEvents()
 				{
 					std::cout << "U can roll again! \n";
 				}
-			}
+			}*/
+			
 		}
 
 	}
@@ -123,6 +125,15 @@ void Game::Update()
 {
 	this->pollEvents();
 	this->UpdateMousePosition();
+
+	//Timer
+	/*t1 = clock1sec.getElapsedTime();
+	int num = (int)t1.asSeconds();
+	printf("%d\n", num);
+	if (num / 5 == 1)
+	{
+		clock1sec.restart();
+	}*/
 }
 
 void Game::updateGui()
@@ -143,11 +154,12 @@ void Game::Render()
 	//this->player.render(this->window);
 	this->map->Render(this->window);
 	this->gameAction->Update();
+	
 
 	//--------------------------
 
 	//Render gui
-	//window->draw(button);
+	window->draw(button);
 	//this->RenderGui(this->window);
 	this->window->display();
 }
