@@ -159,7 +159,7 @@ void Game::Render()
 	//--------------------------
 
 	//Render gui
-	window->draw(button);
+	//window->draw(button);
 	//this->RenderGui(this->window);
 	this->window->display();
 }

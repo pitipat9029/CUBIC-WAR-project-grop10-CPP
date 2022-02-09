@@ -25,9 +25,11 @@ private:
 	Grid* pGridMoveStart = 0;
 
 	Grid* CheckGridPointed();
-	void HighlightGrid();
 
-	void HighlightMove(int);
+	void HighlightGrid(sf::Color, sf::Color);
+	void HighlightGrids(int, sf::Color, sf::Color);
+
+	void Move();
 
 public:
 	std::vector<std::vector<Grid>>& gridInfos;

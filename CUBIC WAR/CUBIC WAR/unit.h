@@ -24,6 +24,7 @@ public:
 	~Unit();
 	void Render(sf::RenderTarget* target);
 	void SetSize(float, float);
+	void Move(sf::Vector2f);
 };
 
 

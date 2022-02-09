@@ -43,11 +43,9 @@ void Player::randomporition()
 
 Player::Player(float x, float y)
 {
-	//this->shape.setPosition(x, y);
 	this->randomporition();
 	this->initVariable();
 	this->initShape();
-
 }
 
 Player::~Player()

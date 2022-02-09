@@ -9,10 +9,10 @@ void Grid::Setup()
 	this->shape.scale(this->size.x / this->texture.getSize().x, this->size.y / this->texture.getSize().y);
 
 	if (this->row % 2 == 0) {
-		shape.setPosition(this->column * this->size.x, this->row * 50);
+		shape.setPosition(this->column * this->size.x, this->row * 52.f);
 	}
 	else {
-		shape.setPosition((this->column * this->size.x) + this->size.x/2, this->row * 50);
+		shape.setPosition((this->column * this->size.x) + this->size.x/2, this->row * 52.f);
 	}
 
 	this->centerPos.x = this->shape.getPosition().x + (this->size.x / 2);
@@ -68,12 +68,30 @@ void Grid::CreateBuilding(std::string type)
 	}
 }
 
-void Grid::AddUnit(std::string type, std::vector<Unit>& vUnits)
+void Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits)
 {
 	this->isUnit = true;
-	Unit unit(type, this->centerPos);
-	vUnits.push_back(unit);
-	this->pUnit = &vUnits.back();
+	//Unit * p = new Unit(type, this->centerPos);
+	vUnits.push_back(new Unit(type, this->centerPos));
+	this->pUnit = vUnits.back();
+}
+
+void Grid::AddUnit(Unit* pNewUnit)
+{
+	this->pUnit = pNewUnit;
+	this->pUnit->Move(this->centerPos);
+	this->isUnit = true;
+}
+
+Unit* Grid::GetUnit()
+{
+	return this->pUnit;
+}
+
+void Grid::ClearUnit()
+{
+	this->isUnit = false;
+	this->pUnit = 0;
 }
 
 bool Grid::isHovered(sf::Vector2i MousePos)

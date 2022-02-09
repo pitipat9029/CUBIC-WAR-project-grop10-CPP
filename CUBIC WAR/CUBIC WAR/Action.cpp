@@ -19,17 +19,35 @@ void Action::Update()
 	this->pGridPointed = this->CheckGridPointed();
 
 	if (pGridMoveStart != 0) {
-		this->HighlightMove(3);
+		this->HighlightGrids(1, sf::Color(0, 255, 0, 100), sf::Color(0, 0, 0, 0));
 	}
 	if (pGridPointed != 0) {
-		this->HighlightGrid();
+		if (pGridMoveStart != 0) {
+			this->HighlightGrid(sf::Color(0, 255, 0, 100), sf::Color(0, 0, 0, 0));
+		}
+		else {
+			this->HighlightGrid(sf::Color(0, 0, 0, 0), sf::Color::White);
+		}
+
+
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 			if (!this->isMousePress) {
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-					if (pGridPointed->isUnit) {
-						this->pGridMoveStart = pGridPointed;
+					if (pGridMoveStart != 0) {
+						this->Move();
+						this->pMap->SetAllGridEnable(true);
+						for (int i = 0; i < this->pMap->vUnits.size(); i++) {
+							std::cout << this->pMap->vUnits[i] << std::endl;
+						}
+						std::cout << "---------------------" << std::endl;
+					}else{
+						if (pGridPointed->isUnit && pGridPointed->GetUnit() != 0) {
+							this->pGridMoveStart = pGridPointed;
+						}
+						else {
+							this->pGridPointed->AddUnit("Soldier", pMap->vUnits);
+						}
 					}
-					this->pGridPointed->AddUnit("Soldier", pMap->vUnits);
 				}
 				else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 					this->pGridPointed->CreateBuilding("B");
@@ -73,31 +91,39 @@ Grid* Action::CheckGridPointed()
 	return 0;
 }
 
-void Action::HighlightGrid()
+void Action::HighlightGrid(sf::Color cFill, sf::Color cOutline)
 {
 	sf::CircleShape rect(35, 6);
 	rect.setPosition(pGridPointed->GetPosition().x - 5, pGridPointed->GetPosition().y);
-	rect.setFillColor(sf::Color(0, 0, 0, 0));
-	rect.setOutlineColor(sf::Color::White);
+	rect.setFillColor(cFill);
+	rect.setOutlineColor(cOutline);
 	rect.setOutlineThickness(-1.5f);
 	this->pWindow->draw(rect);
 }
 
-void Action::HighlightMove(int radius)
+void Action::HighlightGrids(int radius, sf::Color cFill, sf::Color cOutline)
 {
 	sf::CircleShape rect(35, 6);
-	rect.setFillColor(sf::Color(0, 0, 0, 0));
-	rect.setOutlineColor(sf::Color::Green);
-	rect.setOutlineThickness(-1.5f);
-
+	rect.setFillColor(cFill);
+	this->pMap->SetAllGridEnable(false);
 	for (int q = this->pGridMoveStart->GetRC().y - radius; q <= this->pGridMoveStart->GetRC().y + radius; q++) {
 		for (int r = this->pGridMoveStart->GetRC().x - radius; r <= this->pGridMoveStart->GetRC().x + radius; r++) {
 			if (abs( - (q - this->pGridMoveStart->GetRC().y) - (r - this->pGridMoveStart->GetRC().x)) <= radius) {
 				int col = q + (r - (r & 1)) / 2;
 				int row = r;
-				rect.setPosition(pMap->vGrids[row + 1][col + 1].GetPosition().x - 5, pMap->vGrids[row + 1][col + 1].GetPosition().y);
-				this->pWindow->draw(rect);
+				if (&this->pMap->vGrids[row + 1][col + 1] != this->pGridMoveStart) {
+					this->pMap->vGrids[row + 1][col + 1].SetEnabled(true);
+					rect.setPosition(this->pMap->vGrids[row + 1][col + 1].GetPosition().x - 5, this->pMap->vGrids[row + 1][col + 1].GetPosition().y);
+					this->pWindow->draw(rect);
+				}
 			}
 		}
 	}
+}
+
+void Action::Move()
+{
+	this->pGridPointed->AddUnit(this->pGridMoveStart->GetUnit());
+	this->pGridMoveStart->ClearUnit();
+	this->pGridMoveStart = 0;
 }
