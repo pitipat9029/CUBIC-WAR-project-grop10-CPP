@@ -39,8 +39,9 @@ void Grid::Render(sf::RenderTarget *target)
 
 // Grid Action ->
 
-void Grid::CreateBuilding(std::string type)
+void Grid::CreateBuilding(std::string type, int idPlayer)
 {
+	this->idPlayerHere = idPlayer;
 	this->isBuilding = true;
 	this->typeBuilding = type;
 
@@ -70,10 +71,10 @@ void Grid::CreateBuilding(std::string type)
 	}
 }
 
-void Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits)
+void Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits, int idPlayer)
 {
 	this->isUnit = true;
-	vUnits.push_back(new Unit(type, this->centerPos));
+	vUnits.push_back(new Unit(type, this->centerPos, idPlayer));
 	this->pUnit = vUnits.back();
 }
 

@@ -23,5 +23,6 @@ public:
 	std::vector<Unit *> vUnits;
 
 	void Render(sf::RenderTarget *);
-	void SetAllGridEnable(bool);
+	void SetGridAllEnable(bool);
+	void SetGridEdgeDisable();
 };

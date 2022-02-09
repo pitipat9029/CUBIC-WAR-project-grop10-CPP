@@ -18,8 +18,10 @@ private:
 
 	Map* pMap = 0;
 
-	int playerNow = 0;
-	std::vector<Player*> gamePlayers;
+	int countTurn = 0;
+
+	int idPlayerNow = 0;
+	std::vector<Player*> vPlayers;
 	
 	std::vector<sf::Sprite> grids;
 
@@ -27,6 +29,7 @@ private:
 	sf::Vector2i currentMousePos;
 	bool isMousePress = false;
 
+	bool isWait = false;
 	bool isMoveMode = false;
 	bool isCreatdMode = false;
 
@@ -34,13 +37,17 @@ private:
 	Grid* pGridPointed = 0;
 
 	Grid* CheckGridPointed();
+	void CreateGridArea(int);
 
 	void ClickEvents();
+	void NextTurn();
 
 	void HighlightGridPointed(sf::Color, sf::Color);
-	void HighlightGrids(int, sf::Color, sf::Color);
+	void HighlightGridArea(sf::Color, sf::Color);
 	void ShowGridHighlight();
+	void RandomStartPosition();
 
+	void RenderUnit();
 	void Move();
 	
 public:

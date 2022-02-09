@@ -47,17 +47,25 @@ void Map::Render(sf::RenderTarget* target)
 			vGrids[i][j].Render(target);
 		}
 	}
-	for (unsigned int i = 0; i < this->vUnits.size(); i++) {
-		vUnits[i]->Render(target);
-	}
 }
 
-void Map::SetAllGridEnable(bool b)
+void Map::SetGridAllEnable(bool b)
 {
 	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
 		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
-			if (!((j < 0 || (j > this->maxColumn - 2 && (i % 2) != 0)) || (i < 0 || i >= this->maxRow))) {
+			if (!((j <= 0 || (j > this->maxColumn-1 && (i % 2) == 0)) || (i <= 0 || i >= this->maxRow+1))) {
 				vGrids[i][j].SetEnabled(b);
+			}
+		}
+	}
+}
+
+void Map::SetGridEdgeDisable()
+{
+	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
+		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
+			if ((j <= 0 || (j > this->maxColumn - 1 && (i % 2) == 0)) || (i <= 0 || i >= this->maxRow + 1)) {
+				vGrids[i][j].SetEnabled(false);
 			}
 		}
 	}

@@ -1,8 +1,10 @@
 #include "Unit.h"
 
-Unit::Unit(std::string type, sf::Vector2f centerPos)
+Unit::Unit(std::string type, sf::Vector2f centerPos, int idPlayer)
 {
 	std::cout << "Unit " << type << " was create." << std::endl;
+
+	this->idPlayer = idPlayer;
 
 	this->type = type;
 	if (this->type == "Engineer") {

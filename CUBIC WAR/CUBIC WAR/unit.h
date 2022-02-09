@@ -10,17 +10,18 @@ private:
 	std::string imgPath = "";
 	sf::Texture texture;
 	sf::Vector2f size;
-	int points;
-
+	
 	std::string type = "";
 	int hp;
 	int maxhp;
-
+	int price;
 	int atk;
 	int moveRadius;
 
+	int idPlayer;
+
 public:
-	Unit(std::string, sf::Vector2f);
+	Unit(std::string, sf::Vector2f, int);
 	~Unit();
 	void Render(sf::RenderTarget* target);
 	void SetSize(float, float);

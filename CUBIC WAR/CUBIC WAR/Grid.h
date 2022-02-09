@@ -20,6 +20,7 @@ private:
 	sf::Texture texture;
 	sf::Sprite shape;
 	
+	int idPlayerHere = -1;
 	std::string typeBuilding = "";
 	int maxLifePoint = 0, lifePoint = 0;
 	int damage = 0;
@@ -34,12 +35,12 @@ public:
 	~Grid();
 
 	void Render(sf::RenderTarget*);
-	void CreateBuilding(std::string type);
+	void CreateBuilding(std::string type, int);
 
-	void AddUnit(std::string type, std::vector<Unit*>&);
+	void AddUnit(std::string type, std::vector<Unit*>&, int);
 	void AddUnit(Unit*);
-	Unit* GetUnit();
 	void ClearUnit();
+	Unit* GetUnit();
 
 	void SetEnabled(bool);
 

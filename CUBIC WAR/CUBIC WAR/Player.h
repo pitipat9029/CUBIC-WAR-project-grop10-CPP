@@ -11,6 +11,7 @@ class Player
 private:
 	sf::Vector2i startposition;
 	void randomporition();
+	int point = 0;
 
 public:
 	Player(float x = 0.f,float y = 0.f);
