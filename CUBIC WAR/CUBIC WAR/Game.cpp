@@ -3,7 +3,6 @@
 Game::Game()
 {
 	this->initWindow();
-	this->initPlayer(2);
 	this->initVariable();
 	this->initFont();
 	this->initText();
@@ -15,9 +14,8 @@ Game::Game()
 
 Game::~Game()
 {
-	delete window;
-	delete map;
 	delete gameAction;
+	delete window;
 }
 
 const bool Game::IsRuning() const
@@ -25,20 +23,21 @@ const bool Game::IsRuning() const
 	return this->window->isOpen();
 }
 
-// Seting Game start
+// Setting window and main events
 
 void Game::initWindow()
 {
 	this->videoMode.height = 600;
 	this->videoMode.width = 900;
 	this->window = new sf::RenderWindow(this->videoMode, "Game", sf::Style::Titlebar | sf::Style::Close);
+
 	this->window->setFramerateLimit(60);
 }
 
 void Game::initVariable()
 {
-	this->map = new Map;
-	this->gameAction = new Action(this->map, this->window, this->map->vGrids, this->gamePlayers, &this->mousePosView);
+	this->gameAction = new Action(this->window, &this->mousePosView);
+	this->gameAction->StartGame(2);
 }
 
 void Game::initButton()
@@ -95,7 +94,6 @@ void Game::pollEvents()
 				std::cout << "Start Your turn\n";
 				roll1 = (rand() % 6) + 1;
 				roll2 = (rand() % 6) + 1;
-				
 
 				points = roll1 + roll2;
 				std::cout << "dice1 = " << roll1 << "\n";
@@ -106,7 +104,7 @@ void Game::pollEvents()
 				{
 					std::cout << "U can roll again! \n";
 				}
-			}
+			}*/
 			
 		}
 
@@ -178,7 +176,7 @@ void Game::Render()
 	//--------------------------
 
 	//Code draw things here
-	this->player.render(this->window);
+	//this->player.render(this->window);
 	this->map->Render(this->window);
 	this->gameAction->Update();
 	
@@ -186,10 +184,8 @@ void Game::Render()
 	//--------------------------
 
 	//Render gui
-	window->draw(bar);
-	window->draw(guiText);
-	window->draw(timer);
 	window->draw(button);
+	//this->RenderGui(this->window);
 	this->window->display();
 }
 

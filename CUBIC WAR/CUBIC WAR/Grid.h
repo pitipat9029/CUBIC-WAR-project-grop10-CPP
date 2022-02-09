@@ -35,7 +35,11 @@ public:
 
 	void Render(sf::RenderTarget*);
 	void CreateBuilding(std::string type);
-	void AddUnit(std::string type, std::vector<Unit>&);
+
+	void AddUnit(std::string type, std::vector<Unit*>&);
+	void AddUnit(Unit*);
+	Unit* GetUnit();
+	void ClearUnit();
 
 	void SetEnabled(bool);
 

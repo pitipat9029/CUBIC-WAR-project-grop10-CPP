@@ -21,8 +21,6 @@ private:
 	sf::RectangleShape bar;
 
 
-	Player player;
-	std::vector<Player> gamePlayers;
 	Action* gameAction;
 
 	int points;
@@ -37,7 +35,6 @@ private:
 
 	void initWindow();
 	void initVariable();
-	void initPlayer(int);
 	void initButton();
 	void initBar();
 
@@ -53,8 +50,6 @@ public:
 	sf::RenderWindow* window;
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
-
-	Map* map;
 
 	// Consturctor & Desturctor
 	Game();

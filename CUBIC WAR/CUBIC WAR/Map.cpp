@@ -20,6 +20,9 @@ void Map::InitMap()
 
 Map::Map()
 {
+	std::cout << "Map was create" << std::endl;
+
+	// Set map properties
 	gridSize.x = 60.f;
 	gridSize.y = 70.f;
 
@@ -31,20 +34,32 @@ Map::Map()
 
 Map::~Map()
 {
+	for (unsigned int i = 0; i < this->vUnits.size(); i++) {
+		delete this->vUnits[i];
+	}
+	std::cout << "Map was delect" << std::endl;
 }
 
 void Map::Render(sf::RenderTarget* target)
 {
-	/*for (unsigned int i = 0; i < this->vGridsAll.size(); i++) {
-		vGridsAll[i].Render(target);
-	}*/
 	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
 		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
 			vGrids[i][j].Render(target);
 		}
 	}
 	for (unsigned int i = 0; i < this->vUnits.size(); i++) {
-		vUnits[i].Render(target);
+		vUnits[i]->Render(target);
+	}
+}
+
+void Map::SetAllGridEnable(bool b)
+{
+	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
+		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
+			if (!((j < 0 || (j > this->maxColumn - 2 && (i % 2) != 0)) || (i < 0 || i >= this->maxRow))) {
+				vGrids[i][j].SetEnabled(b);
+			}
+		}
 	}
 }
 

@@ -2,6 +2,8 @@
 
 Unit::Unit(std::string type, sf::Vector2f centerPos)
 {
+	std::cout << "Unit " << type << " was create." << std::endl;
+
 	this->type = type;
 	if (this->type == "Engineer") {
 		this->imgPath = "Engineer";
@@ -27,7 +29,7 @@ Unit::Unit(std::string type, sf::Vector2f centerPos)
 
 Unit::~Unit()
 {
-
+	std::cout << "Unit " << this->type << " was delete." << std::endl;
 }
 
 void Unit::Render(sf::RenderTarget* target)
@@ -39,6 +41,11 @@ void Unit::Render(sf::RenderTarget* target)
 void Unit::SetSize(float x, float y)
 {
 	this->shape.scale(x / this->texture.getSize().x, y / this->texture.getSize().y);
+}
+
+void Unit::Move(sf::Vector2f centerPos)
+{
+	this->shape.setPosition(centerPos);
 }
 
 

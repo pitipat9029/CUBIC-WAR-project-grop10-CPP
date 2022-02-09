@@ -12,29 +12,42 @@
 class Action
 {
 private:
-	Map* pMap;
-	sf::RenderWindow* pWindow;
-	sf::Vector2f* pMousePosView;
-	Grid* pGridPointed = 0;
-	std::vector<sf::Sprite> grids;
-	sf::Vector2i currentMousePos;
+	void Update();
 
-	bool isCreatdMode;
+	sf::RenderWindow* pWindow;
+
+	Map* pMap = 0;
+
+	int playerNow = 0;
+	std::vector<Player*> gamePlayers;
+	
+	std::vector<sf::Sprite> grids;
+
+	sf::Vector2f* pMousePosView;
+	sf::Vector2i currentMousePos;
 	bool isMousePress = false;
 
+	bool isMoveMode = false;
+	bool isCreatdMode = false;
+
 	Grid* pGridMoveStart = 0;
+	Grid* pGridPointed = 0;
 
 	Grid* CheckGridPointed();
-	void HighlightGrid();
 
-	void HighlightMove(int);
+	void ClickEvents();
 
+	void HighlightGridPointed(sf::Color, sf::Color);
+	void HighlightGrids(int, sf::Color, sf::Color);
+	void ShowGridHighlight();
+
+	void Move();
+	
 public:
-	std::vector<std::vector<Grid>>& gridInfos;
-	std::vector<Player>& gamePlayers;
-
-	Action(Map*, sf::RenderWindow*, std::vector<std::vector<Grid>>&, std::vector<Player>&, sf::Vector2f*);
+	Action(sf::RenderWindow*, sf::Vector2f*);
 	~Action();
 
-	void Update();
+	void Render();
+	void StartGame(int);
+	void GameEnd();
 };
