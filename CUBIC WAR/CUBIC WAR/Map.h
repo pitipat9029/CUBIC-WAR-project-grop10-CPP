@@ -19,7 +19,6 @@ public:
 	Map();
 	~Map();
 
-	std::vector<Grid> vGridsAll;
 	std::vector<std::vector<Grid>> vGrids;
 	std::vector<Unit *> vUnits;
 

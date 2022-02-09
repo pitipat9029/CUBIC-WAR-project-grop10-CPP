@@ -1,5 +1,17 @@
 #include "Grid.h"
 
+Grid::Grid(int row, int column, sf::Vector2f size)
+{
+	this->size = size;
+	this->column = column;
+	this->row = row;
+	this->Setup();
+}
+
+Grid::~Grid()
+{
+}
+
 void Grid::Setup()
 {
 	if (!texture.loadFromFile("Textures/Terrain/grass.png")) {
@@ -19,23 +31,13 @@ void Grid::Setup()
 	this->centerPos.y = this->shape.getPosition().y + (this->size.y / 2);
 }
 
-Grid::Grid(int row, int column, sf::Vector2f size)
-{
-	this->size = size;
-	this->column = column;
-	this->row = row;
-	this->Setup();
-}
-
-Grid::~Grid()
-{
-}
-
 void Grid::Render(sf::RenderTarget *target)
 {
 	this->shape.setTexture(this->texture);
 	target->draw(this->shape);
 }
+
+// Grid Action ->
 
 void Grid::CreateBuilding(std::string type)
 {
@@ -71,7 +73,6 @@ void Grid::CreateBuilding(std::string type)
 void Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits)
 {
 	this->isUnit = true;
-	//Unit * p = new Unit(type, this->centerPos);
 	vUnits.push_back(new Unit(type, this->centerPos));
 	this->pUnit = vUnits.back();
 }

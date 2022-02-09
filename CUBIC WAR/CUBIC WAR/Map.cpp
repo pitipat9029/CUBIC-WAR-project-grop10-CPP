@@ -20,6 +20,9 @@ void Map::InitMap()
 
 Map::Map()
 {
+	std::cout << "Map was create" << std::endl;
+
+	// Set map properties
 	gridSize.x = 60.f;
 	gridSize.y = 70.f;
 
@@ -34,6 +37,7 @@ Map::~Map()
 	for (unsigned int i = 0; i < this->vUnits.size(); i++) {
 		delete this->vUnits[i];
 	}
+	std::cout << "Map was delect" << std::endl;
 }
 
 void Map::Render(sf::RenderTarget* target)
