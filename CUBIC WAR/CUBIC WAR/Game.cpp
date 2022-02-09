@@ -55,14 +55,6 @@ void Game::initBar()
 	this->bar.setPosition(0.f,550.f);
 }
 
-void Game::initPlayer(int numbers)
-{
-	Player player;
-	for (int i = 0; i < numbers; i++) {
-		gamePlayers.push_back(player);
-	}
-}
-
 void Game::pollEvents()
 {
 	while (this->window->pollEvent(this->event)) {
@@ -104,7 +96,7 @@ void Game::pollEvents()
 				{
 					std::cout << "U can roll again! \n";
 				}
-			}*/
+			}
 			
 		}
 
@@ -177,8 +169,7 @@ void Game::Render()
 
 	//Code draw things here
 	//this->player.render(this->window);
-	this->map->Render(this->window);
-	this->gameAction->Update();
+	this->gameAction->Render();
 	
 
 	//--------------------------

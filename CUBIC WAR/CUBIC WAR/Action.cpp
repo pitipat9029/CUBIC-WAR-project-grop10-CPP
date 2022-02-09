@@ -35,6 +35,7 @@ void Action::Render()
 {
 	if (isWait == false) {
 		this->pMap->Render(this->pWindow);
+		ShowGridHighlight();
 		this->RenderUnit();
 	}
 	this->Update();
@@ -103,7 +104,6 @@ void Action::Update()
 	this->currentMousePos = sf::Mouse::getPosition(*this->pWindow);
 	this->pGridPointed = this->CheckGridPointed();
 
-	ShowGridHighlight();
 	ClickEvents();
 }
 
