@@ -18,27 +18,33 @@ private:
 	sf::Time t1; 
 
 	sf::RectangleShape button;
+	sf::RectangleShape bar;
+
 
 	Player player;
 	std::vector<Player> gamePlayers;
 	Action* gameAction;
 
 	int points;
+	int time;
 
 	int roll1, roll2;
 	
 
 	sf::Font font;
 	sf::Text guiText;
+	sf::Text timer;
 
 	void initWindow();
 	void initVariable();
 	void initPlayer(int);
 	void initButton();
+	void initBar();
 
 	void pollEvents();
 	void initFont();
 	void initText();
+	void initTimer();
 
 	void UpdateMousePosition();
 
@@ -59,9 +65,9 @@ public:
 	// Function
 	void Update();
 	void updateGui();
+	void updateTime();
 	void Render();
 
-	void RenderGui(sf::RenderTarget* target);
 	void renderButton(sf::RenderTarget*);
 };
 

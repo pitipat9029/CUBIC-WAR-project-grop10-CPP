@@ -7,7 +7,9 @@ Game::Game()
 	this->initVariable();
 	this->initFont();
 	this->initText();
+	this->initTimer();
 	this->initButton();
+	this->initBar();
 	this->points = 0;
 }
 
@@ -43,7 +45,15 @@ void Game::initButton()
 {
 	this->button.setFillColor(sf::Color::Red);
 	this->button.setSize(sf::Vector2f(50.f, 50.f));
-	this->button.setPosition(0.f, 0.f);
+	this->button.setPosition(850.f, 550.f);
+}
+
+void Game::initBar()
+{
+	sf::Color temp(196, 164, 132);
+	this->bar.setFillColor(temp);
+	this->bar.setSize(sf::Vector2f(900.f, 100.f));
+	this->bar.setPosition(0.f,550.f);
 }
 
 void Game::initPlayer(int numbers)
@@ -80,7 +90,7 @@ void Game::pollEvents()
 		//button press
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			/*if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
+			if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
 			{
 				std::cout << "Start Your turn\n";
 				roll1 = (rand() % 6) + 1;
@@ -96,7 +106,7 @@ void Game::pollEvents()
 				{
 					std::cout << "U can roll again! \n";
 				}
-			}*/
+			}
 			
 		}
 
@@ -111,8 +121,17 @@ void Game::initFont()
 void Game::initText()
 {
 	this->guiText.setFont(this->font);
-	this->guiText.setFillColor(sf::Color::Blue);
+	this->guiText.setFillColor(sf::Color::White);
 	this->guiText.setCharacterSize(32);
+	this->guiText.setPosition(5.f, 550.f);
+}
+
+void Game::initTimer()
+{
+	this->timer.setFont(this->font);
+	this ->timer.setFillColor(sf::Color::White);
+	this->timer.setCharacterSize(32);
+	this->timer.setPosition(200.f, 550.f);
 }
 
 void Game::UpdateMousePosition()
@@ -125,15 +144,8 @@ void Game::Update()
 {
 	this->pollEvents();
 	this->UpdateMousePosition();
-
-	//Timer
-	/*t1 = clock1sec.getElapsedTime();
-	int num = (int)t1.asSeconds();
-	printf("%d\n", num);
-	if (num / 5 == 1)
-	{
-		clock1sec.restart();
-	}*/
+	this->updateGui();
+	this->updateTime();
 }
 
 void Game::updateGui()
@@ -143,6 +155,21 @@ void Game::updateGui()
 	ss << "Points: " << this->points;
 	this->guiText.setString(ss.str());
 }
+
+void Game::updateTime()
+{
+	//Timer
+	std::stringstream tt;
+
+	t1 = clock1sec.getElapsedTime();
+	time = (int)t1.asSeconds();
+	if (time / 11 == 1)
+	{
+		clock1sec.restart();
+	}
+	tt << "Timer: " << this->time;
+	this->timer.setString(tt.str());
+}
  
 void Game::Render()
 {
@@ -151,7 +178,7 @@ void Game::Render()
 	//--------------------------
 
 	//Code draw things here
-	//this->player.render(this->window);
+	this->player.render(this->window);
 	this->map->Render(this->window);
 	this->gameAction->Update();
 	
@@ -159,8 +186,10 @@ void Game::Render()
 	//--------------------------
 
 	//Render gui
+	window->draw(bar);
+	window->draw(guiText);
+	window->draw(timer);
 	window->draw(button);
-	//this->RenderGui(this->window);
 	this->window->display();
 }
 
