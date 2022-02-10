@@ -1,4 +1,9 @@
-CUBIC WAR/.vs/
+/CUBIC WAR/.vs/
+/CUBIC WAR/x64/
+/CUBIC WAR/CUBIC WAR/x64/
+/CUBIC WAR/CUBIC WAR/CUBIC WAR.vcxproj.filters
+/CUBIC WAR/CUBIC WAR/CUBIC WAR.vcxproj
+/CUBIC-WAR-project-grop10-CPP/CUBIC WAR/CUBIC WAR/Debug/
 
 *.suo
 *.user
