@@ -18,8 +18,9 @@ void Map::InitMap()
 	}
 }
 
-Map::Map()
+Map::Map(sf::RenderWindow* pWindow)
 {
+	this->pWindow = pWindow;
 	std::cout << "Map was create" << std::endl;
 
 	// Set map properties
@@ -40,12 +41,40 @@ Map::~Map()
 	std::cout << "Map was delect" << std::endl;
 }
 
-void Map::Render(sf::RenderTarget* target)
+void Map::Render(sf::RenderTarget* target, int idPlayer)
 {
 	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
 		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
-			vGrids[i][j].Render(target);
+			if (vGrids[i][j].GetPlayerVision(idPlayer)) {
+				vGrids[i][j].Render(target);
+			}
 		}
+	}
+}
+
+void Map::UpdatePlayerVision(Grid* pGrid, int radius, int idPlayer)
+{
+	for (int q = pGrid->GetRC().y - radius; q <= pGrid->GetRC().y + radius; q++) {
+		for (int r = pGrid->GetRC().x - radius; r <= pGrid->GetRC().x + radius; r++) {
+			if (abs(-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) <= radius) {
+				int col = q + (r - (r & 1)) / 2;
+				int row = r;
+				if (row >= 0 && row < 11 && col >= 0 && col < 15) {
+					this->vGrids[row + 1][col + 1].UpdatePlayerVision(idPlayer);
+				}
+			}
+		}
+	}
+}
+
+void Map::ShowGridHighlight(Grid* pGridPointed, std::string gMode)
+{
+	if (gMode == "Move") {
+		this->HighlightGridPointed(pGridPointed, sf::Color(0, 255, 0, 100), sf::Color::Green);
+		this->HighlightGridArea(sf::Color(0, 255, 0, 80), sf::Color(0, 0, 0, 0));
+	}
+	else {
+		this->HighlightGridPointed(pGridPointed, sf::Color(0, 0, 0, 0), sf::Color::White);
 	}
 }
 
@@ -70,5 +99,53 @@ void Map::SetGridEdgeDisable()
 		}
 	}
 }
+
+void Map::CreateGridArea(Grid* pGridCenter, int radius)
+{
+	this->SetGridAllEnable(false);
+	for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
+		for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
+			if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
+				int col = q + (r - (r & 1)) / 2;
+				int row = r;
+				if (row >= 0 && row < 11 && col >= 0 && col < 15) {
+					Grid* pGrid = &this->vGrids[row + 1][col + 1];
+					if (pGrid != pGridCenter && !pGrid->isBuilding && !pGrid->isUnit) {
+						pGrid->SetEnabled(true);
+					}
+				}
+			}
+		}
+	}
+	this->SetGridEdgeDisable();
+}
+
+void Map::HighlightGridArea(sf::Color cFill, sf::Color cOutline)
+{
+	sf::CircleShape rect(35, 6);
+	rect.setFillColor(cFill);
+	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
+		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
+			if (this->vGrids[i][j].isEnabled())
+			{
+				rect.setPosition(this->vGrids[i][j].GetPosition().x - 5, this->vGrids[i][j].GetPosition().y);
+				this->pWindow->draw(rect);
+			}
+		}
+	}
+}
+
+void Map::HighlightGridPointed(Grid* pGridPointed,sf::Color cFill, sf::Color cOutline)
+{
+	if (pGridPointed != 0) {
+		sf::CircleShape rect(35, 6);
+		rect.setPosition(pGridPointed->GetPosition().x - 5, pGridPointed->GetPosition().y);
+		rect.setFillColor(cFill);
+		rect.setOutlineColor(cOutline);
+		rect.setOutlineThickness(-1.5f);
+		this->pWindow->draw(rect);
+	}
+}
+
 
 

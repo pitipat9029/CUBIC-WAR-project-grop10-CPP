@@ -39,7 +39,7 @@ void Grid::Render(sf::RenderTarget *target)
 
 // Grid Action ->
 
-void Grid::CreateBuilding(std::string type, int idPlayer)
+Grid* Grid::CreateBuilding(std::string type, int idPlayer)
 {
 	this->idPlayerHere = idPlayer;
 	this->isBuilding = true;
@@ -69,20 +69,24 @@ void Grid::CreateBuilding(std::string type, int idPlayer)
 	if (!this->texture.loadFromFile("Textures/Building/" + this->imgPath + ".png")) {
 		std::cout << "Error to load Textures/Building/" + this->imgPath + ".png" << std::endl;
 	}
+
+	return this;
 }
 
-void Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits, int idPlayer)
+Grid* Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits, int idPlayer)
 {
 	this->isUnit = true;
 	vUnits.push_back(new Unit(type, this->centerPos, idPlayer));
 	this->pUnit = vUnits.back();
+	return this;
 }
 
-void Grid::AddUnit(Unit* pNewUnit)
+Grid* Grid::AddUnit(Unit* pNewUnit)
 {
 	this->pUnit = pNewUnit;
 	this->pUnit->Move(this->centerPos);
 	this->isUnit = true;
+	return this;
 }
 
 Unit* Grid::GetUnit()
@@ -96,16 +100,16 @@ void Grid::ClearUnit()
 	this->pUnit = 0;
 }
 
-bool Grid::isHovered(sf::Vector2i MousePos)
+bool Grid::isPointed(sf::Vector2i MousePos)
 {
-	if (this->shape.getGlobalBounds().contains(MousePos.x, MousePos.y)) return true;
+	if (this->shape.getGlobalBounds().contains(float(MousePos.x), float(MousePos.y))) return true;
 	return false;
 }
 
 float Grid::distanceFromMouse(sf::Vector2i MousePos)
 {
-	float x = pow(this->centerPos.x - MousePos.x, 2);
-	float y = pow(this->centerPos.y - MousePos.y, 2);
+	float x = float(pow(this->centerPos.x - MousePos.x, 2));
+	float y = float(pow(this->centerPos.y - MousePos.y, 2));
 
 	return sqrt(x + y);
 }
@@ -125,6 +129,16 @@ sf::Vector2i Grid::GetRC()
 	int q = this->column - (this->row - (this->row & 1)) / 2;
 	int r = this->row;
 	return sf::Vector2i(r, q);
+}
+
+void Grid::UpdatePlayerVision(int idPlayer)
+{
+	this->idPlayersVision[idPlayer] = true;
+}
+
+bool Grid::GetPlayerVision(int idPlayer)
+{
+	return this->idPlayersVision[idPlayer];
 }
 
 bool Grid::isEnabled()

@@ -15,6 +15,7 @@ private:
 	sf::Vector2f centerPos;
 	bool enabled = true;
 	void Setup();
+	bool idPlayersVision[2] = {};
 
 	std::string imgPath = "";
 	sf::Texture texture;
@@ -35,20 +36,21 @@ public:
 	~Grid();
 
 	void Render(sf::RenderTarget*);
-	void CreateBuilding(std::string type, int);
-
-	void AddUnit(std::string type, std::vector<Unit*>&, int);
-	void AddUnit(Unit*);
-	void ClearUnit();
-	Unit* GetUnit();
-
+	Grid* CreateBuilding(std::string type, int);
 	void SetEnabled(bool);
 
-	bool isHovered(sf::Vector2i);
+	bool isPointed(sf::Vector2i);
 	bool isEnabled();
 	float distanceFromMouse(sf::Vector2i);
 	sf::Vector2f GetPosition();
 	sf::Vector2i GetRC();
+	void UpdatePlayerVision(int idPlayer);
+	bool GetPlayerVision(int idPlayer);
 	
+	// Unit
+	Grid* AddUnit(std::string type, std::vector<Unit*>&, int);
+	Grid* AddUnit(Unit*);
+	void ClearUnit();
+	Unit* GetUnit();
 };
 

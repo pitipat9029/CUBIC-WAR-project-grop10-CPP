@@ -18,6 +18,7 @@ private:
 
 	Map* pMap = 0;
 
+	bool isWait = true;
 	int countTurn = 0;
 
 	int idPlayerNow = 0;
@@ -29,22 +30,16 @@ private:
 	sf::Vector2i currentMousePos;
 	bool isMousePress = false;
 
-	bool isWait = false;
-	bool isMoveMode = false;
-	bool isCreatdMode = false;
+	std::string gMode = "Normal";
+	void SetModeToNormal();
 
 	Grid* pGridMoveStart = 0;
 	Grid* pGridPointed = 0;
 
 	Grid* CheckGridPointed();
-	void CreateGridArea(int);
 
 	void ClickEvents();
 	void NextTurn();
-
-	void HighlightGridPointed(sf::Color, sf::Color);
-	void HighlightGridArea(sf::Color, sf::Color);
-	void ShowGridHighlight();
 	void RandomStartPosition();
 
 	void RenderUnit();
