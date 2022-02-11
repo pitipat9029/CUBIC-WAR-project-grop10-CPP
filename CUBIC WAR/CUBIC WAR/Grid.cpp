@@ -31,10 +31,15 @@ void Grid::Setup()
 	this->centerPos.y = this->shape.getPosition().y + (this->size.y / 2);
 }
 
-void Grid::Render(sf::RenderTarget *target)
+void Grid::RenderGrid(sf::RenderTarget *target)
 {
 	this->shape.setTexture(this->texture);
 	target->draw(this->shape);
+}
+
+void Grid::RenderUnit(sf::RenderTarget* target)
+{
+	this->pUnit->Render(target);
 }
 
 // Grid Action ->

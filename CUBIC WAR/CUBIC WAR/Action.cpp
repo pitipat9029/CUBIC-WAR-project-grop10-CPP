@@ -1,9 +1,8 @@
 #include "Action.h"
 
-Action::Action(sf::RenderWindow* pWindow, sf::Vector2f* pMousePosView)
+Action::Action(sf::RenderWindow* pWindow)
 {
 	this->pWindow = pWindow;
-	this->pMousePosView = pMousePosView;
 }
 
 Action::~Action()
@@ -13,7 +12,7 @@ Action::~Action()
 
 void Action::StartGame(int numPlayer)
 {
-	this->pMap = new Map(pWindow);
+	this->pMap = new Map(this->pWindow, &this->currentMousePos, &this->idPlayerNow);
 
 	for (int i = 0; i < numPlayer; i++) {
 		this->vPlayers.push_back(new Player);
@@ -52,7 +51,7 @@ void Action::ClickEvents()
 					if (pGridPointed != 0) {
 						if (gMode == "Move") {
 							this->Move();
-							this->SetModeToNormal();
+							this->SetToNormalMode();
 						}
 						else {
 							if (pGridPointed->isUnit && pGridPointed->GetUnit() != 0) {
@@ -101,68 +100,31 @@ void Action::NextTurn()
 		this->idPlayerNow = 0;
 		this->countTurn++;
 	}
-	this->SetModeToNormal();
+	this->SetToNormalMode();
 	std::cout << "Turn: " << countTurn;
 	std::cout << " ----> Player " << idPlayerNow + 1 << " is playing";
 }
 
-void Action::SetModeToNormal()
+void Action::SetToNormalMode()
 {
 	this->gMode = "Normal";
 	this->pGridMoveStart = 0;
 	this->pMap->SetGridAllEnable(true);
 }
 
-Grid* Action::CheckGridPointed()
-{
-	std::vector<Grid*> gridHovered;
-	for (unsigned int i = 0; i < this->pMap->vGrids.size(); i++) {
-		for (unsigned int j = 0; j < this->pMap->vGrids[i].size(); j++) {
-			if (pMap->vGrids[i][j].isPointed(currentMousePos))
-			{
-				gridHovered.push_back(&pMap->vGrids[i][j]);
-			}
-		}
-	}
-	if (gridHovered.size() > 0) {
-		for (unsigned int i = 0; i < gridHovered.size() - 1; i++) {
-			bool isTemp = 0;
-			for (unsigned int j = 0; j < gridHovered.size() - i - 1; j++) {
-				float distanceOne = gridHovered[j]->distanceFromMouse(this->currentMousePos);
-				float distanceTwo = gridHovered[j + 1]->distanceFromMouse(this->currentMousePos);
-				if (distanceOne > distanceTwo){
-					std::swap(gridHovered[j + 1], gridHovered[j]);
-					isTemp = 1;
-				}
-			}
-			if (!isTemp) break;
-		}
-		if(gridHovered[0]->isEnabled()) return gridHovered[0];
-	}
-	return 0;
-}
-
 void Action::Update()
 {
 	this->currentMousePos = sf::Mouse::getPosition(*this->pWindow);
-	this->pGridPointed = this->CheckGridPointed();
-
+	this->pGridPointed = this->pMap->UpdatePointedGrid();
 	ClickEvents();
-}
-
-void Action::RenderUnit()
-{
-	for (unsigned int i = 0; i < this->pMap->vUnits.size(); i++) {
-		this->pMap->vUnits[i]->Render(this->pWindow);
-	}
 }
 
 void Action::Render()
 {
 	if (isWait == false) {
-		this->pMap->Render(this->pWindow, this->idPlayerNow);
-		this->pMap->ShowGridHighlight(this->pGridPointed, this->gMode);
-		this->RenderUnit();
+		this->pMap->RenderMap();
+		this->pMap->ShowGridHighlight(this->gMode);
+		this->pMap->RenderUnits();
 	}
 	this->Update();
 }

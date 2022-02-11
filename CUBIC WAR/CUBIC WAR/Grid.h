@@ -35,7 +35,8 @@ public:
 	Grid(int, int, sf::Vector2f);
 	~Grid();
 
-	void Render(sf::RenderTarget*);
+	void RenderGrid(sf::RenderTarget*);
+	void RenderUnit(sf::RenderTarget*);
 	Grid* CreateBuilding(std::string type, int);
 	void SetEnabled(bool);
 

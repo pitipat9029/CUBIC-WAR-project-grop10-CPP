@@ -18,35 +18,28 @@ private:
 
 	Map* pMap = 0;
 
-	bool isWait = true;
 	int countTurn = 0;
-
-	int idPlayerNow = 0;
+	bool isWait = true;
 	std::vector<Player*> vPlayers;
-	
-	std::vector<sf::Sprite> grids;
+	int idPlayerNow = 0;
 
-	sf::Vector2f* pMousePosView;
 	sf::Vector2i currentMousePos;
 	bool isMousePress = false;
 
 	std::string gMode = "Normal";
-	void SetModeToNormal();
+	void SetToNormalMode();
 
 	Grid* pGridMoveStart = 0;
 	Grid* pGridPointed = 0;
-
-	Grid* CheckGridPointed();
 
 	void ClickEvents();
 	void NextTurn();
 	void RandomStartPosition();
 
-	void RenderUnit();
 	void Move();
 	
 public:
-	Action(sf::RenderWindow*, sf::Vector2f*);
+	Action(sf::RenderWindow*);
 	~Action();
 
 	void Render();

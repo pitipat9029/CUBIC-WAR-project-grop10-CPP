@@ -18,9 +18,11 @@ void Map::InitMap()
 	}
 }
 
-Map::Map(sf::RenderWindow* pWindow)
+Map::Map(sf::RenderWindow* pWindow, sf::Vector2i* currentMousePos, int* pIdPlayerNow)
 {
 	this->pWindow = pWindow;
+	this->pIdPlayerNow = pIdPlayerNow;
+	this->currentMousePos = currentMousePos;
 	std::cout << "Map was create" << std::endl;
 
 	// Set map properties
@@ -41,12 +43,26 @@ Map::~Map()
 	std::cout << "Map was delect" << std::endl;
 }
 
-void Map::Render(sf::RenderTarget* target, int idPlayer)
+void Map::RenderMap()
 {
 	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
 		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
-			if (vGrids[i][j].GetPlayerVision(idPlayer)) {
-				vGrids[i][j].Render(target);
+			if (vGrids[i][j].GetPlayerVision(*this->pIdPlayerNow)) {
+				vGrids[i][j].RenderGrid(this->pWindow);
+			}
+		}
+	}
+}
+
+void Map::RenderUnits()
+{
+	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
+		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
+			if (vGrids[i][j].GetPlayerVision(*this->pIdPlayerNow)) {
+				if (vGrids[i][j].isUnit)
+				{
+					vGrids[i][j].RenderUnit(this->pWindow);
+				}
 			}
 		}
 	}
@@ -59,7 +75,7 @@ void Map::UpdatePlayerVision(Grid* pGrid, int radius, int idPlayer)
 			if (abs(-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) <= radius) {
 				int col = q + (r - (r & 1)) / 2;
 				int row = r;
-				if (row >= 0 && row < 11 && col >= 0 && col < 15) {
+				if (row >= -1 && row < this->maxRow && col >= -1 && col <= this->maxColumn) {
 					this->vGrids[row + 1][col + 1].UpdatePlayerVision(idPlayer);
 				}
 			}
@@ -67,14 +83,48 @@ void Map::UpdatePlayerVision(Grid* pGrid, int radius, int idPlayer)
 	}
 }
 
-void Map::ShowGridHighlight(Grid* pGridPointed, std::string gMode)
+Grid* Map::UpdatePointedGrid()
+{
+	std::vector<Grid*> gridHovered;
+	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
+		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
+			if (this->vGrids[i][j].GetPlayerVision(*this->pIdPlayerNow) && \
+				this->vGrids[i][j].isPointed(*this->currentMousePos))
+			{
+				gridHovered.push_back(&this->vGrids[i][j]);
+			}
+		}
+	}
+	if (gridHovered.size() > 0) {
+		for (unsigned int i = 0; i < gridHovered.size() - 1; i++) {
+			bool isTemp = 0;
+			for (unsigned int j = 0; j < gridHovered.size() - i - 1; j++) {
+				float distanceOne = gridHovered[j]->distanceFromMouse(*this->currentMousePos);
+				float distanceTwo = gridHovered[j + 1]->distanceFromMouse(*this->currentMousePos);
+				if (distanceOne > distanceTwo) {
+					std::swap(gridHovered[j + 1], gridHovered[j]);
+					isTemp = 1;
+				}
+			}
+			if (!isTemp) break;
+		}
+		if (gridHovered[0]->isEnabled()) {
+			this->pPointedGrid = gridHovered[0];
+			return gridHovered[0];
+		}
+	}
+	this->pPointedGrid = 0;
+	return 0;
+}
+
+void Map::ShowGridHighlight(std::string gMode)
 {
 	if (gMode == "Move") {
-		this->HighlightGridPointed(pGridPointed, sf::Color(0, 255, 0, 100), sf::Color::Green);
+		this->HighlightGridPointed(sf::Color(0, 255, 0, 100), sf::Color::Green);
 		this->HighlightGridArea(sf::Color(0, 255, 0, 80), sf::Color(0, 0, 0, 0));
 	}
 	else {
-		this->HighlightGridPointed(pGridPointed, sf::Color(0, 0, 0, 0), sf::Color::White);
+		this->HighlightGridPointed(sf::Color(0, 0, 0, 0), sf::Color::White);
 	}
 }
 
@@ -108,7 +158,7 @@ void Map::CreateGridArea(Grid* pGridCenter, int radius)
 			if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
 				int col = q + (r - (r & 1)) / 2;
 				int row = r;
-				if (row >= 0 && row < 11 && col >= 0 && col < 15) {
+				if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
 					Grid* pGrid = &this->vGrids[row + 1][col + 1];
 					if (pGrid != pGridCenter && !pGrid->isBuilding && !pGrid->isUnit) {
 						pGrid->SetEnabled(true);
@@ -135,11 +185,11 @@ void Map::HighlightGridArea(sf::Color cFill, sf::Color cOutline)
 	}
 }
 
-void Map::HighlightGridPointed(Grid* pGridPointed,sf::Color cFill, sf::Color cOutline)
+void Map::HighlightGridPointed(sf::Color cFill, sf::Color cOutline)
 {
-	if (pGridPointed != 0) {
+	if (this->pPointedGrid != 0) {
 		sf::CircleShape rect(35, 6);
-		rect.setPosition(pGridPointed->GetPosition().x - 5, pGridPointed->GetPosition().y);
+		rect.setPosition(this->pPointedGrid->GetPosition().x - 5, this->pPointedGrid->GetPosition().y);
 		rect.setFillColor(cFill);
 		rect.setOutlineColor(cOutline);
 		rect.setOutlineThickness(-1.5f);
