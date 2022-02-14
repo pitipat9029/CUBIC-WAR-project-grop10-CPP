@@ -10,6 +10,7 @@ Game::Game()
 	this->initButton();
 	this->initBar();
 	this->points = 0;
+	this->playerturn = 1;
 }
 
 Game::~Game()
@@ -36,15 +37,21 @@ void Game::initWindow()
 
 void Game::initVariable()
 {
-	this->gameAction = new Action(this->window);
+	this->gameAction = new Action(this->window, &this->mousePosView);
 	this->gameAction->StartGame(2);
 }
 
 void Game::initButton()
 {
-	this->button.setFillColor(sf::Color::Red);
-	this->button.setSize(sf::Vector2f(50.f, 50.f));
-	this->button.setPosition(850.f, 550.f);
+	this->button1.setFillColor(sf::Color::Red);
+	this->button1.setSize(sf::Vector2f(100.f, 50.f));
+	this->button1.setPosition(800.f, 550.f);
+
+	this->text.setFont(this->font);
+	this->text.setFillColor(sf::Color::White);
+	this->text.setCharacterSize(18);
+	this->text.setPosition(680.f, 567.f);
+	this->text.setString("-> Click to Start ur turn");
 }
 
 void Game::initBar()
@@ -54,6 +61,7 @@ void Game::initBar()
 	this->bar.setSize(sf::Vector2f(900.f, 100.f));
 	this->bar.setPosition(0.f,550.f);
 }
+
 
 void Game::pollEvents()
 {
@@ -69,21 +77,21 @@ void Game::pollEvents()
 			if (this->event.key.code == sf::Keyboard::Escape) this->window->close();
 			break;
 		}
-		if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
+		if (button1.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
 		{
-			button.setFillColor(sf::Color::Blue);
+			button1.setFillColor(sf::Color::Blue);
 		}
 		else
 		{
-			button.setFillColor(sf::Color::Red);
+			button1.setFillColor(sf::Color::Red);
 		}
 		
 		//button press
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
+			if (button1.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
 			{
-				std::cout << "Start Your turn\n";
+				/*std::cout << "Start Your turn\n";
 				roll1 = (rand() % 6) + 1;
 				roll2 = (rand() % 6) + 1;
 
@@ -95,7 +103,7 @@ void Game::pollEvents()
 				if (roll1 == roll2)
 				{
 					std::cout << "U can roll again! \n";
-				}
+				}*/
 			}
 			
 		}
@@ -106,6 +114,14 @@ void Game::pollEvents()
 void Game::initFont()
 {
 	this->font.loadFromFile("Fonts/Minecraft.ttf");
+}
+
+void Game::initTurnText()
+{
+	this->turntext.setFont(this->font);
+	this->turntext.setFillColor(sf::Color::White);
+	this->turntext.setCharacterSize(32);
+	this->turntext.setPosition(400.f, 280.f);
 }
 
 void Game::initText()
@@ -135,7 +151,9 @@ void Game::Update()
 	this->pollEvents();
 	this->UpdateMousePosition();
 	this->updateGui();
+	this->updateTurnText();
 	this->updateTime();
+		
 }
 
 void Game::updateGui()
@@ -160,13 +178,21 @@ void Game::updateTime()
 	tt << "Timer: " << this->time;
 	this->timer.setString(tt.str());
 }
+
+void Game::updateTurnText()
+{
+	std::stringstream textt;
+
+	textt << "Player " << this->playerturn << " turn";
+	this->turntext.setString(textt.str());
+}
  
 void Game::Render()
 {
 	this->window->clear();
 
 	//--------------------------
-
+	window->draw(turntext);
 	//Code draw things here
 	//this->player.render(this->window);
 	this->gameAction->Render();
@@ -175,12 +201,17 @@ void Game::Render()
 	//--------------------------
 
 	//Render gui
+	//window->draw(bar);
 	//window->draw(button);
+	//window->draw(text);
+	//window->draw(guiText);
 	//this->RenderGui(this->window);
 	this->window->display();
+
+
 }
 
 void Game::renderButton(sf::RenderTarget* target)
 {
-	target->draw(this->button);
+	target->draw(this->button1);
 }

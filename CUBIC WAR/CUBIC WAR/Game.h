@@ -17,12 +17,13 @@ private:
 	sf::Clock clock1sec;
 	sf::Time t1; 
 
-	sf::RectangleShape button;
+	sf::RectangleShape button1;
 	sf::RectangleShape bar;
 
 
 	Action* gameAction;
 
+	int playerturn;
 	int points;
 	int time;
 
@@ -32,15 +33,19 @@ private:
 	sf::Font font;
 	sf::Text guiText;
 	sf::Text timer;
+	sf::Text turntext;
+	sf::Text text;
 
 	void initWindow();
 	void initVariable();
 	void initButton();
 	void initBar();
+	
 
 	void pollEvents();
 	void initFont();
 	void initText();
+	void initTurnText();
 	void initTimer();
 
 	void UpdateMousePosition();
@@ -61,6 +66,7 @@ public:
 	void Update();
 	void updateGui();
 	void updateTime();
+	void updateTurnText();
 	void Render();
 
 	void renderButton(sf::RenderTarget*);
