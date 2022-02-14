@@ -44,15 +44,14 @@ private:
 	sf::Vector2i currentMousePos;
 	bool isMousePress = false;
 
+	std::string gMode = "Normal";
 	bool isWait = false;
+	bool isMenuOpen = false;
 	bool isMoveMode = false;
 	bool isCreatdMode = false;
 
-	Grid* pGridMoveStart = 0;
+	Grid* pGridSelected = 0;
 	Grid* pGridPointed = 0;
-
-	Grid* CheckGridPointed();
-	void CreateGridArea(int);
 
 	void initFont();
 	void intitText();
@@ -61,19 +60,15 @@ private:
 
 	void ClickEvents();
 	void NextTurn();
-
-	void HighlightGridPointed(sf::Color, sf::Color);
-	void HighlightGridArea(sf::Color, sf::Color);
-	void ShowGridHighlight();
+	void SetToNormalMode();
 	void RandomStartPosition();
 
-	void RenderUnit();
 	void Move();
 
 	void RenderMenu();
 	
 public:
-	Action(sf::RenderWindow*, sf::Vector2f*);
+	Action(sf::RenderWindow*);
 	~Action();
 
 	void renderText(sf::RenderTarget*);

@@ -37,7 +37,7 @@ void Game::initWindow()
 
 void Game::initVariable()
 {
-	this->gameAction = new Action(this->window, &this->mousePosView);
+	this->gameAction = new Action(this->window);
 	this->gameAction->StartGame(2);
 }
 
