@@ -26,6 +26,8 @@ public:
 	void Render(sf::RenderTarget* target);
 	void SetSize(float, float);
 	void Move(sf::Vector2f);
+	bool isMyUnit(int);
+	std::string GetType();
 };
 
 

@@ -83,6 +83,7 @@ void Map::UpdatePlayerVision(Grid* pGrid, int radius, int idPlayer)
 	}
 }
 
+
 Grid* Map::UpdatePointedGrid()
 {
 	std::vector<Grid*> gridHovered;
@@ -192,7 +193,7 @@ void Map::HighlightGridPointed(sf::Color cFill, sf::Color cOutline)
 		rect.setPosition(this->pPointedGrid->GetPosition().x - 5, this->pPointedGrid->GetPosition().y);
 		rect.setFillColor(cFill);
 		rect.setOutlineColor(cOutline);
-		rect.setOutlineThickness(-1.5f);
+		rect.setOutlineThickness(-2.f);
 		this->pWindow->draw(rect);
 	}
 }

@@ -48,28 +48,31 @@ void Action::ClickEvents()
 					this->isWait = false;
 				}
 				else {
-					if (pGridPointed != 0) {
+					if (this->pGridPointed != 0 && !this->isMenuOpen) {
 						if (gMode == "Move") {
 							this->Move();
 							this->SetToNormalMode();
 						}
 						else {
-							if (pGridPointed->isUnit && pGridPointed->GetUnit() != 0) {
+							if (pGridPointed->isUnit && pGridPointed->GetUnit()->isMyUnit(idPlayerNow) && pGridPointed->GetUnit() != 0) {
 								this->gMode = "Move";
-								this->pGridMoveStart = pGridPointed;
-								this->pMap->CreateGridArea(pGridMoveStart,1);
+								this->pGridSelected = pGridPointed;
+								this->pMap->CreateGridArea(pGridSelected,1);
 							}
 							else {
-
+								
 							}
 						}
 					}
 				}
+				this->isMenuOpen = false;
 			}
 			// Mouse Right click
 			else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-				std::cout << " => End Turn" << std::endl;
-				NextTurn();
+				//std::cout << " => End Turn" << std::endl;
+				//NextTurn();
+				this->pGridSelected = this->pGridPointed;
+				this->isMenuOpen = true;
 			}
 			this->isMousePress = true;
 		}
@@ -81,9 +84,22 @@ void Action::ClickEvents()
 
 void Action::Move()
 {
-	this->pGridPointed->AddUnit(this->pGridMoveStart->GetUnit());
+	this->pGridPointed->AddUnit(this->pGridSelected->GetUnit());
 	this->pMap->UpdatePlayerVision(pGridPointed, 1, this->idPlayerNow);
-	this->pGridMoveStart->ClearUnit();
+	this->pGridSelected->ClearUnit();
+}
+
+void Action::RenderMenu()
+{
+	//this->pGridPointed->GetCenterPoint();
+	float r = 10, grab = 5;
+	int x = pGridSelected->vActionButton.size();
+	sf::Vector2f centerPos = this->pGridSelected->GetCenterPoint();
+	float startX = ((r * x * 2) + (grab * (x - 3))) / 2;
+	for (int i = 0; i < x; i++) {
+		pGridSelected->vActionButton[i]->SetPosition(sf::Vector2f((centerPos.x - startX) + ((grab+r*2)*i), centerPos.y - 40));
+		pGridSelected->vActionButton[i]->Render(this->pWindow);
+	}
 }
 
 void Action::NextTurn()
@@ -108,7 +124,7 @@ void Action::NextTurn()
 void Action::SetToNormalMode()
 {
 	this->gMode = "Normal";
-	this->pGridMoveStart = 0;
+	this->pGridSelected = 0;
 	this->pMap->SetGridAllEnable(true);
 }
 
@@ -125,6 +141,9 @@ void Action::Render()
 		this->pMap->RenderMap();
 		this->pMap->ShowGridHighlight(this->gMode);
 		this->pMap->RenderUnits();
+		if (isMenuOpen) {
+			this->RenderMenu();
+		}
 	}
 	this->Update();
 }

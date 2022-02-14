@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Grid.h"
+#include "ActionButton.h"
 
 class Action
 {
@@ -20,23 +21,26 @@ private:
 
 	int countTurn = 0;
 	bool isWait = true;
-	std::vector<Player*> vPlayers;
 	int idPlayerNow = 0;
-
+	std::vector<Player*> vPlayers;
+	
 	sf::Vector2i currentMousePos;
 	bool isMousePress = false;
 
+	bool isMenuOpen = false;
 	std::string gMode = "Normal";
-	void SetToNormalMode();
-
-	Grid* pGridMoveStart = 0;
+	
+	Grid* pGridSelected = 0;
 	Grid* pGridPointed = 0;
 
+	void SetToNormalMode();
 	void ClickEvents();
 	void NextTurn();
 	void RandomStartPosition();
 
 	void Move();
+
+	void RenderMenu();
 	
 public:
 	Action(sf::RenderWindow*);

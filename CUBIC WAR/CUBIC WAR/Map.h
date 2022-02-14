@@ -20,6 +20,8 @@ private:
 	Grid* pPointedGrid;
 	
 	void InitMap();
+	void HighlightGridArea(sf::Color cFill, sf::Color cOutline);
+	void HighlightGridPointed(sf::Color cFill, sf::Color cOutline);
 
 public:
 	Map(sf::RenderWindow* pWindow, sf::Vector2i*, int*);
@@ -38,6 +40,4 @@ public:
 	void SetGridEdgeDisable();
 
 	void CreateGridArea(Grid* pGridCenter, int radius);
-	void HighlightGridArea(sf::Color cFill, sf::Color cOutline);
-	void HighlightGridPointed(sf::Color cFill, sf::Color cOutline);
 };

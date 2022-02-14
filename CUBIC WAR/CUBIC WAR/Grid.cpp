@@ -10,6 +10,16 @@ Grid::Grid(int row, int column, sf::Vector2f size)
 
 Grid::~Grid()
 {
+	for (unsigned int i = 0; i < this->vActionButton.size(); i++) {
+		delete this->vActionButton[i];
+	}
+}
+
+void Grid::setActionButtons(int N, std::string type[])
+{
+	for (int i = 0; i < N; i++) {
+		this->vActionButton.push_back(new ActionButton(type[i]));
+	}
 }
 
 void Grid::Setup()
@@ -83,6 +93,14 @@ Grid* Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits, int idPlayer)
 	this->isUnit = true;
 	vUnits.push_back(new Unit(type, this->centerPos, idPlayer));
 	this->pUnit = vUnits.back();
+	if (type == "Engineer") {
+		std::string typeActions[] = { "Move", "Build" };
+		this->setActionButtons(2, typeActions);
+	}
+	else {
+		std::string typeActions[] = { "Move", "Attack" };
+		this->setActionButtons(2, typeActions);
+	}
 	return this;
 }
 
@@ -90,6 +108,14 @@ Grid* Grid::AddUnit(Unit* pNewUnit)
 {
 	this->pUnit = pNewUnit;
 	this->pUnit->Move(this->centerPos);
+	if (pUnit->GetType() == "Engineer") {
+		std::string typeActions[] = { "Move", "Build" };
+		this->setActionButtons(2, typeActions);
+	}
+	else {
+		std::string typeActions[] = { "Move", "Attack" };
+		this->setActionButtons(2, typeActions);
+	}
 	this->isUnit = true;
 	return this;
 }
@@ -134,6 +160,11 @@ sf::Vector2i Grid::GetRC()
 	int q = this->column - (this->row - (this->row & 1)) / 2;
 	int r = this->row;
 	return sf::Vector2i(r, q);
+}
+
+sf::Vector2f Grid::GetCenterPoint()
+{
+	return this->centerPos;
 }
 
 void Grid::UpdatePlayerVision(int idPlayer)

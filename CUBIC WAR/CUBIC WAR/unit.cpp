@@ -50,4 +50,16 @@ void Unit::Move(sf::Vector2f centerPos)
 	this->shape.setPosition(centerPos);
 }
 
+bool Unit::isMyUnit(int idPlayer)
+{
+	if (this->idPlayer == idPlayer) {
+		return true;
+	}return false;
+}
+
+std::string Unit::GetType()
+{
+	return this->type;
+}
+
 
