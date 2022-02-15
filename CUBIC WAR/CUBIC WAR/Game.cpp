@@ -77,36 +77,6 @@ void Game::pollEvents()
 			if (this->event.key.code == sf::Keyboard::Escape) this->window->close();
 			break;
 		}
-		if (button1.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
-		{
-			button1.setFillColor(sf::Color::Blue);
-		}
-		else
-		{
-			button1.setFillColor(sf::Color::Red);
-		}
-		
-		//button press
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			if (button1.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
-			{
-				/*std::cout << "Start Your turn\n";
-				roll1 = (rand() % 6) + 1;
-				roll2 = (rand() % 6) + 1;
-
-				points = roll1 + roll2;
-				std::cout << "dice1 = " << roll1 << "\n";
-				std::cout << "dice2 = " << roll2 << "\n";
-				std::cout << "Your total points is " << points << "\n";
-
-				if (roll1 == roll2)
-				{
-					std::cout << "U can roll again! \n";
-				}*/
-			}
-			
-		}
 
 	}
 }

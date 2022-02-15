@@ -52,26 +52,58 @@ void Action::ClickEvents()
 					this->isWait = false;
 				}
 				else {
-					if (this->pGridPointed != 0 && !this->isMenuOpen) {
+					if (this->isMenuOpen) {
+						if (this->pButtonAPointed != 0) {
+							std::string command = pButtonAPointed->GetActionCommand();
+							if (command == "Move") {
+								this->gMode = "Move";
+								this->pMap->CreateGridArea(pGridSelected, 1);
+								this->isMenuOpen = false;
+								this->pButtonAPointed = 0;
+							}
+							else if (command == "Build") {
+								this->gMode = "SelectBuild";
+							}
+							else if (command.find("B_") >= 0) {
+								this->gMode = "Build";
+								this->typeToCreate = command.substr(2, -1);
+								this->pMap->SetExample(command);
+								this->pMap->CreateGridArea(pGridSelected, 1);
+								this->isMenuOpen = false;
+								this->pButtonAPointed = 0;
+							}
+							else {
+								
+							}
+						}
+						else {
+							this->isMenuOpen = false;
+							this->pButtonAPointed = 0;
+						}
+					} else if (this->pGridPointed != 0 && !this->isMenuOpen) {
 						if (gMode == "Move") {
 							this->Move();
 							this->SetToNormalMode();
 						}
+						else if (gMode == "Build") {
+							this->pMap->UpdatePlayerVision(this->pGridPointed->CreateBuilding(this->typeToCreate, this->idPlayerNow), 1, this->idPlayerNow);
+							this->SetToNormalMode();
+						}
 						else {
+							this->pGridSelected = pGridPointed;
 							if (pGridPointed->isUnit && pGridPointed->GetUnit()->isMyUnit(idPlayerNow) && pGridPointed->GetUnit() != 0) {
 								this->gMode = "Move";
-								this->pGridSelected = pGridPointed;
 								this->pMap->CreateGridArea(pGridSelected,1);
 							}
 							else {
 								
 							}
 						}
+					} if (this->pGridPointed == 0) {
+						this->SetToNormalMode();
 					}
 				}
-				this->isMenuOpen = false;
 			}
-			// Mouse Right click
 			//endturn button click
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
@@ -95,10 +127,12 @@ void Action::ClickEvents()
 			}
 			// Mouse Right click
 			else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-				//std::cout << " => End Turn" << std::endl;
-				//NextTurn();
-				this->pGridSelected = this->pGridPointed;
-				this->isMenuOpen = true;
+				if (this->gMode == "Normal" && !isMenuOpen) {
+					if (this->pGridPointed->vActionButton.size() > 0) {
+						this->pGridSelected = this->pGridPointed;
+						this->isMenuOpen = true;
+					}
+				}
 			}
 			this->isMousePress = true;
 		}
@@ -115,16 +149,16 @@ void Action::Move()
 	this->pGridSelected->ClearUnit();
 }
 
-void Action::RenderMenu()
+void Action::RenderMenu(int deep)
 {
-	//this->pGridPointed->GetCenterPoint();
 	float r = 10, grab = 5;
-	int x = pGridSelected->vActionButton.size();
+	int x = pGridSelected->vActionButton[deep].size();
+	this->vActionButtonNow = pGridSelected->vActionButton[deep];
 	sf::Vector2f centerPos = this->pGridSelected->GetCenterPoint();
 	float startX = ((r * x * 2) + (grab * (x - 3))) / 2;
 	for (int i = 0; i < x; i++) {
-		pGridSelected->vActionButton[i]->SetPosition(sf::Vector2f((centerPos.x - startX) + ((grab+r*2)*i), centerPos.y - 40));
-		pGridSelected->vActionButton[i]->Render(this->pWindow);
+		pGridSelected->vActionButton[deep][i]->SetPosition(sf::Vector2f((centerPos.x - startX) + ((grab + r * 2) * i), centerPos.y - 40));
+		pGridSelected->vActionButton[deep][i]->Render(this->pWindow);
 	}
 }
 
@@ -150,6 +184,7 @@ void Action::NextTurn()
 void Action::SetToNormalMode()
 {
 	this->gMode = "Normal";
+	this->typeToCreate = "";
 	this->pGridSelected = 0;
 	this->pMap->SetGridAllEnable(true);
 }
@@ -158,6 +193,9 @@ void Action::Update()
 {
 	this->currentMousePos = sf::Mouse::getPosition(*this->pWindow);
 	this->pGridPointed = this->pMap->UpdatePointedGrid();
+	if (this->isMenuOpen) {
+		this->pButtonAPointed = this->GetButtonAPointed(this->vActionButtonNow);
+	}
 	//button change color
 	if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*pWindow).x, sf::Mouse::getPosition(*pWindow).y))
 	{
@@ -190,7 +228,15 @@ void Action::Render()
 {
 	if (isWait == false) {
 		this->pMap->RenderMap();
-		this->pMap->ShowGridHighlight(this->gMode);
+		if (isMenuOpen && gMode=="SelectBuild") {
+			this->RenderMenu(1);
+		}
+		else if(isMenuOpen) {
+			this->RenderMenu(0);
+		}
+		else {
+			this->pMap->ShowGridHighlight(this->gMode);
+		}
 		this->pMap->RenderUnits();
 		pWindow->draw(bar);
 		pWindow->draw(button);
@@ -198,9 +244,7 @@ void Action::Render()
 		pWindow->draw(pointtext);
 		pWindow->draw(endturn);
 		pWindow->draw(rolltext);
-		if (isMenuOpen) {
-			this->RenderMenu();
-		}
+		
 	}
 	else
 	{
@@ -290,4 +334,32 @@ void Action::updateText()
 
 	pointp << "Points : " << this->point;
 	this->pointtext.setString(pointp.str());
+}
+
+ActionButton* Action::GetButtonAPointed(std::vector<ActionButton*> vButtonA)
+{
+	std::vector<ActionButton*> gridHovered;
+	for (unsigned int i = 0; i < vButtonA.size(); i++) {
+			if (vButtonA[i]->isPointed(this->currentMousePos))
+			{
+				gridHovered.push_back(vButtonA[i]);
+			}
+	}
+	if (gridHovered.size() > 0) {
+		for (unsigned int i = 0; i < gridHovered.size() - 1; i++) {
+			bool isTemp = 0;
+			for (unsigned int j = 0; j < gridHovered.size() - i - 1; j++) {
+				float distanceOne = gridHovered[j]->distanceFromMouse(this->currentMousePos);
+				float distanceTwo = gridHovered[j + 1]->distanceFromMouse(this->currentMousePos);
+				if (distanceOne > distanceTwo) {
+					std::swap(gridHovered[j + 1], gridHovered[j]);
+					isTemp = 1;
+				}
+			}
+			if (!isTemp) break;
+		}
+		return gridHovered[0];
+	}
+	this->pButtonAPointed = 0;
+	return 0;
 }

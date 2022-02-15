@@ -83,7 +83,6 @@ void Map::UpdatePlayerVision(Grid* pGrid, int radius, int idPlayer)
 	}
 }
 
-
 Grid* Map::UpdatePointedGrid()
 {
 	std::vector<Grid*> gridHovered;
@@ -124,6 +123,13 @@ void Map::ShowGridHighlight(std::string gMode)
 		this->HighlightGridPointed(sf::Color(0, 255, 0, 100), sf::Color::Green);
 		this->HighlightGridArea(sf::Color(0, 255, 0, 80), sf::Color(0, 0, 0, 0));
 	}
+	else if (gMode == "Build") {
+		if (this->pPointedGrid != 0) {
+			this->pPointedGrid->ShowInCreate(this->textureExample, this->pWindow);
+		}
+		this->HighlightGridArea(sf::Color(255, 255, 255, 60), sf::Color(0, 0, 0, 0));
+		this->HighlightGridPointed(sf::Color(0, 0, 0, 0), sf::Color::White);
+	}
 	else {
 		this->HighlightGridPointed(sf::Color(0, 0, 0, 0), sf::Color::White);
 	}
@@ -151,9 +157,30 @@ void Map::SetGridEdgeDisable()
 	}
 }
 
+void Map::SetExample(std::string type)
+{
+	std::string imgPath;
+
+	if (type == "B_M") {
+		imgPath = "medieval_training";
+	}
+	else if (type == "B_A") {
+		
+		imgPath = "medieval_tower";
+	}
+	else if (type == "B_C") {
+		imgPath = "medieval_canon";
+	}
+
+	if (!this->textureExample.loadFromFile("Textures/Building/" + imgPath + ".png")) {
+		std::cout << "Error to load Textures/Building/" + imgPath + ".png" << std::endl;
+	}
+}
+
 void Map::CreateGridArea(Grid* pGridCenter, int radius)
 {
 	this->SetGridAllEnable(false);
+	this->pPointedGrid = 0;
 	for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
 		for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
 			if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {

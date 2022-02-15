@@ -11,15 +11,19 @@ Grid::Grid(int row, int column, sf::Vector2f size)
 Grid::~Grid()
 {
 	for (unsigned int i = 0; i < this->vActionButton.size(); i++) {
-		delete this->vActionButton[i];
+		for (unsigned int j = 0; j < this->vActionButton[i].size(); j++) {
+			delete this->vActionButton[i][j];
+		}
 	}
 }
 
 void Grid::setActionButtons(int N, std::string type[])
 {
+	std::vector<ActionButton*> vButton;
 	for (int i = 0; i < N; i++) {
-		this->vActionButton.push_back(new ActionButton(type[i]));
+		vButton.push_back(new ActionButton(type[i]));
 	}
+	this->vActionButton.push_back(vButton);
 }
 
 void Grid::Setup()
@@ -39,6 +43,15 @@ void Grid::Setup()
 
 	this->centerPos.x = this->shape.getPosition().x + (this->size.x / 2);
 	this->centerPos.y = this->shape.getPosition().y + (this->size.y / 2);
+}
+
+void Grid::ShowInCreate(sf::Texture texture, sf::RenderTarget* target)
+{
+	sf::Sprite shape;
+	shape.setPosition(this->shape.getPosition());
+	shape.setTexture(texture);
+	shape.scale(this->size.x / this->texture.getSize().x, this->size.y / this->texture.getSize().y);
+	target->draw(shape);
 }
 
 void Grid::RenderGrid(sf::RenderTarget *target)
@@ -69,6 +82,10 @@ Grid* Grid::CreateBuilding(std::string type, int idPlayer)
 		this->maxLifePoint = this->lifePoint = 45;
 		this->damage = 0;
 		this->imgPath = "medieval_training";
+		std::string typeActions1[] = { "Create" };
+		this->setActionButtons(1, typeActions1);
+		std::string typeActions2[] = { "U_Soldier", "U_Archer", "U_Artillery" };
+		this->setActionButtons(3, typeActions2);
 	}
 	else if (type == "A") {
 		this->maxLifePoint = this->lifePoint = 45;
@@ -94,8 +111,10 @@ Grid* Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits, int idPlayer)
 	vUnits.push_back(new Unit(type, this->centerPos, idPlayer));
 	this->pUnit = vUnits.back();
 	if (type == "Engineer") {
-		std::string typeActions[] = { "Move", "Build" };
-		this->setActionButtons(2, typeActions);
+		std::string typeActions1[] = { "Move", "Build" };
+		this->setActionButtons(2, typeActions1);
+		std::string typeActions2[] = { "B_M", "B_A", "B_C"};
+		this->setActionButtons(3, typeActions2);
 	}
 	else {
 		std::string typeActions[] = { "Move", "Attack" };
@@ -109,8 +128,10 @@ Grid* Grid::AddUnit(Unit* pNewUnit)
 	this->pUnit = pNewUnit;
 	this->pUnit->Move(this->centerPos);
 	if (pUnit->GetType() == "Engineer") {
-		std::string typeActions[] = { "Move", "Build" };
-		this->setActionButtons(2, typeActions);
+		std::string typeActions1[] = { "Move", "Build" };
+		this->setActionButtons(2, typeActions1);
+		std::string typeActions2[] = { "B_M", "B_A", "B_C" };
+		this->setActionButtons(3, typeActions2);
 	}
 	else {
 		std::string typeActions[] = { "Move", "Attack" };
@@ -129,6 +150,13 @@ void Grid::ClearUnit()
 {
 	this->isUnit = false;
 	this->pUnit = 0;
+	
+	for (unsigned int i = 0; i < this->vActionButton.size(); i++) {
+		for (unsigned int j = 0; j < this->vActionButton[i].size(); j++) {
+			delete this->vActionButton[i][j];
+		}
+	}
+	vActionButton.clear();
 }
 
 bool Grid::isPointed(sf::Vector2i MousePos)

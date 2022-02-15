@@ -17,7 +17,7 @@ private:
 	int maxColumn, maxRow;
 
 	sf::Vector2i* currentMousePos;
-	Grid* pPointedGrid;
+	sf::Texture textureExample;
 	
 	void InitMap();
 	void HighlightGridArea(sf::Color cFill, sf::Color cOutline);
@@ -26,18 +26,20 @@ private:
 public:
 	Map(sf::RenderWindow* pWindow, sf::Vector2i*, int*);
 	~Map();
+	Grid* pPointedGrid;
 
 	std::vector<std::vector<Grid>> vGrids;
 	std::vector<Unit *> vUnits;
 
 	void RenderMap();
 	void RenderUnits();
-	void UpdatePlayerVision(Grid*, int, int);
+	void UpdatePlayerVision(Grid*, int radius, int idPlayer);
 
 	Grid* UpdatePointedGrid();
 	void ShowGridHighlight(std::string mode);
 	void SetGridAllEnable(bool);
 	void SetGridEdgeDisable();
+	void SetExample(std::string type);
 
 	void CreateGridArea(Grid* pGridCenter, int radius);
 };
