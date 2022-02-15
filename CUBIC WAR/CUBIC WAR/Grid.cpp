@@ -82,7 +82,7 @@ Grid* Grid::CreateBuilding(std::string type, int idPlayer)
 		this->maxLifePoint = this->lifePoint = 45;
 		this->damage = 0;
 		this->imgPath = "medieval_training";
-		std::string typeActions1[] = { "Create" };
+		std::string typeActions1[] = { "SelectCreate" };
 		this->setActionButtons(1, typeActions1);
 		std::string typeActions2[] = { "U_Soldier", "U_Archer", "U_Artillery" };
 		this->setActionButtons(3, typeActions2);
@@ -111,7 +111,7 @@ Grid* Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits, int idPlayer)
 	vUnits.push_back(new Unit(type, this->centerPos, idPlayer));
 	this->pUnit = vUnits.back();
 	if (type == "Engineer") {
-		std::string typeActions1[] = { "Move", "Build" };
+		std::string typeActions1[] = { "Move", "SelectBuild" };
 		this->setActionButtons(2, typeActions1);
 		std::string typeActions2[] = { "B_M", "B_A", "B_C"};
 		this->setActionButtons(3, typeActions2);
@@ -128,7 +128,7 @@ Grid* Grid::AddUnit(Unit* pNewUnit)
 	this->pUnit = pNewUnit;
 	this->pUnit->Move(this->centerPos);
 	if (pUnit->GetType() == "Engineer") {
-		std::string typeActions1[] = { "Move", "Build" };
+		std::string typeActions1[] = { "Move", "SelectBuild" };
 		this->setActionButtons(2, typeActions1);
 		std::string typeActions2[] = { "B_M", "B_A", "B_C" };
 		this->setActionButtons(3, typeActions2);

@@ -123,7 +123,7 @@ void Map::ShowGridHighlight(std::string gMode)
 		this->HighlightGridPointed(sf::Color(0, 255, 0, 100), sf::Color::Green);
 		this->HighlightGridArea(sf::Color(0, 255, 0, 80), sf::Color(0, 0, 0, 0));
 	}
-	else if (gMode == "Build") {
+	else if (gMode == "Build" || gMode == "Create") {
 		if (this->pPointedGrid != 0) {
 			this->pPointedGrid->ShowInCreate(this->textureExample, this->pWindow);
 		}
@@ -171,9 +171,25 @@ void Map::SetExample(std::string type)
 	else if (type == "B_C") {
 		imgPath = "medieval_canon";
 	}
-
-	if (!this->textureExample.loadFromFile("Textures/Building/" + imgPath + ".png")) {
-		std::cout << "Error to load Textures/Building/" + imgPath + ".png" << std::endl;
+	else if (type == "U_Soldier") {
+		imgPath = "Soldier";
+	}
+	else if (type == "U_Archer") {
+		imgPath = "Archer";
+	}
+	else if (type == "U_Artillery") {
+		imgPath = "Artillery";
+	}
+	if (type.find("U_") != std::string::npos) {
+		if (!this->textureExample.loadFromFile("Textures/Unit/" + imgPath + ".png")) {
+			std::cout << "Error to load Textures/Unit/" + imgPath + ".png" << std::endl;
+		}
+	}
+	else if(type.find("B_") != std::string::npos)
+	{
+		if (!this->textureExample.loadFromFile("Textures/Building/" + imgPath + ".png")) {
+			std::cout << "Error to load Textures/Building/" + imgPath + ".png" << std::endl;
+		}
 	}
 }
 

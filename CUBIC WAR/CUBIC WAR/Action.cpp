@@ -61,11 +61,22 @@ void Action::ClickEvents()
 								this->isMenuOpen = false;
 								this->pButtonAPointed = 0;
 							}
-							else if (command == "Build") {
+							else if (command == "SelectBuild") {
 								this->gMode = "SelectBuild";
 							}
-							else if (command.find("B_") >= 0) {
+							else if (command == "SelectCreate") {
+								this->gMode = "SelectCreate";
+							}
+							else if (command.find("B_") != std::string::npos) {
 								this->gMode = "Build";
+								this->typeToCreate = command.substr(2, -1);
+								this->pMap->SetExample(command);
+								this->pMap->CreateGridArea(pGridSelected, 1);
+								this->isMenuOpen = false;
+								this->pButtonAPointed = 0;
+							}
+							else if (command.find("U_") != std::string::npos) {
+								this->gMode = "Create";
 								this->typeToCreate = command.substr(2, -1);
 								this->pMap->SetExample(command);
 								this->pMap->CreateGridArea(pGridSelected, 1);
@@ -87,6 +98,10 @@ void Action::ClickEvents()
 						}
 						else if (gMode == "Build") {
 							this->pMap->UpdatePlayerVision(this->pGridPointed->CreateBuilding(this->typeToCreate, this->idPlayerNow), 1, this->idPlayerNow);
+							this->SetToNormalMode();
+						}
+						else if (gMode == "Create") {
+							this->pMap->UpdatePlayerVision(this->pGridPointed->AddUnit(this->typeToCreate, this->pMap->vUnits, this->idPlayerNow), 1, this->idPlayerNow);
 							this->SetToNormalMode();
 						}
 						else {
@@ -228,7 +243,7 @@ void Action::Render()
 {
 	if (isWait == false) {
 		this->pMap->RenderMap();
-		if (isMenuOpen && gMode=="SelectBuild") {
+		if (isMenuOpen && (gMode == "SelectBuild" || gMode == "SelectCreate")) {
 			this->RenderMenu(1);
 		}
 		else if(isMenuOpen) {
