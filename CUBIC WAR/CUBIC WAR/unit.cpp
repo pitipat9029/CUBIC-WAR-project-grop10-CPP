@@ -26,7 +26,8 @@ Unit::Unit(std::string type, sf::Vector2f centerPos, int idPlayer)
 
 	this->shape.setOrigin(this->texture.getSize().x / 2, this->texture.getSize().y / 2);
 	this->shape.setPosition(centerPos);
-	this->SetSize(60.f, 70.f);
+	//this->shape.setTextureRect(sf::IntRect(60.f, 0, -60.f, 70.f));
+	this->SetSize(-60.f, 70.f);
 }
 
 Unit::~Unit()

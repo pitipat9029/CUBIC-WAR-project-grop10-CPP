@@ -25,7 +25,7 @@ private:
 
 	bool idPlayersVision[2] = {};
 	int idPlayerHere = -1;
-	
+
 	// Building ----
 	std::string typeBuilding = "";
 	int maxLifePoint = 0, lifePoint = 0;
@@ -38,7 +38,7 @@ private:
 public:
 	bool isBuilding = false;
 	bool isUnit = false;
-	std::vector<ActionButton*> vActionButton;
+	std::vector<std::vector<ActionButton*>> vActionButton;
 
 	Grid(int, int, sf::Vector2f);
 	~Grid();
@@ -50,6 +50,7 @@ public:
 	Grid* CreateBuilding(std::string type, int);
 	void SetEnabled(bool);
 
+	void ShowInCreate(sf::Texture, sf::RenderTarget*);
 	bool isPointed(sf::Vector2i);
 	bool isEnabled();
 	float distanceFromMouse(sf::Vector2i);

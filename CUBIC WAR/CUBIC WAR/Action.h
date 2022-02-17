@@ -39,6 +39,7 @@ private:
 
 	int idPlayerNow = 0;
 	std::vector<Player*> vPlayers;
+	std::vector<ActionButton*> vActionButtonNow;
 	
 	std::vector<sf::Sprite> grids;
 
@@ -47,6 +48,7 @@ private:
 	bool isMousePress = false;
 
 	std::string gMode = "Normal";
+	std::string typeToCreate = "";
 	bool isWait = false;
 	bool isMenuOpen = false;
 	bool isMoveMode = false;
@@ -56,6 +58,7 @@ private:
 
 	Grid* pGridSelected = 0;
 	Grid* pGridPointed = 0;
+	ActionButton* pButtonAPointed = 0;
 
 	void initFont();
 	void intitText();
@@ -66,10 +69,11 @@ private:
 	void NextTurn();
 	void SetToNormalMode();
 	void RandomStartPosition();
+	ActionButton* GetButtonAPointed(std::vector<ActionButton*>);
 
 	void Move();
 
-	void RenderMenu();
+	void RenderMenu(int);
 	
 public:
 	Action(sf::RenderWindow*);
