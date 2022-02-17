@@ -71,14 +71,16 @@ void Action::ClickEvents()
 				}
 				this->isMenuOpen = false;
 			}
-			// Mouse Right click
+			
 			//endturn button click
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*pWindow).x, sf::Mouse::getPosition(*pWindow).y))
 				{
 					std::cout << " => End Turn" << std::endl;
+					UcanRolltext.setPosition(905.f, 605.f);
 					NextTurn();
+					isButtonPress = false;
 				}
 			}
 			//roll button click
@@ -88,9 +90,18 @@ void Action::ClickEvents()
 				{
 					int ran1 = rand() % 6 + 1;
 					int ran2 = rand() % 6 + 1;
-
-					point = point + ran1 + ran2;
-
+					this->vPlayers[this->idPlayerNow]->point += ran1 + ran2;
+					if (ran1 == ran2)
+					{
+						isButtonPress = false;
+						UcanRolltext.setPosition(520.f, 560.f);
+						std::cout << "U can roll again";
+					}
+					else
+					{
+						UcanRolltext.setPosition(905.f, 605.f);
+						isButtonPress = true;
+					}
 				}
 			}
 			// Mouse Right click
@@ -182,6 +193,27 @@ void Action::Update()
 		sf::Color col(192, 192, 192);
 		rollbtn.setFillColor(col);
 	}
+
+	// move roll button
+	if (isButtonPress == true)
+	{
+		rollbtn.setPosition(910.f,610.f);
+		rolltext.setPosition(910.f, 610.f);
+	}
+	else
+	{
+		rollbtn.setPosition(700.f, 550.f);
+		rolltext.setPosition(705.f, 560.f);
+	}
+
+	if (idPlayerNow == 0)
+	{
+		PlayerPlay = false;
+	}
+	else
+	{
+		PlayerPlay = true;
+	}
 	updateText();
 	ClickEvents();
 }
@@ -195,9 +227,10 @@ void Action::Render()
 		pWindow->draw(bar);
 		pWindow->draw(button);
 		pWindow->draw(rollbtn);
-		pWindow->draw(pointtext);
 		pWindow->draw(endturn);
 		pWindow->draw(rolltext);
+		pWindow->draw(UcanRolltext);
+		pWindow->draw(pointPtext);
 		if (isMenuOpen) {
 			this->RenderMenu();
 		}
@@ -239,10 +272,11 @@ void Action::intitText()
 	this->text.setPosition(680.f, 567.f);
 	this->text.setString("-> Click to Start ur turn");
 	//point text
-	this->pointtext.setFont(this->font);
-	this->pointtext.setFillColor(sf::Color::White);
-	this->pointtext.setCharacterSize(32);
-	this->pointtext.setPosition(5.f, 550.f);
+	this->pointPtext.setFont(this->font);
+	this->pointPtext.setFillColor(sf::Color::White);
+	this->pointPtext.setCharacterSize(32);
+	this->pointPtext.setPosition(5.f, 550.f);
+
 	//endtuentext
 	this->endturn.setFont(this->font);
 	this->endturn.setFillColor(sf::Color::White);
@@ -255,6 +289,12 @@ void Action::intitText()
 	this->rolltext.setCharacterSize(20);
 	this->rolltext.setPosition(705.f, 560.f);
 	rolltext.setString("Roll");
+
+	this->UcanRolltext.setFont(this->font);
+	this->UcanRolltext.setFillColor(sf::Color::White);
+	this->UcanRolltext.setCharacterSize(20);
+	this->UcanRolltext.setPosition(905.f, 605.f);
+	UcanRolltext.setString("U can roll again!!");
 }
 
 void Action::initBar()
@@ -288,6 +328,6 @@ void Action::updateText()
 	//point update
 	std::stringstream pointp;
 
-	pointp << "Points : " << this->point;
-	this->pointtext.setString(pointp.str());
+	pointp << "P" << idPlayerNow+1 << " Points : " << this->vPlayers[this->idPlayerNow]->point;
+	this->pointPtext.setString(pointp.str());
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -20,6 +21,9 @@ private:
 	sf::RectangleShape button1;
 	sf::RectangleShape bar;
 
+	//sound
+	sf::SoundBuffer soundBuffer;
+	sf::Sound sound;
 
 	Action* gameAction;
 
@@ -40,7 +44,8 @@ private:
 	void initVariable();
 	void initButton();
 	void initBar();
-	
+	//sound
+	void initSound();
 
 	void pollEvents();
 	void initFont();

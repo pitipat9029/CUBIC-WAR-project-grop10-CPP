@@ -22,9 +22,10 @@ private:
 	sf::Font font;
 	sf::Text Playerturn;
 	sf::Text text;
-	sf::Text pointtext;
+	sf::Text pointPtext;
 	sf::Text endturn;
 	sf::Text rolltext;
+	sf::Text UcanRolltext;
 
 	sf::RectangleShape bar;
 	sf::RectangleShape button;
@@ -33,7 +34,8 @@ private:
 	Map* pMap = 0;
 
 	int countTurn = 0;
-	int point = 0;
+	int pointPlayer1 = 0;
+	int pointPlayer2 = 0;
 
 	int idPlayerNow = 0;
 	std::vector<Player*> vPlayers;
@@ -49,6 +51,8 @@ private:
 	bool isMenuOpen = false;
 	bool isMoveMode = false;
 	bool isCreatdMode = false;
+	bool isButtonPress = false;
+	bool PlayerPlay = false;
 
 	Grid* pGridSelected = 0;
 	Grid* pGridPointed = 0;

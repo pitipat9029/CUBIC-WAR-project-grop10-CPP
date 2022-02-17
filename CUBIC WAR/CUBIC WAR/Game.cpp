@@ -9,6 +9,7 @@ Game::Game()
 	this->initTimer();
 	this->initButton();
 	this->initBar();
+	this->initSound();
 	this->points = 0;
 	this->playerturn = 1;
 }
@@ -62,11 +63,17 @@ void Game::initBar()
 	this->bar.setPosition(0.f,550.f);
 }
 
+void Game::initSound()
+{
+	soundBuffer.loadFromFile("Audio/clickSound.wav");
+	
+	sound.setBuffer(soundBuffer);
+}
+
 
 void Game::pollEvents()
 {
 	while (this->window->pollEvent(this->event)) {
-
 		switch (this->event.type)  
 		{
 		case sf::Event::Closed:
@@ -75,6 +82,10 @@ void Game::pollEvents()
 
 		case sf::Event::KeyPressed:
 			if (this->event.key.code == sf::Keyboard::Escape) this->window->close();
+			if (this->event.key.code == sf::Keyboard::P) {
+				sound.play();
+				std::cout << "P push";
+			}
 			break;
 		}
 		if (button1.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
@@ -85,29 +96,8 @@ void Game::pollEvents()
 		{
 			button1.setFillColor(sf::Color::Red);
 		}
-		
-		//button press
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			if (button1.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
-			{
-				/*std::cout << "Start Your turn\n";
-				roll1 = (rand() % 6) + 1;
-				roll2 = (rand() % 6) + 1;
-
-				points = roll1 + roll2;
-				std::cout << "dice1 = " << roll1 << "\n";
-				std::cout << "dice2 = " << roll2 << "\n";
-				std::cout << "Your total points is " << points << "\n";
-
-				if (roll1 == roll2)
-				{
-					std::cout << "U can roll again! \n";
-				}*/
-			}
-			
-		}
-
+		if (event.type == sf::Mouse::Left)
+			sound.play();
 	}
 }
 
