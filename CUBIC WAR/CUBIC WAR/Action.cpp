@@ -54,12 +54,13 @@ void Action::ClickEvents()
 				else {
 					if (this->isMenuOpen) {
 						if (this->pButtonAPointed != 0) {
-							std::string command = pButtonAPointed->GetActionCommand();
+							std::string command = pButtonAPointed->GetActionCommand(this->vPlayers[this->idPlayerNow]->point);
 							if (command == "Move") {
 								this->gMode = "Move";
 								this->pMap->CreateGridArea(pGridSelected, 1);
 								this->isMenuOpen = false;
 								this->pButtonAPointed = 0;
+								this->vPlayers[idPlayerNow]->whereAttack.push_back(this->pGridPointed);
 							}
 							else if (command == "SelectBuild") {
 								this->gMode = "SelectBuild";
@@ -83,6 +84,11 @@ void Action::ClickEvents()
 								this->isMenuOpen = false;
 								this->pButtonAPointed = 0;
 							}
+							else if (command == "null") {
+								this->isMenuOpen = false;
+								this->pButtonAPointed = 0;
+								this->SetToNormalMode();
+							}
 							else {
 								
 							}
@@ -98,10 +104,34 @@ void Action::ClickEvents()
 						}
 						else if (gMode == "Build") {
 							this->pMap->UpdatePlayerVision(this->pGridPointed->CreateBuilding(this->typeToCreate, this->idPlayerNow), 1, this->idPlayerNow);
+							if (typeToCreate == "M")
+							{
+								this->vPlayers[this->idPlayerNow]->point -= 5;
+							}
+							else if (typeToCreate == "A")
+							{
+								this->vPlayers[this->idPlayerNow]->point -= 8;
+							}
+							else if (typeToCreate == "C")
+							{
+								this->vPlayers[this->idPlayerNow]->point -= 10;
+							}
 							this->SetToNormalMode();
 						}
 						else if (gMode == "Create") {
 							this->pMap->UpdatePlayerVision(this->pGridPointed->AddUnit(this->typeToCreate, this->pMap->vUnits, this->idPlayerNow), 1, this->idPlayerNow);
+							if (typeToCreate == "Soldier")
+							{
+								this->vPlayers[this->idPlayerNow]->point -= 4;
+							}
+							else if (typeToCreate == "Archer")
+							{
+								this->vPlayers[this->idPlayerNow]->point -= 5;
+							}
+							else if (typeToCreate == "Artillery")
+							{
+								this->vPlayers[this->idPlayerNow]->point -= 6;
+							}
 							this->SetToNormalMode();
 						}
 						else {
@@ -171,9 +201,18 @@ void Action::ClickEvents()
 
 void Action::Move()
 {
-	this->pGridPointed->AddUnit(this->pGridSelected->GetUnit());
-	this->pMap->UpdatePlayerVision(pGridPointed, 1, this->idPlayerNow);
-	this->pGridSelected->ClearUnit();
+	if (this->vPlayers[this->idPlayerNow]->point <= 0) //close creategrid area
+	{
+	}
+	else
+	{
+		this->pGridPointed->AddUnit(this->pGridSelected->GetUnit());
+		this->pMap->UpdatePlayerVision(pGridPointed, 1, this->idPlayerNow);
+		this->pGridSelected->ClearUnit();
+		this->vPlayers[this->idPlayerNow]->point -= 1;
+		this->vPlayers[this->idPlayerNow]->whereAttack; //dont know how to do next
+	}
+
 }
 
 void Action::RenderMenu(int deep)
@@ -185,7 +224,7 @@ void Action::RenderMenu(int deep)
 	float startX = ((r * x * 2) + (grab * (x - 3))) / 2;
 	for (int i = 0; i < x; i++) {
 		pGridSelected->vActionButton[deep][i]->SetPosition(sf::Vector2f((centerPos.x - startX) + ((grab + r * 2) * i), centerPos.y - 40));
-		pGridSelected->vActionButton[deep][i]->Render(this->pWindow);
+		pGridSelected->vActionButton[deep][i]->Render(this->pWindow, vPlayers[this->idPlayerNow]->point);
 	}
 }
 
@@ -293,9 +332,6 @@ void Action::Render()
 		pWindow->draw(rolltext);
 		pWindow->draw(UcanRolltext);
 		pWindow->draw(pointPtext);
-		if (isMenuOpen) {
-			this->RenderMenu();
-		}
 	}
 	else
 	{
