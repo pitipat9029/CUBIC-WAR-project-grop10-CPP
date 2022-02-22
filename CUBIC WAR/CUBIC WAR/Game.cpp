@@ -9,6 +9,7 @@ Game::Game()
 	this->initTimer();
 	this->initButton();
 	this->initBar();
+	this->initSound();
 	this->points = 0;
 	this->playerturn = 1;
 }
@@ -62,11 +63,17 @@ void Game::initBar()
 	this->bar.setPosition(0.f,550.f);
 }
 
+void Game::initSound()
+{
+	soundBuffer.loadFromFile("Audio/clickSound.wav");
+	
+	sound.setBuffer(soundBuffer);
+}
+
 
 void Game::pollEvents()
 {
 	while (this->window->pollEvent(this->event)) {
-
 		switch (this->event.type)  
 		{
 		case sf::Event::Closed:
@@ -75,9 +82,22 @@ void Game::pollEvents()
 
 		case sf::Event::KeyPressed:
 			if (this->event.key.code == sf::Keyboard::Escape) this->window->close();
+			if (this->event.key.code == sf::Keyboard::P) {
+				sound.play();
+				std::cout << "P push";
+			}
 			break;
 		}
-
+		if (button1.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
+		{
+			button1.setFillColor(sf::Color::Blue);
+		}
+		else
+		{
+			button1.setFillColor(sf::Color::Red);
+		}
+		if (event.type == sf::Mouse::Left)
+			sound.play();
 	}
 }
 

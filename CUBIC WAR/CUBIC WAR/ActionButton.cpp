@@ -1,8 +1,8 @@
 #include "ActionButton.h"
-
-ActionButton::ActionButton(std::string type)
+ActionButton::ActionButton(std::string type , int usePoint)
 {
 	this->typeAction = type;
+	this->usePoint = usePoint;
 	if (type == "Move") {
 		
 	}else if(type == "Build") {
@@ -23,13 +23,22 @@ ActionButton::~ActionButton()
 {
 }
 
+
 void ActionButton::SetPosition(sf::Vector2f Pos)
 {
 	this->shape.setPosition(Pos);
 }
 
-void ActionButton::Render(sf::RenderTarget* target)
+void ActionButton::Render(sf::RenderTarget* target, int point)
 {
+	if (point <= this->usePoint)
+	{
+		this->shape.setFillColor(sf::Color::Blue);
+	}
+	else
+	{
+		this->shape.setFillColor(sf::Color::White);
+	}
 	target->draw(this->shape);
 }
 
@@ -41,13 +50,18 @@ float ActionButton::distanceFromMouse(sf::Vector2i MousePos)
 	return sqrt(x + y);
 }
 
-bool ActionButton::isPointed(sf::Vector2i MousePos)
+bool ActionButton::isPointed(sf::Vector2i MousePos )
 {
 	if (this->shape.getGlobalBounds().contains(float(MousePos.x), float(MousePos.y))) return true;
 	return false;
 }
 
-std::string ActionButton::GetActionCommand()
+std::string ActionButton::GetActionCommand(int playerPoint)
 {
-	return this->typeAction;
+
+	if (playerPoint > this->usePoint)
+	{
+		return this->typeAction;
+	}
+	return "null";
 }
