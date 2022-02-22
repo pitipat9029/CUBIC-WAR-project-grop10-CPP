@@ -57,7 +57,13 @@ void Action::ClickEvents()
 							std::string command = pButtonAPointed->GetActionCommand();
 							if (command == "Move") {
 								this->gMode = "Move";
-								this->pMap->CreateGridArea(pGridSelected, 1);
+								this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
+								this->isMenuOpen = false;
+								this->pButtonAPointed = 0;
+							}
+							else if (command == "Attack") {
+								this->gMode = "Attack";
+								this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
 								this->isMenuOpen = false;
 								this->pButtonAPointed = 0;
 							}
@@ -71,7 +77,7 @@ void Action::ClickEvents()
 								this->gMode = "Build";
 								this->typeToCreate = command.substr(2, -1);
 								this->pMap->SetExample(command);
-								this->pMap->CreateGridArea(pGridSelected, 1);
+								this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
 								this->isMenuOpen = false;
 								this->pButtonAPointed = 0;
 							}
@@ -79,7 +85,7 @@ void Action::ClickEvents()
 								this->gMode = "Create";
 								this->typeToCreate = command.substr(2, -1);
 								this->pMap->SetExample(command);
-								this->pMap->CreateGridArea(pGridSelected, 1);
+								this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
 								this->isMenuOpen = false;
 								this->pButtonAPointed = 0;
 							}
@@ -104,11 +110,15 @@ void Action::ClickEvents()
 							this->pMap->UpdatePlayerVision(this->pGridPointed->AddUnit(this->typeToCreate, this->pMap->vUnits, this->idPlayerNow), 1, this->idPlayerNow);
 							this->SetToNormalMode();
 						}
+						else if (gMode == "Attack") {
+							this->pGridPointed->BeAttack(this->pGridSelected->Attack());
+							this->SetToNormalMode();
+						}
 						else {
 							this->pGridSelected = pGridPointed;
 							if (pGridPointed->isUnit && pGridPointed->GetUnit()->isMyUnit(idPlayerNow) && pGridPointed->GetUnit() != 0) {
 								this->gMode = "Move";
-								this->pMap->CreateGridArea(pGridSelected,1);
+								this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
 							}
 							else {
 								

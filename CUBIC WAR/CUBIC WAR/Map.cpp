@@ -61,7 +61,7 @@ void Map::RenderUnits()
 			if (vGrids[i][j].GetPlayerVision(*this->pIdPlayerNow)) {
 				if (vGrids[i][j].isUnit)
 				{
-					vGrids[i][j].RenderUnit(this->pWindow);
+					vGrids[i][j].RenderUnit(this->pWindow, *this->pIdPlayerNow);
 				}
 			}
 		}
@@ -122,6 +122,10 @@ void Map::ShowGridHighlight(std::string gMode)
 	if (gMode == "Move") {
 		this->HighlightGridPointed(sf::Color(0, 255, 0, 100), sf::Color::Green);
 		this->HighlightGridArea(sf::Color(0, 255, 0, 80), sf::Color(0, 0, 0, 0));
+	}
+	else if (gMode == "Attack") {
+		this->HighlightGridPointed(sf::Color(255, 0, 0, 100), sf::Color::Red);
+		this->HighlightGridArea(sf::Color(255, 0, 0, 120), sf::Color(0, 0, 0, 0));
 	}
 	else if (gMode == "Build" || gMode == "Create") {
 		if (this->pPointedGrid != 0) {
@@ -193,7 +197,7 @@ void Map::SetExample(std::string type)
 	}
 }
 
-void Map::CreateGridArea(Grid* pGridCenter, int radius)
+void Map::CreateGridArea(Grid* pGridCenter, int radius, std::string gMode)
 {
 	this->SetGridAllEnable(false);
 	this->pPointedGrid = 0;
@@ -204,8 +208,15 @@ void Map::CreateGridArea(Grid* pGridCenter, int radius)
 				int row = r;
 				if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
 					Grid* pGrid = &this->vGrids[row + 1][col + 1];
-					if (pGrid != pGridCenter && !pGrid->isBuilding && !pGrid->isUnit) {
-						pGrid->SetEnabled(true);
+					if (gMode == "Attack") {
+						if (pGrid != pGridCenter) {
+							pGrid->SetEnabled(true);
+						}
+					}
+					else {
+						if (pGrid != pGridCenter && !pGrid->isBuilding && !pGrid->isUnit) {
+							pGrid->SetEnabled(true);
+						}
 					}
 				}
 			}

@@ -7,6 +7,7 @@ class Unit
 {
 private:
 	sf::Sprite shape;
+	sf::RectangleShape hpBar;
 	std::string imgPath = "";
 	sf::Texture texture;
 	sf::Vector2f size;
@@ -23,9 +24,13 @@ private:
 public:
 	Unit(std::string, sf::Vector2f, int);
 	~Unit();
-	void Render(sf::RenderTarget* target);
+	void Render(sf::RenderTarget* target, int idPlayerNow);
+	void RenderHpBar(sf::RenderTarget* target, bool isEnemy);
+	int GetAttackPoint();
+	bool BeAttack(int);
 	void SetSize(float, float);
 	void Move(sf::Vector2f);
+	void destroy();
 	bool isMyUnit(int);
 	std::string GetType();
 };
