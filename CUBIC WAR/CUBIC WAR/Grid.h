@@ -43,7 +43,7 @@ public:
 	Grid(int, int, sf::Vector2f);
 	~Grid();
 
-	void setActionButtons(int, std::string[]);
+	void setActionButtons(int, std::string[] , int[]);
 
 	void RenderGrid(sf::RenderTarget*);
 	void RenderUnit(sf::RenderTarget*);

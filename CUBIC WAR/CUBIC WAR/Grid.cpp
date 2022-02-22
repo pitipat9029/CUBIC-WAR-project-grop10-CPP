@@ -17,11 +17,11 @@ Grid::~Grid()
 	}
 }
 
-void Grid::setActionButtons(int N, std::string type[])
+void Grid::setActionButtons(int N, std::string type[] , int point[])
 {
 	std::vector<ActionButton*> vButton;
 	for (int i = 0; i < N; i++) {
-		vButton.push_back(new ActionButton(type[i]));
+		vButton.push_back(new ActionButton(type[i], point[i]));
 	}
 	this->vActionButton.push_back(vButton);
 }
@@ -83,9 +83,12 @@ Grid* Grid::CreateBuilding(std::string type, int idPlayer)
 		this->damage = 0;
 		this->imgPath = "medieval_training";
 		std::string typeActions1[] = { "SelectCreate" };
-		this->setActionButtons(1, typeActions1);
+		int pointAction1[] = {0};
+		this->setActionButtons(1, typeActions1, pointAction1);
 		std::string typeActions2[] = { "U_Soldier", "U_Archer", "U_Artillery" };
-		this->setActionButtons(3, typeActions2);
+		int pointAction2[] = {4,5,6};
+
+		this->setActionButtons(3, typeActions2, pointAction2);
 	}
 	else if (type == "A") {
 		this->maxLifePoint = this->lifePoint = 45;
@@ -112,13 +115,16 @@ Grid* Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits, int idPlayer)
 	this->pUnit = vUnits.back();
 	if (type == "Engineer") {
 		std::string typeActions1[] = { "Move", "SelectBuild" };
-		this->setActionButtons(2, typeActions1);
+		int pointAction1[] = { 1 };
+		this->setActionButtons(2, typeActions1,pointAction1);
 		std::string typeActions2[] = { "B_M", "B_A", "B_C"};
-		this->setActionButtons(3, typeActions2);
+		int pointAction2[] = { 5,8,10 };
+		this->setActionButtons(3, typeActions2,pointAction2);
 	}
 	else {
 		std::string typeActions[] = { "Move", "Attack" };
-		this->setActionButtons(2, typeActions);
+		int pointAction[] = { 0,0 };
+		this->setActionButtons(2, typeActions,pointAction);
 	}
 	return this;
 }
@@ -129,13 +135,16 @@ Grid* Grid::AddUnit(Unit* pNewUnit)
 	this->pUnit->Move(this->centerPos);
 	if (pUnit->GetType() == "Engineer") {
 		std::string typeActions1[] = { "Move", "SelectBuild" };
-		this->setActionButtons(2, typeActions1);
+		int pointAction1[] = { 1 };
+		this->setActionButtons(2, typeActions1,pointAction1);
 		std::string typeActions2[] = { "B_M", "B_A", "B_C" };
-		this->setActionButtons(3, typeActions2);
+		int pointAction2[] = { 5,8,10 };
+		this->setActionButtons(3, typeActions2,pointAction2);
 	}
 	else {
 		std::string typeActions[] = { "Move", "Attack" };
-		this->setActionButtons(2, typeActions);
+		int pointAction[] = { 0,0 };
+		this->setActionButtons(2, typeActions,pointAction);
 	}
 	this->isUnit = true;
 	return this;
