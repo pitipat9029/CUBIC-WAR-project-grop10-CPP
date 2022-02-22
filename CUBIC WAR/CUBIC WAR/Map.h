@@ -41,5 +41,5 @@ public:
 	void SetGridEdgeDisable();
 	void SetExample(std::string type);
 
-	void CreateGridArea(Grid* pGridCenter, int radius);
+	void CreateGridArea(Grid* pGridCenter, int radius, std::string gMode);
 };

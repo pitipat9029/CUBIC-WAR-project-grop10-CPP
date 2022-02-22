@@ -60,9 +60,9 @@ void Grid::RenderGrid(sf::RenderTarget *target)
 	target->draw(this->shape);
 }
 
-void Grid::RenderUnit(sf::RenderTarget* target)
+void Grid::RenderUnit(sf::RenderTarget* target, int idPlayerNow)
 {
-	this->pUnit->Render(target);
+	this->pUnit->Render(target, idPlayerNow);
 }
 
 // Grid Action ->
@@ -153,6 +153,23 @@ Grid* Grid::AddUnit(Unit* pNewUnit)
 Unit* Grid::GetUnit()
 {
 	return this->pUnit;
+}
+
+void Grid::BeAttack(int dmg)
+{
+	if (this->isUnit) {
+		if (this->pUnit->BeAttack(dmg)) {
+			this->pUnit = 0;
+			this->isUnit = false;
+		}
+	}
+}
+
+int Grid::Attack()
+{
+	if (this->isUnit) {
+		return this->pUnit->GetAttackPoint();
+	}
 }
 
 void Grid::ClearUnit()

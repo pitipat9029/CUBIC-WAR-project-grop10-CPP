@@ -46,7 +46,7 @@ public:
 	void setActionButtons(int, std::string[] , int[]);
 
 	void RenderGrid(sf::RenderTarget*);
-	void RenderUnit(sf::RenderTarget*);
+	void RenderUnit(sf::RenderTarget*, int idPlayerNow);
 	Grid* CreateBuilding(std::string type, int);
 	void SetEnabled(bool);
 
@@ -65,5 +65,7 @@ public:
 	Grid* AddUnit(Unit*);
 	void ClearUnit();
 	Unit* GetUnit();
+	void BeAttack(int);
+	int Attack();
 };
 
