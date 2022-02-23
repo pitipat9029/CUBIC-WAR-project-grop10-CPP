@@ -68,15 +68,108 @@ void Map::RenderUnits()
 	}
 }
 
-void Map::UpdatePlayerVision(Grid* pGrid, int radius, int idPlayer)
+void Map::UpdatePlayerVision(Grid* pGrid, int radius2, int idPlayer)
 {
-	for (int q = pGrid->GetRC().y - radius; q <= pGrid->GetRC().y + radius; q++) {
-		for (int r = pGrid->GetRC().x - radius; r <= pGrid->GetRC().x + radius; r++) {
-			if (abs(-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) <= radius) {
-				int col = q + (r - (r & 1)) / 2;
-				int row = r;
-				if (row >= -1 && row < this->maxRow && col >= -1 && col <= this->maxColumn) {
-					this->vGrids[row + 1][col + 1].UpdatePlayerVision(idPlayer);
+	if (pGrid->isUnit) {
+		if (pGrid->GetUnit()->GetType() == "Soldier") {
+			int radius = 2;
+			for (int q = pGrid->GetRC().y - radius; q <= pGrid->GetRC().y + radius; q++) {
+				for (int r = pGrid->GetRC().x - radius; r <= pGrid->GetRC().x + radius; r++) {
+					if (abs(-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) <= radius) {
+						if ((-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) == 0 || (q - pGrid->GetRC().y) == 0 || (r - pGrid->GetRC().x) == 0) {
+							int col = q + (r - (r & 1)) / 2;
+							int row = r;
+							if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+								this->vGrids[row + 1][col + 1].UpdatePlayerVision(idPlayer);
+							}
+						}
+					}
+				}
+			}
+		}
+		else if (pGrid->GetUnit()->GetType() == "Archer") {
+			int radius = 2;
+			for (int q = pGrid->GetRC().y - radius; q <= pGrid->GetRC().y + radius; q++) {
+				for (int r = pGrid->GetRC().x - radius; r <= pGrid->GetRC().x + radius; r++) {
+					if (abs(-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) <= radius) {
+						int col = q + (r - (r & 1)) / 2;
+						int row = r;
+						if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+							this->vGrids[row + 1][col + 1].UpdatePlayerVision(idPlayer);
+						}
+					}
+				}
+			}
+		}
+		else {
+			int radius = 1;
+			for (int q = pGrid->GetRC().y - radius; q <= pGrid->GetRC().y + radius; q++) {
+				for (int r = pGrid->GetRC().x - radius; r <= pGrid->GetRC().x + radius; r++) {
+					if (abs(-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) <= radius) {
+						int col = q + (r - (r & 1)) / 2;
+						int row = r;
+						if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+							this->vGrids[row + 1][col + 1].UpdatePlayerVision(idPlayer);
+						}
+					}
+				}
+			}
+		}
+	}
+	else if (pGrid->isBuilding) {
+		if (pGrid->typeBuilding == "A") {
+			int radius = 2;
+			for (int q = pGrid->GetRC().y - radius; q <= pGrid->GetRC().y + radius; q++) {
+				for (int r = pGrid->GetRC().x - radius; r <= pGrid->GetRC().x + radius; r++) {
+					if (abs(-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) <= radius) {
+						int col = q + (r - (r & 1)) / 2;
+						int row = r;
+						if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+							this->vGrids[row + 1][col + 1].UpdatePlayerVision(idPlayer);
+						}
+					}
+				}
+			}
+		}
+		else if (pGrid->typeBuilding == "C") {
+			int radius = 3;
+			for (int q = pGrid->GetRC().y - radius; q <= pGrid->GetRC().y + radius; q++) {
+				for (int r = pGrid->GetRC().x - radius; r <= pGrid->GetRC().x + radius; r++) {
+					if (abs(-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) <= radius) {
+						int col = q + (r - (r & 1)) / 2;
+						int row = r;
+						if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+							this->vGrids[row + 1][col + 1].UpdatePlayerVision(idPlayer);
+						}
+					}
+				}
+			}
+		}
+		else {
+			int radius = 1;
+			for (int q = pGrid->GetRC().y - radius; q <= pGrid->GetRC().y + radius; q++) {
+				for (int r = pGrid->GetRC().x - radius; r <= pGrid->GetRC().x + radius; r++) {
+					if (abs(-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) <= radius) {
+						int col = q + (r - (r & 1)) / 2;
+						int row = r;
+						if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+							this->vGrids[row + 1][col + 1].UpdatePlayerVision(idPlayer);
+						}
+					}
+				}
+			}
+		}
+	}
+	else {
+		int radius = 1;
+		for (int q = pGrid->GetRC().y - radius; q <= pGrid->GetRC().y + radius; q++) {
+			for (int r = pGrid->GetRC().x - radius; r <= pGrid->GetRC().x + radius; r++) {
+				if (abs(-(q - pGrid->GetRC().y) - (r - pGrid->GetRC().x)) <= radius) {
+					int col = q + (r - (r & 1)) / 2;
+					int row = r;
+					if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+						this->vGrids[row + 1][col + 1].UpdatePlayerVision(idPlayer);
+					}
 				}
 			}
 		}
@@ -197,23 +290,162 @@ void Map::SetExample(std::string type)
 	}
 }
 
-void Map::CreateGridArea(Grid* pGridCenter, int radius, std::string gMode)
+void Map::CreateGridArea(Grid* pGridCenter, int radius1, std::string gMode)
 {
-	this->SetGridAllEnable(false);
 	this->pPointedGrid = 0;
-	for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
-		for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
-			if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
-				int col = q + (r - (r & 1)) / 2;
-				int row = r;
-				if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
-					Grid* pGrid = &this->vGrids[row + 1][col + 1];
-					if (gMode == "Attack") {
-						if (pGrid != pGridCenter) {
+	this->SetGridAllEnable(false);
+
+	if (gMode == "Attack") {
+		if (pGridCenter->isUnit) {
+			if (pGridCenter->GetUnit()->GetType() == "Archer") {
+				int radius = 2;
+				for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
+					for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
+						if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
+							int col = q + (r - (r & 1)) / 2;
+							int row = r;
+							if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+								Grid* pGrid = &this->vGrids[row + 1][col + 1];
+								if (pGrid != pGridCenter) {
+									pGrid->SetEnabled(true);
+								}
+							}
+						}
+					}
+				}
+			}
+			else {
+				int radius = 1;
+				for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
+					for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
+						if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
+							int col = q + (r - (r & 1)) / 2;
+							int row = r;
+							if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+								Grid* pGrid = &this->vGrids[row + 1][col + 1];
+								if (pGrid != pGridCenter) {
+									pGrid->SetEnabled(true);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else if (pGridCenter->isBuilding) {
+			if (pGridCenter->typeBuilding == "C") {
+				int radius = 3;
+				for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
+					for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
+						if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
+							if (!(abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) + abs(q - pGridCenter->GetRC().y) + abs(r - pGridCenter->GetRC().x) == 2)) {
+								int col = q + (r - (r & 1)) / 2;
+								int row = r;
+								if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+									Grid* pGrid = &this->vGrids[row + 1][col + 1];
+									if (pGrid != pGridCenter) {
+										pGrid->SetEnabled(true);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else {
+				int radius = 1;
+				for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
+					for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
+						if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
+							int col = q + (r - (r & 1)) / 2;
+							int row = r;
+							if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+								Grid* pGrid = &this->vGrids[row + 1][col + 1];
+								if (pGrid != pGridCenter) {
+									pGrid->SetEnabled(true);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else {
+			int radius = 1;
+			for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
+				for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
+					if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
+						int col = q + (r - (r & 1)) / 2;
+						int row = r;
+						if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+							Grid* pGrid = &this->vGrids[row + 1][col + 1];
+							if (pGrid != pGridCenter) {
+								pGrid->SetEnabled(true);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	else if (gMode == "Move") {
+		if (pGridCenter->GetUnit()->GetType() == "Soldier") {
+			int radius = 2;
+			for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
+				for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
+					if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
+						if ((-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) == 0 || (q - pGridCenter->GetRC().y) == 0 || (r - pGridCenter->GetRC().x) == 0) {
+							int col = q + (r - (r & 1)) / 2;
+							int row = r;
+							Grid* pGrid = &this->vGrids[row + 1][col + 1];
+							if (pGrid != pGridCenter && !pGrid->isBuilding && !pGrid->isUnit) {
+								pGrid->SetEnabled(true);
+							}
+						}
+					}
+				}
+			}
+		}
+		else if (pGridCenter->GetUnit()->GetType() == "Archer") {
+			int radius = 1;
+			for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
+				for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
+					if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
+						int col = q + (r - (r & 1)) / 2;
+						int row = r;
+						Grid* pGrid = &this->vGrids[row + 1][col + 1];
+						if (pGrid != pGridCenter && !pGrid->isBuilding && !pGrid->isUnit) {
 							pGrid->SetEnabled(true);
 						}
 					}
-					else {
+				}
+			}
+		}
+		else {
+			int radius = 1;
+			for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
+				for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
+					if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
+						int col = q + (r - (r & 1)) / 2;
+						int row = r;
+						Grid* pGrid = &this->vGrids[row + 1][col + 1];
+						if (pGrid != pGridCenter && !pGrid->isBuilding && !pGrid->isUnit) {
+							pGrid->SetEnabled(true);
+						}
+					}
+				}
+			}
+		}
+	}
+	else {
+		int radius = 1;
+		for (int q = pGridCenter->GetRC().y - radius; q <= pGridCenter->GetRC().y + radius; q++) {
+			for (int r = pGridCenter->GetRC().x - radius; r <= pGridCenter->GetRC().x + radius; r++) {
+				if (abs(-(q - pGridCenter->GetRC().y) - (r - pGridCenter->GetRC().x)) <= radius) {
+					int col = q + (r - (r & 1)) / 2;
+					int row = r;
+					if (row >= 0 && row < this->maxRow && col >= 0 && col < this->maxColumn) {
+						Grid* pGrid = &this->vGrids[row + 1][col + 1];
 						if (pGrid != pGridCenter && !pGrid->isBuilding && !pGrid->isUnit) {
 							pGrid->SetEnabled(true);
 						}

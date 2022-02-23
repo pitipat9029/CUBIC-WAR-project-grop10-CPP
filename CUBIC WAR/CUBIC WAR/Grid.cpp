@@ -115,11 +115,17 @@ Grid* Grid::CreateBuilding(std::string type, int idPlayer)
 		this->maxhp = this->hp = 45;
 		this->atk = 0;
 		this->imgPath = "medieval_tower";
+		std::string typeActions[] = { "Attack" };
+		int pointAction[] = { 3 };
+		this->setActionButtons(1, typeActions, pointAction);
 	}
 	else if (type == "C") {
 		this->maxhp = this->hp = 35;
 		this->atk = 0;
 		this->imgPath = "medieval_canon";
+		std::string typeActions[] = { "Attack" };
+		int pointAction[] = { 3 };
+		this->setActionButtons(1, typeActions, pointAction);
 	}
 
 	if (!this->texture.loadFromFile("Textures/Building/" + this->imgPath + ".png")) {
@@ -134,18 +140,28 @@ Grid* Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits, int idPlayer)
 	this->isUnit = true;
 	vUnits.push_back(new Unit(type, this->centerPos, idPlayer));
 	this->pUnit = vUnits.back();
-	if (type == "Engineer") {
+	if (pUnit->GetType() == "Engineer") {
 		std::string typeActions1[] = { "Move", "SelectBuild" };
-		int pointAction1[] = { 1 , 5 };
-		this->setActionButtons(2, typeActions1,pointAction1);
-		std::string typeActions2[] = { "B_M", "B_A", "B_C"};
+		int pointAction1[] = { 1, 5 };
+		this->setActionButtons(2, typeActions1, pointAction1);
+		std::string typeActions2[] = { "B_M", "B_A", "B_C" };
 		int pointAction2[] = { 5,8,10 };
-		this->setActionButtons(3, typeActions2,pointAction2);
+		this->setActionButtons(3, typeActions2, pointAction2);
 	}
-	else {
+	else if (pUnit->GetType() == "Soldier") {
 		std::string typeActions[] = { "Move", "Attack" };
-		int pointAction[] = { 0,0 };
-		this->setActionButtons(2, typeActions,pointAction);
+		int pointAction[] = { 1, 1 };
+		this->setActionButtons(2, typeActions, pointAction);
+	}
+	else if (pUnit->GetType() == "Archer") {
+		std::string typeActions[] = { "Move", "Attack" };
+		int pointAction[] = { 1, 2 };
+		this->setActionButtons(2, typeActions, pointAction);
+	}
+	else if (pUnit->GetType() == "Artillery") {
+		std::string typeActions[] = { "Move", "Attack" };
+		int pointAction[] = { 3, 2 };
+		this->setActionButtons(2, typeActions, pointAction);
 	}
 	return this;
 }
@@ -162,10 +178,20 @@ Grid* Grid::AddUnit(Unit* pNewUnit)
 		int pointAction2[] = { 5,8,10 };
 		this->setActionButtons(3, typeActions2,pointAction2);
 	}
-	else {
+	else if(pUnit->GetType() == "Soldier") {
 		std::string typeActions[] = { "Move", "Attack" };
-		int pointAction[] = { 0,0 };
+		int pointAction[] = { 1, 1 };
 		this->setActionButtons(2, typeActions,pointAction);
+	}
+	else if (pUnit->GetType() == "Archer") {
+		std::string typeActions[] = { "Move", "Attack" };
+		int pointAction[] = { 1, 2 };
+		this->setActionButtons(2, typeActions, pointAction);
+	}
+	else if (pUnit->GetType() == "Artillery") {
+		std::string typeActions[] = { "Move", "Attack" };
+		int pointAction[] = { 3, 2 };
+		this->setActionButtons(2, typeActions, pointAction);
 	}
 	this->isUnit = true;
 	return this;
@@ -195,6 +221,9 @@ int Grid::Attack()
 {
 	if (this->isUnit) {
 		return this->pUnit->GetAttackPoint();
+	}
+	else {
+		return this->atk;
 	}
 }
 
