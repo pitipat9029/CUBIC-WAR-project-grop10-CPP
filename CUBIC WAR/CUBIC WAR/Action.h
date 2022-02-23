@@ -64,7 +64,7 @@ private:
 	void intitText();
 	void initBar();
 	void initButton();
-
+	void DoCommand();
 	void ClickEvents();
 	void NextTurn();
 	void SetToNormalMode();

@@ -55,105 +55,56 @@ void Action::ClickEvents()
 				else {
 					if (this->isMenuOpen) {
 						if (this->pButtonAPointed != 0) {
-							std::string command = pButtonAPointed->GetActionCommand(this->vPlayers[this->idPlayerNow]->point);
-							if (command == "Move") {
-								this->gMode = "Move";
-								this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
-								this->isMenuOpen = false;
-								this->pButtonAPointed = 0;
-							}
-							else if (command == "Attack") {
-								this->gMode = "Attack";
-								this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
-								this->isMenuOpen = false;
-								this->pButtonAPointed = 0;
-								this->vPlayers[idPlayerNow]->whereAttack.push_back(this->pGridPointed);
-								
-							}
-							else if (command == "SelectBuild") {
-								this->gMode = "SelectBuild";
-							}
-							else if (command == "SelectCreate") {
-								this->gMode = "SelectCreate";
-							}
-							else if (command.find("B_") != std::string::npos) {
-								this->gMode = "Build";
-								this->typeToCreate = command.substr(2, -1);
-								this->pMap->SetExample(command);
-								this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
-								this->isMenuOpen = false;
-								this->pButtonAPointed = 0;
-							}
-							else if (command.find("U_") != std::string::npos) {
-								this->gMode = "Create";
-								this->typeToCreate = command.substr(2, -1);
-								this->pMap->SetExample(command);
-								this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
-								this->isMenuOpen = false;
-								this->pButtonAPointed = 0;
-							}
-							else if (command == "null") {
-								this->isMenuOpen = false;
-								this->pButtonAPointed = 0;
-								this->SetToNormalMode();
-							}
-							else {
-								
-							}
+							this->DoCommand();
 						}
 						else {
 							this->isMenuOpen = false;
 							this->pButtonAPointed = 0;
+							this->SetToNormalMode();
 						}
 					} else if (this->pGridPointed != 0 && !this->isMenuOpen) {
 						if (gMode == "Move") {
+							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							this->Move();
 							this->SetToNormalMode();
 						}
 						else if (gMode == "Build") {
+							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							this->pMap->UpdatePlayerVision(this->pGridPointed->CreateBuilding(this->typeToCreate, this->idPlayerNow), 1, this->idPlayerNow);
-							if (typeToCreate == "M")
-							{
-								this->vPlayers[this->idPlayerNow]->point -= 5;
-							}
-							else if (typeToCreate == "A")
-							{
-								this->vPlayers[this->idPlayerNow]->point -= 8;
-							}
-							else if (typeToCreate == "C")
-							{
-								this->vPlayers[this->idPlayerNow]->point -= 10;
-							}
 							this->SetToNormalMode();
 						}
 						else if (gMode == "Create") {
+							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							this->pMap->UpdatePlayerVision(this->pGridPointed->AddUnit(this->typeToCreate, this->pMap->vUnits, this->idPlayerNow), 1, this->idPlayerNow);
-							if (typeToCreate == "Soldier")
-							{
-								this->vPlayers[this->idPlayerNow]->point -= 4;
-							}
-							else if (typeToCreate == "Archer")
-							{
-								this->vPlayers[this->idPlayerNow]->point -= 5;
-							}
-							else if (typeToCreate == "Artillery")
-							{
-								this->vPlayers[this->idPlayerNow]->point -= 6;
-							}
 							this->SetToNormalMode();
 						}
 						else if (gMode == "Attack") {
+							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							this->pGridPointed->BeAttack(this->pGridSelected->Attack());
 							this->SetToNormalMode();
 						}
 						else {
 							this->pGridSelected = pGridPointed;
-							if (pGridPointed->isUnit && pGridPointed->GetUnit()->isMyUnit(idPlayerNow) && pGridPointed->GetUnit() != 0) {
-								this->gMode = "Move";
-								this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
-							}
-							else {
-								
+							if (this->pGridSelected->vActionButton.size() > 0 && ((pGridSelected->isUnit && pGridSelected->GetUnit()->isMyUnit(idPlayerNow)) || (pGridSelected->isBuilding && pGridSelected->isMyBuilding(idPlayerNow)))) {
+								if (pGridSelected->GetUnit() != 0) {
+									if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
+										this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
+										this->DoCommand();
+									}
+								}
+								else if (this->pGridSelected->typeBuilding == "M") {
+									if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
+										this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
+										this->isMenuOpen = true;
+										this->DoCommand();
+									}
+								}
+								else {
+									if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
+										this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
+										this->DoCommand();
+									}
+								}
 							}
 						}
 					} if (this->pGridPointed == 0) {
@@ -196,11 +147,15 @@ void Action::ClickEvents()
 			}
 			// Mouse Right click
 			else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-				if (this->gMode == "Normal" && !isMenuOpen) {
+				if (this->gMode == "Normal" && !isMenuOpen && this->pGridPointed != 0) {
 					if (this->pGridPointed->vActionButton.size() > 0) {
 						this->pGridSelected = this->pGridPointed;
 						this->isMenuOpen = true;
+						this->pGridPointed = 0;
 					}
+				}
+				else {
+					//this->SetToNormalMode();
 				}
 			}
 			this->isMousePress = true;
@@ -213,18 +168,10 @@ void Action::ClickEvents()
 
 void Action::Move()
 {
-	if (this->vPlayers[this->idPlayerNow]->point <= 0) //close creategrid area
-	{
-	}
-	else
-	{
-		this->pGridPointed->AddUnit(this->pGridSelected->GetUnit());
-		this->pMap->UpdatePlayerVision(pGridPointed, 1, this->idPlayerNow);
-		this->pGridSelected->ClearUnit();
-		this->vPlayers[this->idPlayerNow]->point -= 1;
-		this->vPlayers[this->idPlayerNow]->whereAttack; //dont know how to do next
-	}
-
+	this->pGridPointed->AddUnit(this->pGridSelected->GetUnit());
+	this->pMap->UpdatePlayerVision(pGridPointed, 1, this->idPlayerNow);
+	this->pGridSelected->ClearUnit();
+	this->vPlayers[this->idPlayerNow]->whereAttack; //dont know how to do next
 }
 
 void Action::RenderMenu(int deep)
@@ -264,6 +211,7 @@ void Action::SetToNormalMode()
 	this->gMode = "Normal";
 	this->typeToCreate = "";
 	this->pGridSelected = 0;
+	this->pButtonAPointed = 0;
 	this->pMap->SetGridAllEnable(true);
 }
 
@@ -327,16 +275,17 @@ void Action::Render()
 {
 	if (isWait == false) {
 		this->pMap->RenderMap();
+		if (!isMenuOpen && !(gMode == "SelectBuild" || gMode == "SelectCreate")) {
+			this->pMap->ShowGridHighlight(this->gMode);
+		}
+		this->pMap->RenderUnits();
 		if (isMenuOpen && (gMode == "SelectBuild" || gMode == "SelectCreate")) {
 			this->RenderMenu(1);
 		}
 		else if(isMenuOpen) {
 			this->RenderMenu(0);
 		}
-		else {
-			this->pMap->ShowGridHighlight(this->gMode);
-		}
-		this->pMap->RenderUnits();
+			
 		pWindow->draw(bar);
 		pWindow->draw(button);
 		pWindow->draw(rollbtn);
@@ -425,6 +374,51 @@ void Action::initButton()
 	this->rollbtn.setFillColor(col);
 	this->rollbtn.setSize(sf::Vector2f(50.f, 50.f));
 	this->rollbtn.setPosition(700.f, 550.f);
+}
+
+void Action::DoCommand()
+{
+	std::string command = pButtonAPointed->GetActionCommand(this->vPlayers[this->idPlayerNow]->point);
+	if (command == "Move") {
+		this->gMode = "Move";
+		this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
+		this->isMenuOpen = false;
+	}
+	else if (command == "Attack") {
+		this->gMode = "Attack";
+		this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
+		this->isMenuOpen = false;
+		//this->vPlayers[idPlayerNow]->whereAttack.push_back(this->pGridPointed);
+	}
+	else if (command == "SelectBuild") {
+		this->gMode = "SelectBuild";
+	}
+	else if (command == "SelectCreate") {
+		this->gMode = "SelectCreate";
+	}
+	else if (command.find("B_") != std::string::npos) {
+		this->gMode = "Build";
+		this->typeToCreate = command.substr(2, -1);
+		this->pMap->SetExample(command);
+		this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
+		this->isMenuOpen = false;
+	}
+	else if (command.find("U_") != std::string::npos) {
+		this->gMode = "Create";
+		this->typeToCreate = command.substr(2, -1);
+		this->pMap->SetExample(command);
+		this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
+		this->isMenuOpen = false;
+	}
+	else if (command == "null") {
+		this->isMenuOpen = false;
+		this->SetToNormalMode();
+	}
+	else {
+		this->isMenuOpen = false;
+		this->pButtonAPointed = 0;
+		this->SetToNormalMode();
+	}
 }
 
 void Action::updateText()
