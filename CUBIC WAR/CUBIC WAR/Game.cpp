@@ -39,20 +39,20 @@ void Game::initWindow()
 void Game::initVariable()
 {
 	this->gameAction = new Action(this->window);
-	this->gameAction->StartGame(2);
 }
 
 void Game::initButton()
 {
-	this->button1.setFillColor(sf::Color::Red);
-	this->button1.setSize(sf::Vector2f(100.f, 50.f));
-	this->button1.setPosition(800.f, 550.f);
+	sf::Color temp(196, 164, 132);
+	this->startbtn.setFillColor(temp);
+	this->startbtn.setSize(sf::Vector2f(220.f, 72.f));
+	this->startbtn.setPosition(350.f, 350.f);
 
 	this->text.setFont(this->font);
 	this->text.setFillColor(sf::Color::White);
-	this->text.setCharacterSize(18);
-	this->text.setPosition(680.f, 567.f);
-	this->text.setString("-> Click to Start ur turn");
+	this->text.setCharacterSize(32);
+	this->text.setPosition(355.f, 360.f);
+	this->text.setString("START GAME");
 }
 
 void Game::initBar()
@@ -88,16 +88,28 @@ void Game::pollEvents()
 			}
 			break;
 		}
-		if (button1.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
+		if (startbtn.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
 		{
-			button1.setFillColor(sf::Color::Blue);
+			sf::Color temp(150, 1200, 100);
+			startbtn.setFillColor(temp);
 		}
 		else
 		{
-			button1.setFillColor(sf::Color::Red);
+			sf::Color temp(196, 164, 132);
+			startbtn.setFillColor(temp);
 		}
-		if (event.type == sf::Mouse::Left)
-			sound.play();
+		//start game click
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			if (startbtn.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
+			{
+				std::cout << "startbtn is clicked";
+				this->gameAction->StartGame(2);
+				startbtn.setPosition(910.f,610.f);
+				guiText.setPosition(910.f, 610.f);
+				text.setPosition(910.f, 619.f);
+			}
+		}
 	}
 }
 
@@ -106,20 +118,13 @@ void Game::initFont()
 	this->font.loadFromFile("Fonts/Minecraft.ttf");
 }
 
-void Game::initTurnText()
-{
-	this->turntext.setFont(this->font);
-	this->turntext.setFillColor(sf::Color::White);
-	this->turntext.setCharacterSize(32);
-	this->turntext.setPosition(400.f, 280.f);
-}
-
 void Game::initText()
 {
 	this->guiText.setFont(this->font);
 	this->guiText.setFillColor(sf::Color::White);
-	this->guiText.setCharacterSize(32);
-	this->guiText.setPosition(5.f, 550.f);
+	this->guiText.setCharacterSize(75);
+	this->guiText.setPosition(250.f, 230.f);
+	guiText.setString("CUBIC WAR");
 }
 
 void Game::initTimer()
@@ -140,18 +145,8 @@ void Game::Update()
 {
 	this->pollEvents();
 	this->UpdateMousePosition();
-	this->updateGui();
 	this->updateTurnText();
 	this->updateTime();
-		
-}
-
-void Game::updateGui()
-{
-	std::stringstream ss;
-
-	ss << "Points: " << this->points;
-	this->guiText.setString(ss.str());
 }
 
 void Game::updateTime()
@@ -182,19 +177,21 @@ void Game::Render()
 	this->window->clear();
 
 	//--------------------------
-	window->draw(turntext);
+	window->draw(guiText);
 	//Code draw things here
 	//this->player.render(this->window);
-	this->gameAction->Render();
+	window->draw(startbtn);
+	window->draw(text);
 	
-
+	if (this->gameAction->isGamePlaying == true) {
+		this->gameAction->Render();
+	}
+	
 	//--------------------------
 
 	//Render gui
 	//window->draw(bar);
-	//window->draw(button);
-	//window->draw(text);
-	//window->draw(guiText);
+	//window->draw(timer);
 	//this->RenderGui(this->window);
 	this->window->display();
 
@@ -203,5 +200,5 @@ void Game::Render()
 
 void Game::renderButton(sf::RenderTarget* target)
 {
-	target->draw(this->button1);
+	target->draw(this->startbtn);
 }

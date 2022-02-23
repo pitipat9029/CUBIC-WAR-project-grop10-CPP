@@ -16,6 +16,7 @@ Action::~Action()
 
 void Action::StartGame(int numPlayer)
 {
+	isGamePlaying = true;
 	this->pMap = new Map(this->pWindow, &this->currentMousePos, &this->idPlayerNow);
 
 	for (int i = 0; i < numPlayer; i++) {
@@ -67,6 +68,7 @@ void Action::ClickEvents()
 								this->isMenuOpen = false;
 								this->pButtonAPointed = 0;
 								this->vPlayers[idPlayerNow]->whereAttack.push_back(this->pGridPointed);
+								
 							}
 							else if (command == "SelectBuild") {
 								this->gMode = "SelectBuild";

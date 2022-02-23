@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>
+#include <string>
 #include "Grid.h"
 
 class Player
@@ -17,7 +18,6 @@ private:
 public:
 
 
-	sf::Vector2f whoAttack;
 	std::vector<Grid* > whereAttack;
 
 	int point = 0;

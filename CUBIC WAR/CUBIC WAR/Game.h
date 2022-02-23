@@ -18,7 +18,7 @@ private:
 	sf::Clock clock1sec;
 	sf::Time t1; 
 
-	sf::RectangleShape button1;
+	sf::RectangleShape startbtn;
 	sf::RectangleShape bar;
 
 	//sound
@@ -26,13 +26,13 @@ private:
 	sf::Sound sound;
 
 	Action* gameAction;
+	ActionButton* actionButton;
 
 	int playerturn;
 	int points;
 	int time;
 
 	int roll1, roll2;
-	
 
 	sf::Font font;
 	sf::Text guiText;
@@ -50,7 +50,6 @@ private:
 	void pollEvents();
 	void initFont();
 	void initText();
-	void initTurnText();
 	void initTimer();
 
 	void UpdateMousePosition();
@@ -69,7 +68,6 @@ public:
 
 	// Function
 	void Update();
-	void updateGui();
 	void updateTime();
 	void updateTurnText();
 	void Render();

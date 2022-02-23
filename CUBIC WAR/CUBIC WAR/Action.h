@@ -76,6 +76,8 @@ private:
 	void RenderMenu(int);
 	
 public:
+	bool isGamePlaying = false;
+
 	Action(sf::RenderWindow*);
 	~Action();
 
