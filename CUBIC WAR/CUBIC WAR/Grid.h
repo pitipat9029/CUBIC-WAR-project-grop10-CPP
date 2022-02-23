@@ -27,10 +27,11 @@ private:
 	int idPlayerHere = -1;
 
 	// Building ----
-	std::string typeBuilding = "";
-	int maxLifePoint = 0, lifePoint = 0;
-	int damage = 0;
+	int hp = 0, maxhp = 0;
+	int atk = 0;
 	std::string* pListMenu = 0;
+	sf::RectangleShape hpBar;
+	void RenderHpBar(sf::RenderTarget* target, bool isEnemy);
 
 	// Unit -------
 	Unit* pUnit = 0;
@@ -44,8 +45,9 @@ public:
 	~Grid();
 
 	void setActionButtons(int, std::string[] , int[]);
+	std::string typeBuilding = "";
 
-	void RenderGrid(sf::RenderTarget*);
+	void RenderGrid(sf::RenderTarget*, int idPlayerNow);
 	void RenderUnit(sf::RenderTarget*, int idPlayerNow);
 	Grid* CreateBuilding(std::string type, int);
 	void SetEnabled(bool);
@@ -59,6 +61,11 @@ public:
 	sf::Vector2f GetCenterPoint();
 	void UpdatePlayerVision(int idPlayer);
 	bool GetPlayerVision(int idPlayer);
+
+	//Building
+	int GetAttackPoint();
+	void ClearBuilding();
+	bool isMyBuilding(int idPlayer);
 	
 	// Unit
 	Grid* AddUnit(std::string type, std::vector<Unit*>&, int);

@@ -54,15 +54,36 @@ void Grid::ShowInCreate(sf::Texture texture, sf::RenderTarget* target)
 	target->draw(shape);
 }
 
-void Grid::RenderGrid(sf::RenderTarget *target)
+void Grid::RenderGrid(sf::RenderTarget *target, int idPlayerNow)
 {
 	this->shape.setTexture(this->texture);
 	target->draw(this->shape);
+	if (this->isBuilding) {
+		this->RenderHpBar(target, idPlayerNow != this->idPlayerHere);
+	}
 }
 
 void Grid::RenderUnit(sf::RenderTarget* target, int idPlayerNow)
 {
 	this->pUnit->Render(target, idPlayerNow);
+}
+
+void Grid::RenderHpBar(sf::RenderTarget* target, bool isEnemy)
+{
+	sf::Vector2f unitPos = this->shape.getPosition();
+	this->hpBar.setSize(sf::Vector2f(35.f, 5.f));
+	this->hpBar.setOrigin(hpBar.getSize());
+	this->hpBar.setPosition(unitPos.x + 47.5f, unitPos.y + 55.f);
+	this->hpBar.setFillColor(sf::Color::White);
+	target->draw(this->hpBar);
+	this->hpBar.setSize(sf::Vector2f(35.f * (this->hp / (float)this->maxhp), 5.f));
+	if (isEnemy) {
+		this->hpBar.setFillColor(sf::Color::Red);
+	}
+	else {
+		this->hpBar.setFillColor(sf::Color::Green);
+	}
+	target->draw(this->hpBar);
 }
 
 // Grid Action ->
@@ -74,16 +95,16 @@ Grid* Grid::CreateBuilding(std::string type, int idPlayer)
 	this->typeBuilding = type;
 
 	if(type == "B") {
-		this->maxLifePoint = this->lifePoint = 50;
-		this->damage = 0;
+		this->maxhp = this->hp = 50;
+		this->atk = 0;
 		this->imgPath = "medieval_largeCastle";
 	}
 	else if (type == "M") {
-		this->maxLifePoint = this->lifePoint = 45;
-		this->damage = 0;
+		this->maxhp = this->hp = 45;
+		this->atk = 0;
 		this->imgPath = "medieval_training";
 		std::string typeActions1[] = { "SelectCreate" };
-		int pointAction1[] = {0};
+		int pointAction1[] = {4};
 		this->setActionButtons(1, typeActions1, pointAction1);
 		std::string typeActions2[] = { "U_Soldier", "U_Archer", "U_Artillery" };
 		int pointAction2[] = {4,5,6};
@@ -91,13 +112,13 @@ Grid* Grid::CreateBuilding(std::string type, int idPlayer)
 		this->setActionButtons(3, typeActions2, pointAction2);
 	}
 	else if (type == "A") {
-		this->maxLifePoint = this->lifePoint = 45;
-		this->damage = 0;
+		this->maxhp = this->hp = 45;
+		this->atk = 0;
 		this->imgPath = "medieval_tower";
 	}
 	else if (type == "C") {
-		this->maxLifePoint = this->lifePoint = 35;
-		this->damage = 0;
+		this->maxhp = this->hp = 35;
+		this->atk = 0;
 		this->imgPath = "medieval_canon";
 	}
 
@@ -115,7 +136,7 @@ Grid* Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits, int idPlayer)
 	this->pUnit = vUnits.back();
 	if (type == "Engineer") {
 		std::string typeActions1[] = { "Move", "SelectBuild" };
-		int pointAction1[] = { 1 };
+		int pointAction1[] = { 1 , 5 };
 		this->setActionButtons(2, typeActions1,pointAction1);
 		std::string typeActions2[] = { "B_M", "B_A", "B_C"};
 		int pointAction2[] = { 5,8,10 };
@@ -135,7 +156,7 @@ Grid* Grid::AddUnit(Unit* pNewUnit)
 	this->pUnit->Move(this->centerPos);
 	if (pUnit->GetType() == "Engineer") {
 		std::string typeActions1[] = { "Move", "SelectBuild" };
-		int pointAction1[] = { 1 };
+		int pointAction1[] = { 1, 5 };
 		this->setActionButtons(2, typeActions1,pointAction1);
 		std::string typeActions2[] = { "B_M", "B_A", "B_C" };
 		int pointAction2[] = { 5,8,10 };
@@ -163,6 +184,11 @@ void Grid::BeAttack(int dmg)
 			this->isUnit = false;
 		}
 	}
+	else if (this->isBuilding) {
+		this->hp -= dmg;
+		if (this->hp <= 0);
+
+	}
 }
 
 int Grid::Attack()
@@ -177,6 +203,18 @@ void Grid::ClearUnit()
 	this->isUnit = false;
 	this->pUnit = 0;
 	
+	for (unsigned int i = 0; i < this->vActionButton.size(); i++) {
+		for (unsigned int j = 0; j < this->vActionButton[i].size(); j++) {
+			delete this->vActionButton[i][j];
+		}
+	}
+	vActionButton.clear();
+}
+
+void Grid::ClearBuilding()
+{
+	this->isBuilding = false;
+
 	for (unsigned int i = 0; i < this->vActionButton.size(); i++) {
 		for (unsigned int j = 0; j < this->vActionButton[i].size(); j++) {
 			delete this->vActionButton[i][j];
@@ -234,6 +272,13 @@ bool Grid::GetPlayerVision(int idPlayer)
 bool Grid::isEnabled()
 {
 	return this->enabled;
+}
+
+bool Grid::isMyBuilding(int idPlayer)
+{
+	if (this->idPlayerHere == idPlayer) {
+		return true;
+	}return false;
 }
 
 

@@ -53,12 +53,12 @@ void Unit::Render(sf::RenderTarget* target, int idPlayerNow)
 void Unit::RenderHpBar(sf::RenderTarget* target, bool isEnemy)
 {
 	sf::Vector2f unitPos = this->shape.getPosition();
-	this->hpBar.setSize(sf::Vector2f(-5.f, -35.f));
+	this->hpBar.setSize(sf::Vector2f(35.f, 5.f));
 	this->hpBar.setOrigin(hpBar.getSize());
-	this->hpBar.setPosition(unitPos.x + 25.f, unitPos.y -17.5f);
+	this->hpBar.setPosition(unitPos.x + 17.5f, unitPos.y + 20.f);
 	this->hpBar.setFillColor(sf::Color::White);
 	target->draw(this->hpBar);
-	this->hpBar.setSize(sf::Vector2f(-5.f, -1*(35.f*(this->hp/(float)this->maxhp))));
+	this->hpBar.setSize(sf::Vector2f(35.f * (this->hp / (float)this->maxhp), 5.f));
 	if (isEnemy) {
 		this->hpBar.setFillColor(sf::Color::Red);
 	} else {

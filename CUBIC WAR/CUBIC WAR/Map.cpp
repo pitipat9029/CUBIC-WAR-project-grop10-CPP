@@ -48,7 +48,7 @@ void Map::RenderMap()
 	for (unsigned int i = 0; i < this->vGrids.size(); i++) {
 		for (unsigned int j = 0; j < this->vGrids[i].size(); j++) {
 			if (vGrids[i][j].GetPlayerVision(*this->pIdPlayerNow)) {
-				vGrids[i][j].RenderGrid(this->pWindow);
+				vGrids[i][j].RenderGrid(this->pWindow, *this->pIdPlayerNow);
 			}
 		}
 	}
