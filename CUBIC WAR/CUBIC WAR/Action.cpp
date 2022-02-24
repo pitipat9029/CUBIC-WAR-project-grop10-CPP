@@ -37,10 +37,14 @@ void Action::GameEnd()
 
 void Action::RandomStartPosition()
 {
-	this->pMap->UpdatePlayerVision(this->pMap->vGrids[5][3].CreateBuilding("B", 0), 1,0);
-	this->pMap->UpdatePlayerVision(this->pMap->vGrids[6][3].AddUnit("Engineer", this->pMap->vUnits, 0), 1, 0);
-	this->pMap->UpdatePlayerVision(this->pMap->vGrids[8][12].CreateBuilding("B", 1), 1, 1);
-	this->pMap->UpdatePlayerVision(this->pMap->vGrids[7][13].AddUnit("Engineer", this->pMap->vUnits, 1), 1, 1);
+	int player1Xstart = rand() % 5 + 3;
+	int player1Ystart = rand() % 8 + 3;
+	int player2Xstart = rand() % 5 + 9;
+	int player2Ystart = rand() % 8 + 3;
+	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player1Ystart][player1Xstart].CreateBuilding("B", 0), 1,0);
+	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player1Ystart + rand()%2][player1Xstart + 1].AddUnit("Engineer", this->pMap->vUnits, 0), 1, 0);
+	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player2Ystart][player2Xstart].CreateBuilding("B", 1), 1, 1);
+	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player2Ystart - 1][player2Xstart - rand()%2].AddUnit("Engineer", this->pMap->vUnits, 1), 1, 1);
 }
 
 void Action::ClickEvents()
