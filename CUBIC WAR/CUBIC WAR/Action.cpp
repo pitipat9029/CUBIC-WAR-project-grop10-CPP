@@ -39,10 +39,14 @@ void Action::GameEnd()
 
 void Action::RandomStartPosition()
 {
-	this->pMap->UpdatePlayerVision(this->pMap->vGrids[5][3].CreateBuilding("B", 0), 1,0);
-	this->pMap->UpdatePlayerVision(this->pMap->vGrids[6][3].AddUnit("Engineer", this->pMap->vUnits, 0), 1, 0);
-	this->pMap->UpdatePlayerVision(this->pMap->vGrids[8][12].CreateBuilding("B", 1), 1, 1);
-	this->pMap->UpdatePlayerVision(this->pMap->vGrids[7][13].AddUnit("Engineer", this->pMap->vUnits, 1), 1, 1);
+	int player1Xstart = rand() % 5 + 3;
+	int player1Ystart = rand() % 8 + 3;
+	int player2Xstart = rand() % 5 + 9;
+	int player2Ystart = rand() % 8 + 3;
+	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player1Ystart][player1Xstart].CreateBuilding("B", 0), 1,0);
+	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player1Ystart + rand()%2][player1Xstart + 1].AddUnit("Engineer", this->pMap->vUnits, 0), 1, 0);
+	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player2Ystart][player2Xstart].CreateBuilding("B", 1), 1, 1);
+	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player2Ystart - 1][player2Xstart - rand()%2].AddUnit("Engineer", this->pMap->vUnits, 1), 1, 1);
 }
 
 void Action::ClickEvents()
@@ -64,7 +68,8 @@ void Action::ClickEvents()
 							this->pButtonAPointed = 0;
 							this->SetToNormalMode();
 						}
-					} else if (this->pGridPointed != 0 && !this->isMenuOpen) {
+					}
+					else if (this->pGridPointed != 0 && !this->isMenuOpen && this->pGridSelected != 0) {
 						if (gMode == "Move") {
 							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							this->Move();
@@ -85,31 +90,32 @@ void Action::ClickEvents()
 							isGameEnd = this->pGridPointed->BeAttack(this->pGridSelected->Attack());
 							this->SetToNormalMode();
 						}
-						else {
-							this->pGridSelected = pGridPointed;
-							if (this->pGridSelected->vActionButton.size() > 0 && ((pGridSelected->isUnit && pGridSelected->GetUnit()->isMyUnit(idPlayerNow)) || (pGridSelected->isBuilding && pGridSelected->isMyBuilding(idPlayerNow)))) {
-								if (pGridSelected->GetUnit() != 0) {
-									if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
-										this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
-										this->DoCommand();
-									}
+					}
+					else if (this->pGridPointed != 0 && !this->isMenuOpen) {
+						this->pGridSelected = pGridPointed;
+						if (this->pGridSelected->vActionButton.size() > 0 && ((pGridSelected->isUnit && pGridSelected->GetUnit()->isMyUnit(idPlayerNow)) || (pGridSelected->isBuilding && pGridSelected->isMyBuilding(idPlayerNow)))) {
+							if (pGridSelected->GetUnit() != 0) {
+								if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
+									this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
+									this->DoCommand();
 								}
-								else if (this->pGridSelected->typeBuilding == "M") {
-									if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
-										this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
-										this->isMenuOpen = true;
-										this->DoCommand();
-									}
+							}
+							else if (this->pGridSelected->typeBuilding == "M") {
+								if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
+									this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
+									this->isMenuOpen = true;
+									this->DoCommand();
 								}
-								else {
-									if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
-										this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
-										this->DoCommand();
-									}
+							}
+							else {
+								if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
+									this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
+									this->DoCommand();
 								}
 							}
 						}
-					} if (this->pGridPointed == 0) {
+					}
+					else if (this->pGridPointed == 0) {
 						this->SetToNormalMode();
 					}
 				}
@@ -336,11 +342,7 @@ void Action::renderText(sf::RenderTarget *target)
 
 void Action::initFont()
 {
-	this->font.loadFromFile("Fonts/Minecraft.ttf");
-	if (font.loadFromFile("Fonts/Minecraft.ttf"))
-	{
-		std::cout << "cantnot load font";
-	}
+	this->font.loadFromFile("Fonts/gomarice_no_continue.ttf");
 }
 
 void Action::intitText()
@@ -420,6 +422,7 @@ void Action::DoCommand()
 	std::string command = pButtonAPointed->GetActionCommand(this->vPlayers[this->idPlayerNow]->point);
 	if (command == "Move") {
 		this->gMode = "Move";
+		std::cout << "What";
 		this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
 		this->isMenuOpen = false;
 	}
@@ -452,11 +455,12 @@ void Action::DoCommand()
 	else if (command == "null") {
 		this->isMenuOpen = false;
 		this->SetToNormalMode();
+		this->pButtonAPointed = 0;
 	}
 	else {
 		this->isMenuOpen = false;
-		this->pButtonAPointed = 0;
 		this->SetToNormalMode();
+		this->pButtonAPointed = 0;
 	}
 }
 

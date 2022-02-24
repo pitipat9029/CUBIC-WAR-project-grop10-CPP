@@ -39,6 +39,7 @@ void Game::initWindow()
 void Game::initVariable()
 {
 	this->gameAction = new Action(this->window);
+	this->gameUImanager = new UImanager(this->window);
 }
 
 void Game::initButton()
@@ -46,13 +47,17 @@ void Game::initButton()
 	sf::Color temp(196, 164, 132);
 	this->startbtn.setFillColor(temp);
 	this->startbtn.setSize(sf::Vector2f(220.f, 72.f));
-	this->startbtn.setPosition(350.f, 350.f);
+	this->startbtn.setOrigin(110.f, 36.f);
+	this->startbtn.setPosition(450.f, 350.f);
 
 	this->text.setFont(this->font);
 	this->text.setFillColor(sf::Color::White);
 	this->text.setCharacterSize(32);
-	this->text.setPosition(355.f, 360.f);
 	this->text.setString("START GAME");
+	sf::FloatRect textRect = text.getLocalBounds();
+	this->text.setOrigin(textRect.left + textRect.width / 2.0f,
+		textRect.top + textRect.height / 2.0f);
+	this->text.setPosition(this->startbtn.getPosition());
 }
 
 void Game::initBar()
@@ -65,9 +70,12 @@ void Game::initBar()
 
 void Game::initSound()
 {
-	soundBuffer.loadFromFile("Audio/clickSound.wav");
+	soundBuffer.loadFromFile("Sounds/Main.wav");
 	
 	sound.setBuffer(soundBuffer);
+	sound.setVolume(25.f);
+	sound.setLoop(true);
+	sound.play();
 }
 
 
@@ -88,26 +96,30 @@ void Game::pollEvents()
 			}
 			break;
 		}
-		if (startbtn.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
-		{
-			sf::Color temp(150, 1200, 100);
-			startbtn.setFillColor(temp);
-		}
-		else
-		{
-			sf::Color temp(196, 164, 132);
-			startbtn.setFillColor(temp);
-		}
-		//start game click
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
+		if (this->pageNow == "start") {
 			if (startbtn.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
 			{
-				std::cout << "startbtn is clicked";
-				this->gameAction->StartGame(2);
-				startbtn.setPosition(910.f,610.f);
-				guiText.setPosition(910.f, 610.f);
-				text.setPosition(910.f, 619.f);
+				sf::Color temp(150, 1200, 100);
+				startbtn.setFillColor(temp);
+			}
+			else
+			{
+				sf::Color temp(196, 164, 132);
+				startbtn.setFillColor(temp);
+			}
+			//start game click
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				if (startbtn.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
+				{
+					std::cout << "startbtn is clicked";
+					this->gameAction->StartGame(2);
+					startbtn.setPosition(910.f, 610.f);
+					guiText.setPosition(910.f, 610.f);
+					text.setPosition(910.f, 619.f);
+					sound.stop();
+				}
 			}
 		}
 	}
@@ -115,22 +127,25 @@ void Game::pollEvents()
 
 void Game::initFont()
 {
-	this->font.loadFromFile("Fonts/Minecraft.ttf");
+	this->font.loadFromFile("Fonts/gomarice_no_continue.ttf");
 }
 
 void Game::initText()
 {
 	this->guiText.setFont(this->font);
-	this->guiText.setFillColor(sf::Color::White);
-	this->guiText.setCharacterSize(75);
-	this->guiText.setPosition(250.f, 230.f);
-	guiText.setString("CUBIC WAR");
+	this->guiText.setFillColor(sf::Color(184, 134, 11));
+	this->guiText.setCharacterSize(85);
+	guiText.setString("HEXA WAR");
+	sf::FloatRect textRect = guiText.getLocalBounds();
+	this->guiText.setOrigin(textRect.left + textRect.width / 2.0f,
+		textRect.top + textRect.height / 2.0f);
+	this->guiText.setPosition(450.f, 200.f);
 }
 
 void Game::initTimer()
 {
 	this->timer.setFont(this->font);
-	this ->timer.setFillColor(sf::Color::White);
+	this->timer.setFillColor(sf::Color::White);
 	this->timer.setCharacterSize(32);
 	this->timer.setPosition(200.f, 550.f);
 }
@@ -175,18 +190,24 @@ void Game::updateTurnText()
 void Game::Render()
 {
 	this->window->clear();
+	if (this->gameAction->isGamePlaying == true) {
+		this->pageNow = "game";
+	}
+	else {
+		this->pageNow = "start";
+		
+	}
+	this->gameUImanager->RenderUI(this->pageNow);
 
 	//--------------------------
-	window->draw(guiText);
-	//Code draw things here
-	//this->player.render(this->window);
-	window->draw(startbtn);
-	window->draw(text);
-	
 	if (this->gameAction->isGamePlaying == true) {
 		this->gameAction->Render();
 	}
-	
+	else {
+		window->draw(guiText);
+		window->draw(startbtn);
+		window->draw(text);
+	}
 	//--------------------------
 
 	//Render gui
