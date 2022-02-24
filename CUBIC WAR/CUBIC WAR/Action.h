@@ -1,10 +1,12 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <sstream>
+
 
 #include "Map.h"
 #include "Player.h"
@@ -18,6 +20,13 @@ private:
 	void updateText();
 
 	sf::RenderWindow* pWindow;
+
+	sf::SoundBuffer soundBufferclick;
+	sf::Sound clicksound;
+	sf::SoundBuffer soundBufferatk;
+	sf::Sound atksound;
+	sf::SoundBuffer backgroundBuffer;
+	sf::Sound backgroundsound;
 
 	sf::Font font;
 	sf::Text Playerturn;
@@ -66,6 +75,7 @@ private:
 
 	void initFont();
 	void intitText();
+	void initAudio();
 	void initBar();
 	void initButton();
 	void DoCommand();

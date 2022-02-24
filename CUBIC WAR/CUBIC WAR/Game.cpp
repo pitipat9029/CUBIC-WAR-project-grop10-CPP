@@ -79,7 +79,6 @@ void Game::initSound()
 	soundBufferclick.loadFromFile("Sounds/click.wav");
 	clicksound.setBuffer(soundBufferclick);
 	clicksound.setVolume(25.f);
-	clicksound.play();
 }
 
 
