@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -8,10 +9,13 @@
 #include <sstream>
 
 #include "Action.h"
+#include "UImanager.h"
 
 class Game
 {
 private:
+	std::string pageNow;
+
 	sf::VideoMode videoMode;
 	sf::Event event;
 
@@ -26,6 +30,7 @@ private:
 	sf::Sound sound;
 
 	Action* gameAction;
+	UImanager* gameUImanager;
 	ActionButton* actionButton;
 
 	int playerturn;

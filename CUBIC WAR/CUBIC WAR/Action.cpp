@@ -62,7 +62,8 @@ void Action::ClickEvents()
 							this->pButtonAPointed = 0;
 							this->SetToNormalMode();
 						}
-					} else if (this->pGridPointed != 0 && !this->isMenuOpen) {
+					}
+					else if (this->pGridPointed != 0 && !this->isMenuOpen && this->pGridSelected != 0) {
 						if (gMode == "Move") {
 							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							this->Move();
@@ -83,31 +84,32 @@ void Action::ClickEvents()
 							this->pGridPointed->BeAttack(this->pGridSelected->Attack());
 							this->SetToNormalMode();
 						}
-						else {
-							this->pGridSelected = pGridPointed;
-							if (this->pGridSelected->vActionButton.size() > 0 && ((pGridSelected->isUnit && pGridSelected->GetUnit()->isMyUnit(idPlayerNow)) || (pGridSelected->isBuilding && pGridSelected->isMyBuilding(idPlayerNow)))) {
-								if (pGridSelected->GetUnit() != 0) {
-									if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
-										this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
-										this->DoCommand();
-									}
+					}
+					else if (this->pGridPointed != 0 && !this->isMenuOpen) {
+						this->pGridSelected = pGridPointed;
+						if (this->pGridSelected->vActionButton.size() > 0 && ((pGridSelected->isUnit && pGridSelected->GetUnit()->isMyUnit(idPlayerNow)) || (pGridSelected->isBuilding && pGridSelected->isMyBuilding(idPlayerNow)))) {
+							if (pGridSelected->GetUnit() != 0) {
+								if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
+									this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
+									this->DoCommand();
 								}
-								else if (this->pGridSelected->typeBuilding == "M") {
-									if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
-										this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
-										this->isMenuOpen = true;
-										this->DoCommand();
-									}
+							}
+							else if (this->pGridSelected->typeBuilding == "M") {
+								if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
+									this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
+									this->isMenuOpen = true;
+									this->DoCommand();
 								}
-								else {
-									if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
-										this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
-										this->DoCommand();
-									}
+							}
+							else {
+								if (this->pGridSelected->vActionButton[0][0]->GetUsePoint() <= this->vPlayers[this->idPlayerNow]->point) {
+									this->pButtonAPointed = this->pGridSelected->vActionButton[0][0];
+									this->DoCommand();
 								}
 							}
 						}
-					} if (this->pGridPointed == 0) {
+					}
+					else if (this->pGridPointed == 0) {
 						this->SetToNormalMode();
 					}
 				}
@@ -310,11 +312,7 @@ void Action::renderText(sf::RenderTarget *target)
 
 void Action::initFont()
 {
-	this->font.loadFromFile("Fonts/Minecraft.ttf");
-	if (font.loadFromFile("Fonts/Minecraft.ttf"))
-	{
-		std::cout << "cantnot load font";
-	}
+	this->font.loadFromFile("Fonts/gomarice_no_continue.ttf");
 }
 
 void Action::intitText()
@@ -381,6 +379,7 @@ void Action::DoCommand()
 	std::string command = pButtonAPointed->GetActionCommand(this->vPlayers[this->idPlayerNow]->point);
 	if (command == "Move") {
 		this->gMode = "Move";
+		std::cout << "What";
 		this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
 		this->isMenuOpen = false;
 	}
@@ -413,11 +412,12 @@ void Action::DoCommand()
 	else if (command == "null") {
 		this->isMenuOpen = false;
 		this->SetToNormalMode();
+		this->pButtonAPointed = 0;
 	}
 	else {
 		this->isMenuOpen = false;
-		this->pButtonAPointed = 0;
 		this->SetToNormalMode();
+		this->pButtonAPointed = 0;
 	}
 }
 

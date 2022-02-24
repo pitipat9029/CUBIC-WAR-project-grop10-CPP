@@ -160,7 +160,7 @@ Grid* Grid::AddUnit(std::string type, std::vector<Unit*>& vUnits, int idPlayer)
 	}
 	else if (pUnit->GetType() == "Artillery") {
 		std::string typeActions[] = { "Move", "Attack" };
-		int pointAction[] = { 3, 2 };
+		int pointAction[] = { 4, 2 };
 		this->setActionButtons(2, typeActions, pointAction);
 	}
 	return this;
@@ -190,7 +190,7 @@ Grid* Grid::AddUnit(Unit* pNewUnit)
 	}
 	else if (pUnit->GetType() == "Artillery") {
 		std::string typeActions[] = { "Move", "Attack" };
-		int pointAction[] = { 3, 2 };
+		int pointAction[] = { 4, 2 };
 		this->setActionButtons(2, typeActions, pointAction);
 	}
 	this->isUnit = true;
@@ -222,9 +222,7 @@ int Grid::Attack()
 	if (this->isUnit) {
 		return this->pUnit->GetAttackPoint();
 	}
-	else {
-		return this->atk;
-	}
+	return this->atk;
 }
 
 void Grid::ClearUnit()
