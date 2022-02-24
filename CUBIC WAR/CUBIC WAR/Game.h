@@ -28,6 +28,8 @@ private:
 	//sound
 	sf::SoundBuffer soundBuffer;
 	sf::Sound sound;
+	sf::SoundBuffer soundBufferclick;
+	sf::Sound clicksound;
 
 	Action* gameAction;
 	UImanager* gameUImanager;

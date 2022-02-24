@@ -71,11 +71,15 @@ void Game::initBar()
 void Game::initSound()
 {
 	soundBuffer.loadFromFile("Sounds/Main.wav");
-	
 	sound.setBuffer(soundBuffer);
 	sound.setVolume(25.f);
 	sound.setLoop(true);
 	sound.play();
+
+	soundBufferclick.loadFromFile("Sounds/click.wav");
+	clicksound.setBuffer(soundBufferclick);
+	clicksound.setVolume(25.f);
+	clicksound.play();
 }
 
 
@@ -111,8 +115,10 @@ void Game::pollEvents()
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
+				clicksound.play();
 				if (startbtn.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
 				{
+					clicksound.play();
 					std::cout << "startbtn is clicked";
 					this->gameAction->StartGame(2);
 					startbtn.setPosition(910.f, 610.f);
