@@ -202,7 +202,7 @@ Unit* Grid::GetUnit()
 	return this->pUnit;
 }
 
-void Grid::BeAttack(int dmg)
+bool Grid::BeAttack(int dmg)
 {
 	if (this->isUnit) {
 		if (this->pUnit->BeAttack(dmg)) {
@@ -212,9 +212,13 @@ void Grid::BeAttack(int dmg)
 	}
 	else if (this->isBuilding) {
 		this->hp -= dmg;
-		if (this->hp <= 0);
-
+		if (this->typeBuilding == "B") {
+			if (this->hp <= 0) {
+				return true;
+			}
+		}	
 	}
+	return false;
 }
 
 int Grid::Attack()

@@ -17,6 +17,7 @@ Action::~Action()
 void Action::StartGame(int numPlayer)
 {
 	isGamePlaying = true;
+	isGameEnd = false;
 	this->pMap = new Map(this->pWindow, &this->currentMousePos, &this->idPlayerNow);
 
 	for (int i = 0; i < numPlayer; i++) {
@@ -33,6 +34,7 @@ void Action::GameEnd()
 		delete this->vPlayers[i];
 	}
 	delete this->pMap;
+	isGameEnd = false;
 }
 
 void Action::RandomStartPosition()
@@ -80,7 +82,7 @@ void Action::ClickEvents()
 						}
 						else if (gMode == "Attack") {
 							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
-							this->pGridPointed->BeAttack(this->pGridSelected->Attack());
+							isGameEnd = this->pGridPointed->BeAttack(this->pGridSelected->Attack());
 							this->SetToNormalMode();
 						}
 						else {
@@ -122,6 +124,20 @@ void Action::ClickEvents()
 					UcanRolltext.setPosition(905.f, 605.f);
 					NextTurn();
 					isButtonPress = false;
+				}
+				//restart button click
+				if (restartbtn.getGlobalBounds().contains(sf::Mouse::getPosition(*pWindow).x, sf::Mouse::getPosition(*pWindow).y)) {
+					StartGame(2);
+					restartbtn.setPosition(910.f,610.f);
+					returnMenubtn.setPosition(910.f, 610.f);
+					PlayerWin.setPosition(910.f, 610.f);
+				}
+				//returnmenu button click
+				if (returnMenubtn.getGlobalBounds().contains(sf::Mouse::getPosition(*pWindow).x, sf::Mouse::getPosition(*pWindow).y)) {
+					StartGame(2);
+					restartbtn.setPosition(910.f, 610.f);
+					returnMenubtn.setPosition(910.f, 610.f);
+					PlayerWin.setPosition(910.f, 610.f);
 				}
 			}
 			//roll button click
@@ -300,6 +316,16 @@ void Action::Render()
 		this->renderText(this->pWindow);
 		pWindow->draw(text);
 	}
+	if (isGameEnd == true) {
+		this->GameEnd();
+		showWinner = true;
+	}
+	if (showWinner == true) {
+		pWindow->draw(PlayerWin);
+		pWindow->draw(returnMenubtn);
+		pWindow->draw(restartbtn);
+	}
+
 	this->Update();
 }
 
@@ -323,6 +349,11 @@ void Action::intitText()
 	this->Playerturn.setFillColor(sf::Color::White);
 	this->Playerturn.setCharacterSize(32);
 	this->Playerturn.setPosition(350.f, 280.f);
+
+	this->PlayerWin.setFont(this->font);
+	this->PlayerWin.setFillColor(sf::Color::White);
+	this->PlayerWin.setCharacterSize(32);
+	this->PlayerWin.setPosition(350.f, 280.f);
 
 	//Click to start text
 	this->text.setFont(this->font);
@@ -374,7 +405,15 @@ void Action::initButton()
 	this->rollbtn.setFillColor(col);
 	this->rollbtn.setSize(sf::Vector2f(50.f, 50.f));
 	this->rollbtn.setPosition(700.f, 550.f);
-}
+	//return menu button
+	this->returnMenubtn.setFillColor(col);
+	this->returnMenubtn.setSize(sf::Vector2f(100.f, 50.f));
+	this->returnMenubtn.setPosition(350.f, 350.f);
+	//restart game button
+	this->restartbtn.setFillColor(col);
+	this->restartbtn.setSize(sf::Vector2f(50.f, 50.f));
+	this->restartbtn.setPosition(350.f, 450.f);
+}	
 
 void Action::DoCommand()
 {
@@ -427,6 +466,11 @@ void Action::updateText()
 
 	textt << "Player " << this->idPlayerNow+1 << " turn";
 	this->Playerturn.setString(textt.str());
+
+	//Player Win text
+	std::stringstream Pwin;
+	Pwin << "Player " << this->idPlayerNow + 1 << " Win";
+	this->PlayerWin.setString(Pwin.str());
 
 
 	//point update

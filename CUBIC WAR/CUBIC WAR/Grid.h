@@ -35,6 +35,7 @@ private:
 
 	// Unit -------
 	Unit* pUnit = 0;
+
 	
 public:
 	bool isBuilding = false;
@@ -72,7 +73,7 @@ public:
 	Grid* AddUnit(Unit*);
 	void ClearUnit();
 	Unit* GetUnit();
-	void BeAttack(int);
+	bool BeAttack(int);
 	int Attack();
 };
 
