@@ -7,6 +7,7 @@ Action::Action(sf::RenderWindow* pWindow)
 	this->initFont();
 	this->initBar();
 	this->initButton();
+	this->initAudio();
 }
 
 Action::~Action()
@@ -18,6 +19,7 @@ Action::~Action()
 
 void Action::StartGame(int numPlayer)
 {
+	backgroundsound.play();
 	isGamePlaying = true;
 	isGameEnd = false;
 	isButtonPress = false;
@@ -39,6 +41,8 @@ void Action::GameEnd()
 	}
 	delete this->pMap;
 	this->vPlayers.clear();
+	isGameEnd = false;
+	backgroundsound.stop();
 }
 
 void Action::RandomStartPosition()
@@ -78,21 +82,25 @@ void Action::ClickEvents()
 							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							this->Move();
 							this->SetToNormalMode();
+							clicksound.play();
 						}
 						else if (gMode == "Build") {
 							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							this->pMap->UpdatePlayerVision(this->pGridPointed->CreateBuilding(this->typeToCreate, this->idPlayerNow), 1, this->idPlayerNow);
 							this->SetToNormalMode();
+							clicksound.play();
 						}
 						else if (gMode == "Create") {
 							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							this->pMap->UpdatePlayerVision(this->pGridPointed->AddUnit(this->typeToCreate, this->pMap->vUnits, this->idPlayerNow), 1, this->idPlayerNow);
 							this->SetToNormalMode();
+							clicksound.play();
 						}
 						else if (gMode == "Attack") {
 							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							isGameEnd = this->pGridPointed->BeAttack(this->pGridSelected->Attack());
 							this->SetToNormalMode();
+							atksound.play();
 						}
 					}
 					else if (this->pGridPointed != 0 && !this->isMenuOpen) {
@@ -130,6 +138,7 @@ void Action::ClickEvents()
 			{
 				if (button.getGlobalBounds().contains(sf::Mouse::getPosition(*pWindow).x, sf::Mouse::getPosition(*pWindow).y))
 				{
+					clicksound.play();
 					std::cout << " => End Turn" << std::endl;
 					UcanRolltext.setPosition(905.f, 605.f);
 					NextTurn();
@@ -141,6 +150,7 @@ void Action::ClickEvents()
 			{
 				if (rollbtn.getGlobalBounds().contains(sf::Mouse::getPosition(*pWindow).x, sf::Mouse::getPosition(*pWindow).y))
 				{
+					clicksound.play();
 					int ran1 = rand() % 6 + 1;
 					int ran2 = rand() % 6 + 1;
 					this->vPlayers[this->idPlayerNow]->point += ran1 + ran2;
@@ -358,6 +368,22 @@ void Action::intitText()
 	this->UcanRolltext.setCharacterSize(20);
 	this->UcanRolltext.setPosition(905.f, 605.f);
 	UcanRolltext.setString("U can roll again!!");
+}
+
+void Action::initAudio()
+{
+	soundBufferclick.loadFromFile("Sounds/click.wav");
+	clicksound.setBuffer(soundBufferclick);
+	clicksound.setVolume(25.f);
+
+	soundBufferatk.loadFromFile("Sounds/attack.wav");
+	atksound.setBuffer(soundBufferatk);
+	atksound.setVolume(25.f);
+
+	backgroundBuffer.loadFromFile("Sounds/background.wav");
+	backgroundsound.setBuffer(backgroundBuffer);
+	backgroundsound.setVolume(5.f);
+	backgroundsound.setLoop(true);
 }
 
 void Action::initBar()
