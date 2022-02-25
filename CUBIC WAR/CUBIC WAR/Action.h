@@ -27,6 +27,7 @@ private:
 	sf::Sound atksound;
 	sf::SoundBuffer backgroundBuffer;
 	sf::Sound backgroundsound;
+	sf::SoundBuffer soundBufferBuild;
 
 	sf::Font font;
 	sf::Text Playerturn;
@@ -44,7 +45,6 @@ private:
 
 	int countTurn = 0;
 
-	int idPlayerNow = 0;
 	std::vector<Player*> vPlayers;
 	std::vector<ActionButton*> vActionButtonNow;
 	
@@ -84,6 +84,7 @@ public:
 	bool isGamePlaying = false;
 	bool isGameEnd = false;
 	bool isWin = false;
+	int idPlayerNow = 0;
 
 	Action(sf::RenderWindow*);
 	~Action();

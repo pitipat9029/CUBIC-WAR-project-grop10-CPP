@@ -41,15 +41,14 @@ void Action::GameEnd()
 	}
 	delete this->pMap;
 	this->vPlayers.clear();
-	isGameEnd = false;
 	backgroundsound.stop();
 }
 
 void Action::RandomStartPosition()
 {
-	int player1Xstart = rand() % 5 + 3;
+	int player1Xstart = rand() % 3 + 3;
 	int player1Ystart = rand() % 7 + 3;
-	int player2Xstart = rand() % 5 + 9;
+	int player2Xstart = rand() % 3 + 10;
 	int player2Ystart = rand() % 7 + 3;
 	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player1Ystart][player1Xstart].CreateBuilding("B", 0), 1,0);
 	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player1Ystart + rand()%2][player1Xstart + 1].AddUnit("Engineer", this->pMap->vUnits, 0), 1, 0);
@@ -88,7 +87,8 @@ void Action::ClickEvents()
 							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							this->pMap->UpdatePlayerVision(this->pGridPointed->CreateBuilding(this->typeToCreate, this->idPlayerNow), 1, this->idPlayerNow);
 							this->SetToNormalMode();
-							clicksound.play();
+							atksound.setBuffer(soundBufferBuild);
+							atksound.play();
 						}
 						else if (gMode == "Create") {
 							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
@@ -100,7 +100,8 @@ void Action::ClickEvents()
 							this->vPlayers[this->idPlayerNow]->point -= this->pButtonAPointed->GetUsePoint();
 							isGameEnd = this->pGridPointed->BeAttack(this->pGridSelected->Attack());
 							this->SetToNormalMode();
-							atksound.play();
+							atksound.setBuffer(soundBufferatk);
+							clicksound.play();
 						}
 					}
 					else if (this->pGridPointed != 0 && !this->isMenuOpen) {
@@ -170,10 +171,12 @@ void Action::ClickEvents()
 			// Mouse Right click
 			else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 				if (this->gMode == "Normal" && !isMenuOpen && this->pGridPointed != 0) {
-					if (this->pGridPointed->vActionButton.size() > 0) {
-						this->pGridSelected = this->pGridPointed;
-						this->isMenuOpen = true;
-						this->pGridPointed = 0;
+					if ((pGridPointed->isUnit && pGridPointed->GetUnit()->isMyUnit(idPlayerNow)) || (pGridPointed->isBuilding && pGridPointed->isMyBuilding(idPlayerNow))) {
+						if (this->pGridPointed->vActionButton.size() > 0) {
+							this->pGridSelected = this->pGridPointed;
+							this->isMenuOpen = true;
+							this->pGridPointed = 0;
+						}
 					}
 				}
 				else {
@@ -380,9 +383,12 @@ void Action::initAudio()
 	atksound.setBuffer(soundBufferatk);
 	atksound.setVolume(25.f);
 
+	soundBufferBuild.loadFromFile("Sounds/Build.wav");
+	atksound.setVolume(25.f);
+
 	backgroundBuffer.loadFromFile("Sounds/background.wav");
 	backgroundsound.setBuffer(backgroundBuffer);
-	backgroundsound.setVolume(5.f);
+	backgroundsound.setVolume(10.f);
 	backgroundsound.setLoop(true);
 }
 

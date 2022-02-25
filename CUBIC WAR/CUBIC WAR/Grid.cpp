@@ -216,7 +216,12 @@ bool Grid::BeAttack(int dmg)
 			if (this->hp <= 0) {
 				return true;
 			}
-		}	
+		}
+		else {
+			if (this->hp <= 0) {
+				this->ClearBuilding();
+			}
+		}
 	}
 	return false;
 }
@@ -245,7 +250,9 @@ void Grid::ClearUnit()
 void Grid::ClearBuilding()
 {
 	this->isBuilding = false;
-
+	if (!texture.loadFromFile("Textures/Terrain/grass.png")) {
+		std::cout << "Error to load Textures/Terrain/grass.png";// +this->imgPath + ".png" << std::endl;
+	}
 	for (unsigned int i = 0; i < this->vActionButton.size(); i++) {
 		for (unsigned int j = 0; j < this->vActionButton[i].size(); j++) {
 			delete this->vActionButton[i][j];

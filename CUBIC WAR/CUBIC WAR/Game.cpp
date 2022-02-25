@@ -71,6 +71,7 @@ void Game::initBar()
 void Game::initSound()
 {
 	soundBuffer.loadFromFile("Sounds/Main.wav");
+	soundBufferwin.loadFromFile("Sounds/win.wav");
 	sound.setBuffer(soundBuffer);
 	sound.setVolume(25.f);
 	sound.setLoop(true);
@@ -164,11 +165,15 @@ void Game::Update()
 	this->updateTime();
 	if (this->gameAction->isGamePlaying == true) {
 		this->pageNow = "game";
-		this->isSoundMainPlay = false;
+		if (this->isSoundMainPlay) {
+			sound.stop();
+			this->isSoundMainPlay = false;
+		}
 	}
 	else if (this->gameAction->isGameEnd == true) {
 		this->pageNow = "result";
 		if (!this->isSoundMainPlay) {
+			sound.setBuffer(soundBufferwin);
 			sound.play();
 			this->isSoundMainPlay = true;
 		}
@@ -176,6 +181,7 @@ void Game::Update()
 	else {
 		this->pageNow = "start";
 		if (!this->isSoundMainPlay) {
+			sound.setBuffer(soundBuffer);
 			sound.play();
 			this->isSoundMainPlay = true;
 		}
@@ -208,7 +214,10 @@ void Game::updateTurnText()
 void Game::Render()
 {
 	this->window->clear();
-	this->gameUImanager->RenderUI(this->pageNow);
+	if (this->gameUImanager->RenderUI(this->pageNow) == "super")
+	{
+		this->gameAction->isGameEnd = false;
+	}
 
 	//--------------------------
 	if (this->gameAction->isGamePlaying == true) {

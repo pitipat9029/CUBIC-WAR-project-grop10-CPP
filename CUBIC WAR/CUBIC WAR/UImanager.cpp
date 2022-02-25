@@ -84,6 +84,9 @@ std::string UImanager::RenderUI(std::string page)
 		this->pWindow->draw(this->tRestartbtn);
 		this->pWindow->draw(this->tPlayerWin);
 		this->pWindow->draw(this->tWin);
+		std::stringstream ss;
+		ss << "Player " << this->gameAction->idPlayerNow + 1;
+		this->tPlayerWin.setString(ss.str());
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			//restart button click
@@ -92,7 +95,7 @@ std::string UImanager::RenderUI(std::string page)
 			}
 			//returnmenu button click
 			if (returnMenubtn.getGlobalBounds().contains(sf::Mouse::getPosition(*pWindow).x, sf::Mouse::getPosition(*pWindow).y)) {
-
+				return "super";
 			}
 		}
 	}

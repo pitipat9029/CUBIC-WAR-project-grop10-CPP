@@ -29,6 +29,7 @@ private:
 	sf::SoundBuffer soundBuffer;
 	sf::Sound sound;
 	sf::SoundBuffer soundBufferclick;
+	sf::SoundBuffer soundBufferwin;
 	sf::Sound clicksound;
 	bool isSoundMainPlay = false;
 
