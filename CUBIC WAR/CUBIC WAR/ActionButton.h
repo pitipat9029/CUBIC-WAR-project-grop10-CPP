@@ -5,7 +5,7 @@
 class ActionButton
 {
 private:
-	float size = 20;
+	float size = 30;
 	std::string imgPath = "";
 	sf::Texture texture;
 	sf::Sprite img;

@@ -113,7 +113,7 @@ Grid* Grid::CreateBuilding(std::string type, int idPlayer)
 	}
 	else if (type == "A") {
 		this->maxhp = this->hp = 45;
-		this->atk = 0;
+		this->atk = 10;
 		this->imgPath = "medieval_tower";
 		std::string typeActions[] = { "Attack" };
 		int pointAction[] = { 3 };
@@ -121,7 +121,7 @@ Grid* Grid::CreateBuilding(std::string type, int idPlayer)
 	}
 	else if (type == "C") {
 		this->maxhp = this->hp = 35;
-		this->atk = 0;
+		this->atk = 15;
 		this->imgPath = "medieval_canon";
 		std::string typeActions[] = { "Attack" };
 		int pointAction[] = { 3 };

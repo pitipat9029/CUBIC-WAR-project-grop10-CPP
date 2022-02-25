@@ -30,6 +30,7 @@ private:
 	sf::Sound sound;
 	sf::SoundBuffer soundBufferclick;
 	sf::Sound clicksound;
+	bool isSoundMainPlay = false;
 
 	Action* gameAction;
 	UImanager* gameUImanager;

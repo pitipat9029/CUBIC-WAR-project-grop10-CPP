@@ -26,19 +26,14 @@ private:
 	sf::Text endturn;
 	sf::Text rolltext;
 	sf::Text UcanRolltext;
-	sf::Text PlayerWin;
 
 	sf::RectangleShape bar;
 	sf::RectangleShape button;
 	sf::RectangleShape rollbtn;
-	sf::RectangleShape returnMenubtn;
-	sf::RectangleShape restartbtn;
 
 	Map* pMap = 0;
 
 	int countTurn = 0;
-	int pointPlayer1 = 0;
-	int pointPlayer2 = 0;
 
 	int idPlayerNow = 0;
 	std::vector<Player*> vPlayers;
@@ -54,11 +49,7 @@ private:
 	std::string typeToCreate = "";
 	bool isWait = false;
 	bool isMenuOpen = false;
-	bool isMoveMode = false;
-	bool isCreatdMode = false;
 	bool isButtonPress = false;
-	bool PlayerPlay = false;
-	bool showWinner = false;
 
 	Grid* pGridSelected = 0;
 	Grid* pGridPointed = 0;
@@ -82,6 +73,7 @@ private:
 public:
 	bool isGamePlaying = false;
 	bool isGameEnd = false;
+	bool isWin = false;
 
 	Action(sf::RenderWindow*);
 	~Action();

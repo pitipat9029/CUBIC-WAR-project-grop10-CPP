@@ -11,13 +11,16 @@ Action::Action(sf::RenderWindow* pWindow)
 
 Action::~Action()
 {
-	GameEnd();
+	if (this->isGamePlaying) {
+		GameEnd();
+	}
 }
 
 void Action::StartGame(int numPlayer)
 {
 	isGamePlaying = true;
 	isGameEnd = false;
+	isButtonPress = false;
 	this->pMap = new Map(this->pWindow, &this->currentMousePos, &this->idPlayerNow);
 
 	for (int i = 0; i < numPlayer; i++) {
@@ -30,19 +33,20 @@ void Action::StartGame(int numPlayer)
 
 void Action::GameEnd()
 {
+	this->isGamePlaying = false;
 	for (int i = 0; i < this->vPlayers.size(); i++) {
 		delete this->vPlayers[i];
 	}
 	delete this->pMap;
-	isGameEnd = false;
+	this->vPlayers.clear();
 }
 
 void Action::RandomStartPosition()
 {
 	int player1Xstart = rand() % 5 + 3;
-	int player1Ystart = rand() % 8 + 3;
+	int player1Ystart = rand() % 7 + 3;
 	int player2Xstart = rand() % 5 + 9;
-	int player2Ystart = rand() % 8 + 3;
+	int player2Ystart = rand() % 7 + 3;
 	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player1Ystart][player1Xstart].CreateBuilding("B", 0), 1,0);
 	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player1Ystart + rand()%2][player1Xstart + 1].AddUnit("Engineer", this->pMap->vUnits, 0), 1, 0);
 	this->pMap->UpdatePlayerVision(this->pMap->vGrids[player2Ystart][player2Xstart].CreateBuilding("B", 1), 1, 1);
@@ -131,20 +135,6 @@ void Action::ClickEvents()
 					NextTurn();
 					isButtonPress = false;
 				}
-				//restart button click
-				if (restartbtn.getGlobalBounds().contains(sf::Mouse::getPosition(*pWindow).x, sf::Mouse::getPosition(*pWindow).y)) {
-					StartGame(2);
-					restartbtn.setPosition(910.f,610.f);
-					returnMenubtn.setPosition(910.f, 610.f);
-					PlayerWin.setPosition(910.f, 610.f);
-				}
-				//returnmenu button click
-				if (returnMenubtn.getGlobalBounds().contains(sf::Mouse::getPosition(*pWindow).x, sf::Mouse::getPosition(*pWindow).y)) {
-					StartGame(2);
-					restartbtn.setPosition(910.f, 610.f);
-					returnMenubtn.setPosition(910.f, 610.f);
-					PlayerWin.setPosition(910.f, 610.f);
-				}
 			}
 			//roll button click
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -198,7 +188,7 @@ void Action::Move()
 
 void Action::RenderMenu(int deep)
 {
-	float r = 10, grab = 5;
+	float r = 15, grab = 5;
 	int x = pGridSelected->vActionButton[deep].size();
 	this->vActionButtonNow = pGridSelected->vActionButton[deep];
 	sf::Vector2f centerPos = this->pGridSelected->GetCenterPoint();
@@ -280,15 +270,6 @@ void Action::Update()
 		rollbtn.setPosition(700.f, 550.f);
 		rolltext.setPosition(705.f, 560.f);
 	}
-
-	if (idPlayerNow == 0)
-	{
-		PlayerPlay = false;
-	}
-	else
-	{
-		PlayerPlay = true;
-	}
 	updateText();
 	ClickEvents();
 }
@@ -322,17 +303,12 @@ void Action::Render()
 		this->renderText(this->pWindow);
 		pWindow->draw(text);
 	}
-	if (isGameEnd == true) {
-		this->GameEnd();
-		showWinner = true;
-	}
-	if (showWinner == true) {
-		pWindow->draw(PlayerWin);
-		pWindow->draw(returnMenubtn);
-		pWindow->draw(restartbtn);
-	}
 
 	this->Update();
+
+	if (isGameEnd) {
+		this->GameEnd();
+	}
 }
 
 void Action::renderText(sf::RenderTarget *target)
@@ -351,11 +327,6 @@ void Action::intitText()
 	this->Playerturn.setFillColor(sf::Color::White);
 	this->Playerturn.setCharacterSize(32);
 	this->Playerturn.setPosition(350.f, 280.f);
-
-	this->PlayerWin.setFont(this->font);
-	this->PlayerWin.setFillColor(sf::Color::White);
-	this->PlayerWin.setCharacterSize(32);
-	this->PlayerWin.setPosition(350.f, 280.f);
 
 	//Click to start text
 	this->text.setFont(this->font);
@@ -407,14 +378,6 @@ void Action::initButton()
 	this->rollbtn.setFillColor(col);
 	this->rollbtn.setSize(sf::Vector2f(50.f, 50.f));
 	this->rollbtn.setPosition(700.f, 550.f);
-	//return menu button
-	this->returnMenubtn.setFillColor(col);
-	this->returnMenubtn.setSize(sf::Vector2f(100.f, 50.f));
-	this->returnMenubtn.setPosition(350.f, 350.f);
-	//restart game button
-	this->restartbtn.setFillColor(col);
-	this->restartbtn.setSize(sf::Vector2f(50.f, 50.f));
-	this->restartbtn.setPosition(350.f, 450.f);
 }	
 
 void Action::DoCommand()
@@ -422,7 +385,6 @@ void Action::DoCommand()
 	std::string command = pButtonAPointed->GetActionCommand(this->vPlayers[this->idPlayerNow]->point);
 	if (command == "Move") {
 		this->gMode = "Move";
-		std::cout << "What";
 		this->pMap->CreateGridArea(pGridSelected, 1, this->gMode);
 		this->isMenuOpen = false;
 	}
@@ -470,12 +432,6 @@ void Action::updateText()
 
 	textt << "Player " << this->idPlayerNow+1 << " turn";
 	this->Playerturn.setString(textt.str());
-
-	//Player Win text
-	std::stringstream Pwin;
-	Pwin << "Player " << this->idPlayerNow + 1 << " Win";
-	this->PlayerWin.setString(Pwin.str());
-
 
 	//point update
 	std::stringstream pointp;

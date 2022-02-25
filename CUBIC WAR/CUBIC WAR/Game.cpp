@@ -39,7 +39,7 @@ void Game::initWindow()
 void Game::initVariable()
 {
 	this->gameAction = new Action(this->window);
-	this->gameUImanager = new UImanager(this->window);
+	this->gameUImanager = new UImanager(this->window, this->gameAction);
 }
 
 void Game::initButton()
@@ -74,12 +74,10 @@ void Game::initSound()
 	sound.setBuffer(soundBuffer);
 	sound.setVolume(25.f);
 	sound.setLoop(true);
-	sound.play();
-
+	
 	soundBufferclick.loadFromFile("Sounds/click.wav");
 	clicksound.setBuffer(soundBufferclick);
 	clicksound.setVolume(25.f);
-	clicksound.play();
 }
 
 
@@ -111,19 +109,15 @@ void Game::pollEvents()
 				sf::Color temp(196, 164, 132);
 				startbtn.setFillColor(temp);
 			}
-			//start game click
 
+			//start game click
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				clicksound.play();
 				if (startbtn.getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))
 				{
 					clicksound.play();
 					std::cout << "startbtn is clicked";
 					this->gameAction->StartGame(2);
-					startbtn.setPosition(910.f, 610.f);
-					guiText.setPosition(910.f, 610.f);
-					text.setPosition(910.f, 619.f);
 					sound.stop();
 				}
 			}
@@ -168,6 +162,24 @@ void Game::Update()
 	this->UpdateMousePosition();
 	this->updateTurnText();
 	this->updateTime();
+	if (this->gameAction->isGamePlaying == true) {
+		this->pageNow = "game";
+		this->isSoundMainPlay = false;
+	}
+	else if (this->gameAction->isGameEnd == true) {
+		this->pageNow = "result";
+		if (!this->isSoundMainPlay) {
+			sound.play();
+			this->isSoundMainPlay = true;
+		}
+	}
+	else {
+		this->pageNow = "start";
+		if (!this->isSoundMainPlay) {
+			sound.play();
+			this->isSoundMainPlay = true;
+		}
+	}
 }
 
 void Game::updateTime()
@@ -196,13 +208,6 @@ void Game::updateTurnText()
 void Game::Render()
 {
 	this->window->clear();
-	if (this->gameAction->isGamePlaying == true) {
-		this->pageNow = "game";
-	}
-	else {
-		this->pageNow = "start";
-		
-	}
 	this->gameUImanager->RenderUI(this->pageNow);
 
 	//--------------------------
@@ -210,6 +215,14 @@ void Game::Render()
 		this->gameAction->Render();
 	}
 	else {
+		/*
+		window->draw(guiText);
+		window->draw(startbtn);
+		window->draw(text);
+		*/
+	}
+
+	if (this->pageNow == "start") {
 		window->draw(guiText);
 		window->draw(startbtn);
 		window->draw(text);
@@ -221,8 +234,6 @@ void Game::Render()
 	//window->draw(timer);
 	//this->RenderGui(this->window);
 	this->window->display();
-
-
 }
 
 void Game::renderButton(sf::RenderTarget* target)
